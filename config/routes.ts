@@ -56,6 +56,12 @@
                 component: './TableList',
               },
               {
+                path: '/store',
+                name: 'store',
+                icon: 'smile',
+                component: './store',
+              },
+              {
                 component: './404',
               },
             ],
