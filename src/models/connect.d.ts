@@ -1,12 +1,13 @@
-import { Action } from 'redux';
+import { EffectsCommandMap } from 'dva';
+import { Action, AnyAction  } from 'redux';
 import { RouterTypes } from 'umi';
+import { call } from 'redux-saga/effects';
 import type { MenuDataItem, Settings as ProSettings } from '@ant-design/pro-layout';
 import { GlobalModelState } from './global';
 import { UserModelState } from './user';
 import type { StateType } from './login';
-import { StoreModelState } from '@/models/store';
 
-export { GlobalModelState, UserModelState, StoreModelState };
+export { GlobalModelState, UserModelState };
 
 export type Loading = {
   global: boolean;
@@ -18,6 +19,7 @@ export type Loading = {
     user?: boolean;
     login?: boolean;
     store?: boolean;
+    desk?: boolean;
   };
 };
 
@@ -27,12 +29,19 @@ export type ConnectState = {
   settings: ProSettings;
   user: UserModelState;
   login: StateType;
-  store: StoreModelState;
+  store: IStoreState;
+  desk: IDeskState;
 };
 
 export type Route = {
   routes?: Route[];
 } & MenuDataItem;
+
+
+export type Effect = (
+  action: AnyAction,
+  effects: Omit<EffectsCommandMap, 'call'> & { select: <T>(func: (state: ConnectState) => T) => T; call: typeof call }
+) => void;
 
 /**
  * @type P: Type of payload

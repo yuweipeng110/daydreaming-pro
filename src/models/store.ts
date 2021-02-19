@@ -7,11 +7,6 @@ import { STATUS_CODE } from '@/pages/constants';
 export interface IStore {
   [key: string]: any;
 }
-export type StoreModelState = {
-  storeList: [],
-  dataCount: 0,
-  pageCount: 0,
-}
 
 export interface IStoreModelType {
   namespace: 'store';

@@ -18,11 +18,15 @@ const EditStoreModalForm: React.FC<IProps> = (props) => {
   const [form] = Form.useForm();
   const formRef = React.createRef<FormInstance>();
 
-  const onSubmit = async (params: any) => {
+  const onSubmit = async (values: any) => {
     const hide = message.loading('正在修改');
+    const params = {
+      storeId: currentData.id,
+      ...values
+    }
 
     const submitRes: IAddStoreExists = await dispatch({
-      type: 'storeManagement/editStoreManagementEffect',
+      type: 'store/editStoreEffect',
       params
     });
     if (!submitRes.storeNameExists) {
@@ -86,24 +90,12 @@ const EditStoreModalForm: React.FC<IProps> = (props) => {
           name='realName'
           label='管理员 (真实姓名)'
           width='md'
-          rules={[
-            {
-              required: true,
-              message: '输入管理员 (真实姓名)!',
-            },
-          ]}
         />
         <ProFormText
           disabled
           name='userName'
           label='管理员 (账号)'
           width='md'
-          rules={[
-            {
-              required: true,
-              message: '输入管理员 (账号)!',
-            },
-          ]}
         />
       </ProForm.Group>
       <ProForm.Group>
@@ -112,12 +104,6 @@ const EditStoreModalForm: React.FC<IProps> = (props) => {
           name='passWord'
           label='管理员 (密码)'
           width='md'
-          rules={[
-            {
-              required: true,
-              message: '输入管理员 (密码)!',
-            },
-          ]}
         />
         <ProFormText
           disabled
@@ -126,21 +112,6 @@ const EditStoreModalForm: React.FC<IProps> = (props) => {
           dependencies={['passWord']}
           hasFeedback
           width='md'
-          rules={[
-            {
-              required: true,
-              message: '请确认密码!',
-            },
-            ({ getFieldValue }) => ({
-              validator(rule, value) {
-                if (!value || getFieldValue('passWord') === value) {
-                  return Promise.resolve();
-                }
-                // eslint-disable-next-line prefer-promise-reject-errors
-                return Promise.reject('两次输入的密码不一致!');
-              },
-            }),
-          ]}
         />
       </ProForm.Group>
       <ProForm.Group>
@@ -149,12 +120,6 @@ const EditStoreModalForm: React.FC<IProps> = (props) => {
           name='phoneNumber'
           label='管理员手机号'
           width='md'
-          rules={[
-            {
-              required: true,
-              message: '输入管理员手机号!',
-            },
-          ]}
         />
         <ProFormTextArea
           name='address'

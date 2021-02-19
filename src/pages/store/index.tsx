@@ -6,8 +6,8 @@ import { PlusOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import { IStoreTable } from '@/pages/types/store';
 import _ from 'lodash';
+import { IStoreTable } from '@/pages/types/store';
 import AddStoreModalForm from '@/pages/store/components/ModalForm/AddStoreModalForm';
 import EditStoreModalForm from '@/pages/store/components/ModalForm/EditStoreModalForm';
 
@@ -43,6 +43,11 @@ const StoreList: React.FC<IProps> = (props) => {
 
   const columns: ProColumns<IStoreTable>[] = [
     {
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
+    },
+    {
       title: '门店名称',
       dataIndex: 'storeName',
       key: 'storeName',
@@ -51,13 +56,33 @@ const StoreList: React.FC<IProps> = (props) => {
       title: '系统使用状态',
       dataIndex: 'status',
       key: 'status',
+      valueEnum: {
+        true: {
+          text: '使用中',
+          status: 'Error',
+        },
+        false: {
+          text: '未激活',
+          status: 'Success',
+        },
+      },
     },
     {
-      title: '管理员账号 (真实姓名)',
+      title: '管理员 (真实姓名)',
       key: 'realName',
       render: (record: any) => {
         if (!_.isEmpty(record.bossInfo)) {
           return record.bossInfo.realName;
+        }
+        return '';
+      },
+    },
+    {
+      title: '管理员 (账号)',
+      key: 'realName',
+      render: (record: any) => {
+        if (!_.isEmpty(record.bossInfo)) {
+          return record.bossInfo.userName;
         }
         return '';
       },

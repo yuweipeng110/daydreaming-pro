@@ -62,6 +62,12 @@
                 component: './store',
               },
               {
+                path: '/desk',
+                name: 'desk',
+                icon: 'smile',
+                component: './desk',
+              },
+              {
                 component: './404',
               },
             ],
