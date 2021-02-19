@@ -1,16 +1,45 @@
-import React, { useState } from 'react';
-import { Button } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { ConnectState, ConnectProps } from '@/models/connect';
+import { Button, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { IStoreTable } from '@/pages/types/store';
-import { queryStoreManagementListApi } from '@/services/store';
 import _ from 'lodash';
+import AddStoreModalForm from '@/pages/store/components/ModalForm/AddStoreModalForm';
+import EditStoreModalForm from '@/pages/store/components/ModalForm/EditStoreModalForm';
 
-const StoreList: React.FC = () => {
+interface IProps extends ConnectProps {
+  storeList: IStoreTable[];
+};
 
-  const [storeCreateModalVisible, handleStoreCreateModalVisible] = useState<boolean>(false);
+const StoreList: React.FC<IProps> = (props) => {
+  const { storeList, dispatch } = props;
+
+  const [createStoreModalVisible, handleCreateStoreModalVisible] = useState<boolean>(false);
+  const [editStoreModalVisible, handleEditStoreModalVisible] = useState<boolean>(false);
+  const [currentData, setCurrentData] = useState<IStoreTable>(Object.create(null));
+
+  const loadStoreListData = () => {
+    dispatch({
+      type: 'store/getStoreListEffect',
+    });
+  };
+
+  const createStoreModalStatusSwitch = (createStoreModalStatus: boolean) => {
+    handleCreateStoreModalVisible(createStoreModalStatus);
+  };
+
+  const editStoreModalStatusSwitch = (editStoreModalStatus: boolean, currentEditData?: any) => {
+    handleEditStoreModalVisible(editStoreModalStatus);
+    setCurrentData(currentEditData);
+  };
+
+  useEffect(() => {
+    loadStoreListData();
+  }, []);
 
   const columns: ProColumns<IStoreTable>[] = [
     {
@@ -57,6 +86,11 @@ const StoreList: React.FC = () => {
     {
       title: '操作',
       key: 'action',
+      render: (record: any) => (
+        <Space size="middle">
+          <a onClick={ () => editStoreModalStatusSwitch(true, record) }>修改</a>
+        </Space>
+      )
     },
   ];
 
@@ -71,22 +105,27 @@ const StoreList: React.FC = () => {
             type='primary'
             key='primary'
             onClick={() => {
-              handleStoreCreateModalVisible(true);
+              createStoreModalStatusSwitch(true);
             }}
           >
             <PlusOutlined /> 新建
           </Button>,
         ]}
         options={false}
-        request={(params) => queryStoreManagementListApi({ ...params })}
+        dataSource={storeList}
+        // request={(params) => queryStoreListApi({ ...params })}
         pagination={{
-          pageSize: 10,
+          pageSize: 5,
         }}
         columns={columns}
       >
       </ProTable>
+      <AddStoreModalForm visible={createStoreModalVisible} onVisibleChange={handleCreateStoreModalVisible} />
+      <EditStoreModalForm visible={editStoreModalVisible} onVisibleChange={handleEditStoreModalVisible} currentData={currentData} />
     </PageContainer>
   );
 };
 
-export default StoreList;
+export default connect(({ store }: ConnectState) => ({
+  storeList: store.storeList,
+}))(StoreList);
