@@ -68,6 +68,12 @@
                 component: './desk',
               },
               {
+                path: '/player',
+                name: 'player',
+                icon: 'smile',
+                component: './player',
+              },
+              {
                 component: './404',
               },
             ],

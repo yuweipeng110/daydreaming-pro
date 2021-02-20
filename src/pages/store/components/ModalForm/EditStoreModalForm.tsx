@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { ConnectProps } from '@/models/connect';
-import { Form, FormInstance, message } from 'antd';
+import { Form, message } from 'antd';
 import ProForm, { ModalForm, ProFormSwitch, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
 import { IAddStoreExists, IStoreTable } from '@/pages/types/store';
 import _ from 'lodash';
@@ -16,7 +16,6 @@ const EditStoreModalForm: React.FC<IProps> = (props) => {
   const { dispatch, visible, onVisibleChange, currentData } = props;
   const initialValues = !_.isEmpty(currentData) ? { ...currentData } : {};
   const [form] = Form.useForm();
-  const formRef = React.createRef<FormInstance>();
 
   const onSubmit = async (values: any) => {
     const hide = message.loading('正在修改');
@@ -30,21 +29,18 @@ const EditStoreModalForm: React.FC<IProps> = (props) => {
       params
     });
     if (!submitRes.storeNameExists) {
+      hide();
       // @ts-ignore
-      formRef.current.setFields([{
+      form.setFields([{
         name: 'storeName',
         errors: ['该门店名称已存在']
       }]);
       return false;
     }
     onVisibleChange(false);
-    if (submitRes.storeNameExists) {
-      hide();
-      message.success('修改成功');
-      return true;
-    }
-    message.error('修改失败请重试');
-    return false;
+    hide();
+    message.success('修改成功');
+    return true;
   };
 
   return (

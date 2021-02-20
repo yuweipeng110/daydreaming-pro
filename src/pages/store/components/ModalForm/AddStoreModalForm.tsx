@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { ConnectProps } from '@/models/connect';
-import { Form, FormInstance, message } from 'antd';
+import { Form, message } from 'antd';
 import ProForm, { ModalForm, ProFormSwitch, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
 import { IAddStoreExists } from '@/pages/types/store';
 
@@ -13,7 +13,6 @@ interface IProps extends ConnectProps {
 const AddStoreModalForm: React.FC<IProps> = (props) => {
   const { visible, onVisibleChange } = props;
   const [form] = Form.useForm();
-  const formRef = React.createRef<FormInstance>();
 
   const onSubmit = async (params: any) => {
     const hide = message.loading('正在添加');
@@ -35,18 +34,15 @@ const AddStoreModalForm: React.FC<IProps> = (props) => {
         userNameError,
         storeNameError,
       ];
+      hide();
       // @ts-ignore
-      formRef.current.setFields(errorList);
+      form.setFields(errorList);
       return false;
     }
     onVisibleChange(false);
-    if (submitRes.userNameExists && submitRes.storeNameExists) {
-      hide();
-      message.success('添加成功');
-      return true;
-    }
-    message.error('添加失败请重试');
-    return false;
+    hide();
+    message.success('添加成功');
+    return true;
   };
 
   return (

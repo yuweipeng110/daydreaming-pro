@@ -162,4 +162,29 @@ export default {
   },
 
   'GET  /api/login/captcha': getFakeCaptcha,
+
+
+  'GET /app/user/get-player-list': {
+    "code": 10200,
+    "msg": "\u6210\u529f",
+    data: [],
+    "time": "2021-02-19 23:48:42",
+    "total": 0
+  },
+
+  // 支持值为 Object 和 Array
+  'POST /app/user/add-player': {
+    code: 10505,
+    msg: 'success',
+    time: '2020-01-01 00:00:00',
+    data: {phoneExists: false},
+  },
+
+  // 支持值为 Object 和 Array
+  'POST /app/user/edit-player': {
+    code: 10200,
+    msg: 'success',
+    time: '2020-01-01 00:00:00',
+    data: {phoneExists: true},
+  },
 };

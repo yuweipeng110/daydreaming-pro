@@ -5,10 +5,9 @@ import { PageContainer } from '@ant-design/pro-layout';
 import type { ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
 import { IDeskTable } from '@/pages/types/desk';
-import { queryDeskListApi } from "@/services/desk";
-// import AddDeskModalForm from '@/pages/desk/components/ModalForm/AddDeskModalForm';
-// import EditDeskModalForm from '@/pages/desk/components/ModalForm/EditDeskModalForm';
-
+import { queryDeskListApi } from '@/services/desk';
+import AddDeskModalForm from '@/pages/desk/components/ModalForm/AddDeskModalForm';
+import EditDeskModalForm from '@/pages/desk/components/ModalForm/EditDeskModalForm';
 
 const DeskList: React.FC = () => {
   const [createDeskModalVisible, handleCreateDeskModalVisible] = useState<boolean>(false);
@@ -29,7 +28,7 @@ const DeskList: React.FC = () => {
       title: 'ID',
       dataIndex: 'id',
       key: 'id',
-      search: false
+      search: false,
     },
     {
       title: ' 桌号',
@@ -41,13 +40,13 @@ const DeskList: React.FC = () => {
       dataIndex: 'isEnabled',
       key: 'isEnabled',
       valueEnum: {
-        1: {
+        true: {
           text: '是',
-          status: 'Error',
+          status: 'success',
         },
-        0: {
+        false: {
           text: '否',
-          status: 'Success',
+          status: 'error',
         },
       },
     },
@@ -56,10 +55,10 @@ const DeskList: React.FC = () => {
       key: 'action',
       search: false,
       render: (record: any) => (
-        <Space size="middle">
+        <Space size='middle'>
           <a onClick={() => editDeskModalStatusSwitch(true, record)}>修改</a>
         </Space>
-      )
+      ),
     },
   ];
 
@@ -68,6 +67,7 @@ const DeskList: React.FC = () => {
       <ProTable<IDeskTable>
         headerTitle='桌台管理'
         rowKey='id'
+        search={false}
         toolBarRender={() => [
           <Button
             type='primary'
@@ -76,20 +76,21 @@ const DeskList: React.FC = () => {
               createDeskModalStatusSwitch(true);
             }}
           >
-            <PlusOutlined/> 新建
+            <PlusOutlined /> 新建
           </Button>,
         ]}
         options={false}
         request={(params) => queryDeskListApi({ ...params })}
-        // dataSource={deskList}
         pagination={{
           pageSize: 10,
         }}
         columns={columns}
       >
       </ProTable>
+      <AddDeskModalForm visible={createDeskModalVisible} onVisibleChange={handleCreateDeskModalVisible} />
+      <EditDeskModalForm visible={editDeskModalVisible} onVisibleChange={handleEditDeskModalVisible} currentData={currentData} />
     </PageContainer>
   );
 };
 
-export default DeskList
+export default DeskList;

@@ -1,32 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
-import { ConnectState, ConnectProps } from '@/models/connect';
+import React, { useState } from 'react';
 import { Button, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ProColumns } from '@ant-design/pro-table';
 import ProTable from '@ant-design/pro-table';
-import _ from 'lodash';
 import { IStoreTable } from '@/pages/types/store';
 import AddStoreModalForm from '@/pages/store/components/ModalForm/AddStoreModalForm';
 import EditStoreModalForm from '@/pages/store/components/ModalForm/EditStoreModalForm';
+import { queryStoreListApi } from '@/services/store';
+import _ from 'lodash';
 
-interface IProps extends ConnectProps {
-  storeList: IStoreTable[];
-};
-
-const StoreList: React.FC<IProps> = (props) => {
-  const { storeList, dispatch } = props;
+const StoreList: React.FC = () => {
 
   const [createStoreModalVisible, handleCreateStoreModalVisible] = useState<boolean>(false);
   const [editStoreModalVisible, handleEditStoreModalVisible] = useState<boolean>(false);
   const [currentData, setCurrentData] = useState<IStoreTable>(Object.create(null));
-
-  const loadStoreListData = () => {
-    dispatch({
-      type: 'store/getStoreListEffect',
-    });
-  };
 
   const createStoreModalStatusSwitch = (createStoreModalStatus: boolean) => {
     handleCreateStoreModalVisible(createStoreModalStatus);
@@ -36,10 +24,6 @@ const StoreList: React.FC<IProps> = (props) => {
     handleEditStoreModalVisible(editStoreModalStatus);
     setCurrentData(currentEditData);
   };
-
-  useEffect(() => {
-    loadStoreListData();
-  }, []);
 
   const columns: ProColumns<IStoreTable>[] = [
     {
@@ -59,11 +43,11 @@ const StoreList: React.FC<IProps> = (props) => {
       valueEnum: {
         true: {
           text: '使用中',
-          status: 'Error',
+          status: 'success',
         },
         false: {
           text: '未激活',
-          status: 'Success',
+          status: 'error',
         },
       },
     },
@@ -137,11 +121,7 @@ const StoreList: React.FC<IProps> = (props) => {
           </Button>,
         ]}
         options={false}
-        dataSource={storeList}
-        // request={(params) => queryStoreListApi({ ...params })}
-        pagination={{
-          pageSize: 5,
-        }}
+        request={(params) => queryStoreListApi({ ...params })}
         columns={columns}
       >
       </ProTable>
@@ -151,6 +131,4 @@ const StoreList: React.FC<IProps> = (props) => {
   );
 };
 
-export default connect(({ store }: ConnectState) => ({
-  storeList: store.storeList,
-}))(StoreList);
+export default StoreList;
