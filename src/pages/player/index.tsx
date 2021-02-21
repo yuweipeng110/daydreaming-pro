@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Button, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ProColumns } from '@ant-design/pro-table';
-import ProTable from '@ant-design/pro-table';
+import ProTable, { ActionType } from '@ant-design/pro-table';
 import { IUserTable } from '@/pages/types/user';
 import { queryPlayerListApi } from '@/services/player';
-import AddPlayerModalForm from '@/pages/player/components/ModalForm/AddPlayerModalForm';
-import EditPlayerModalForm from '@/pages/player/components/ModalForm/EditPlayerModalForm';
+import AddPlayer from '@/pages/player/components/ModalForm/AddPlayer';
+import EditPlayer from '@/pages/player/components/ModalForm/EditPlayer';
+import AccountRecharge from "@/pages/player/components/ModalForm/AccountRecharge";
 
 const PlayerList: React.FC = () => {
+  const actionRef = useRef<ActionType>();
   const [createPlayerModalVisible, handleCreatePlayerModalVisible] = useState<boolean>(false);
   const [editPlayerModalVisible, handleEditPlayerModalVisible] = useState<boolean>(false);
   const [accountRechargeModalVisible, handleAccountRechargeModalVisible] = useState<boolean>(false);
@@ -19,14 +21,14 @@ const PlayerList: React.FC = () => {
     handleCreatePlayerModalVisible(createPlayerModalStatus);
   };
 
-  const editPlayerModalStatusSwitch = (editPlayerModalStatus: boolean, currentData?: any) => {
+  const editPlayerModalStatusSwitch = (editPlayerModalStatus: boolean, rowCurrentData?: any) => {
     handleEditPlayerModalVisible(editPlayerModalStatus);
-    setCurrentData(currentData);
+    setCurrentData(rowCurrentData);
   };
 
-  const accountRechargeModalStatusSwitch = (accountRechargeModalStatus: boolean, currentData: any) => {
+  const accountRechargeModalStatusSwitch = (accountRechargeModalStatus: boolean, rowCurrentData: any) => {
     handleAccountRechargeModalVisible(accountRechargeModalStatus);
-    setCurrentData(currentData);
+    setCurrentData(rowCurrentData);
   }
 
   const columns: ProColumns<IUserTable>[] = [
@@ -123,6 +125,7 @@ const PlayerList: React.FC = () => {
     <PageContainer>
       <ProTable<IUserTable>
         headerTitle='玩家管理'
+        actionRef={actionRef}
         rowKey='id'
         search={false}
         toolBarRender={() => [
@@ -144,9 +147,9 @@ const PlayerList: React.FC = () => {
         columns={columns}
       >
       </ProTable>
-      <AddPlayerModalForm visible={createPlayerModalVisible} onVisibleChange={handleCreatePlayerModalVisible} />
-      <EditPlayerModalForm visible={editPlayerModalVisible} onVisibleChange={handleEditPlayerModalVisible} currentData={currentData} />
-      {/*<AccountRechargeModelModel visible={accountRechargeModalVisible} onVisibleChange={handleAccountRechargeModalVisible} currentData={currentData} />*/}
+      <AddPlayer actionRef={actionRef} visible={createPlayerModalVisible} onVisibleChange={handleCreatePlayerModalVisible} />
+      <EditPlayer actionRef={actionRef} visible={editPlayerModalVisible} onVisibleChange={handleEditPlayerModalVisible} currentData={currentData} />
+      <AccountRecharge actionRef={actionRef} visible={accountRechargeModalVisible} onVisibleChange={handleAccountRechargeModalVisible} currentData={currentData} />
     </PageContainer>
   );
 };

@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Button, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ProColumns } from '@ant-design/pro-table';
-import ProTable from '@ant-design/pro-table';
+import ProTable, { ActionType } from '@ant-design/pro-table';
 import { IDeskTable } from '@/pages/types/desk';
 import { queryDeskListApi } from '@/services/desk';
-import AddDeskModalForm from '@/pages/desk/components/ModalForm/AddDeskModalForm';
-import EditDeskModalForm from '@/pages/desk/components/ModalForm/EditDeskModalForm';
+import AddDesk from '@/pages/desk/components/ModalForm/AddDesk';
+import EditDesk from '@/pages/desk/components/ModalForm/EditDesk';
 
 const DeskList: React.FC = () => {
+  const actionRef = useRef<ActionType>();
   const [createDeskModalVisible, handleCreateDeskModalVisible] = useState<boolean>(false);
   const [editDeskModalVisible, handleEditDeskModalVisible] = useState<boolean>(false);
   const [currentData, setCurrentData] = useState<IDeskTable>(Object.create(null));
@@ -18,9 +19,9 @@ const DeskList: React.FC = () => {
     handleCreateDeskModalVisible(createDeskModalStatus);
   };
 
-  const editDeskModalStatusSwitch = (editDeskModalStatus: boolean, currentEditData?: any) => {
+  const editDeskModalStatusSwitch = (editDeskModalStatus: boolean, rowCurrentData: any) => {
     handleEditDeskModalVisible(editDeskModalStatus);
-    setCurrentData(currentEditData);
+    setCurrentData(rowCurrentData);
   };
 
   const columns: ProColumns<IDeskTable>[] = [
@@ -66,6 +67,7 @@ const DeskList: React.FC = () => {
     <PageContainer>
       <ProTable<IDeskTable>
         headerTitle='桌台管理'
+        actionRef={actionRef}
         rowKey='id'
         search={false}
         toolBarRender={() => [
@@ -76,7 +78,7 @@ const DeskList: React.FC = () => {
               createDeskModalStatusSwitch(true);
             }}
           >
-            <PlusOutlined /> 新建
+            <PlusOutlined /> 创建桌台
           </Button>,
         ]}
         options={false}
@@ -87,8 +89,8 @@ const DeskList: React.FC = () => {
         columns={columns}
       >
       </ProTable>
-      <AddDeskModalForm visible={createDeskModalVisible} onVisibleChange={handleCreateDeskModalVisible} />
-      <EditDeskModalForm visible={editDeskModalVisible} onVisibleChange={handleEditDeskModalVisible} currentData={currentData} />
+      <AddDesk actionRef={actionRef} visible={createDeskModalVisible} onVisibleChange={handleCreateDeskModalVisible} />
+      <EditDesk actionRef={actionRef} visible={editDeskModalVisible} onVisibleChange={handleEditDeskModalVisible} currentData={currentData} />
     </PageContainer>
   );
 };

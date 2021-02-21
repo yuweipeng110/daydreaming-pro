@@ -7,13 +7,14 @@ import { IAddStoreExists, IStoreTable } from '@/pages/types/store';
 import _ from 'lodash';
 
 interface IProps extends ConnectProps {
+  actionRef: any;
   visible: boolean;
   onVisibleChange: (visible: boolean) => void;
   currentData: IStoreTable;
 }
 
-const EditStoreModalForm: React.FC<IProps> = (props) => {
-  const { dispatch, visible, onVisibleChange, currentData } = props;
+const EditStore: React.FC<IProps> = (props) => {
+  const { actionRef, dispatch, visible, onVisibleChange, currentData } = props;
   const initialValues = !_.isEmpty(currentData) ? { ...currentData } : {};
   const [form] = Form.useForm();
 
@@ -23,7 +24,6 @@ const EditStoreModalForm: React.FC<IProps> = (props) => {
       storeId: currentData.id,
       ...values
     }
-
     const submitRes: IAddStoreExists = await dispatch({
       type: 'store/editStoreEffect',
       params
@@ -58,10 +58,17 @@ const EditStoreModalForm: React.FC<IProps> = (props) => {
           return false;
         }
         onVisibleChange(false);
+        if (actionRef.current) {
+          actionRef.current.reload();
+        }
         return true;
       }}
       initialValues={initialValues}
     >
+      <ProFormText
+        name='id'
+        hidden
+      />
       <ProForm.Group>
         <ProFormText
           name='storeName'
@@ -137,4 +144,4 @@ const EditStoreModalForm: React.FC<IProps> = (props) => {
   );
 };
 
-export default connect()(EditStoreModalForm);
+export default connect()(EditStore);

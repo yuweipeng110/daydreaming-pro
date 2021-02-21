@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Button, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ProColumns } from '@ant-design/pro-table';
-import ProTable from '@ant-design/pro-table';
+import ProTable, { ActionType } from '@ant-design/pro-table';
 import { IStoreTable } from '@/pages/types/store';
-import AddStoreModalForm from '@/pages/store/components/ModalForm/AddStoreModalForm';
-import EditStoreModalForm from '@/pages/store/components/ModalForm/EditStoreModalForm';
+import AddStore from '@/pages/store/components/ModalForm/AddStore';
+import EditStore from '@/pages/store/components/ModalForm/EditStore';
 import { queryStoreListApi } from '@/services/store';
 import _ from 'lodash';
 
 const StoreList: React.FC = () => {
-
+  const actionRef = useRef<ActionType>();
   const [createStoreModalVisible, handleCreateStoreModalVisible] = useState<boolean>(false);
   const [editStoreModalVisible, handleEditStoreModalVisible] = useState<boolean>(false);
   const [currentData, setCurrentData] = useState<IStoreTable>(Object.create(null));
@@ -20,9 +20,9 @@ const StoreList: React.FC = () => {
     handleCreateStoreModalVisible(createStoreModalStatus);
   };
 
-  const editStoreModalStatusSwitch = (editStoreModalStatus: boolean, currentEditData?: any) => {
+  const editStoreModalStatusSwitch = (editStoreModalStatus: boolean, rowCurrentData: any) => {
     handleEditStoreModalVisible(editStoreModalStatus);
-    setCurrentData(currentEditData);
+    setCurrentData(rowCurrentData);
   };
 
   const columns: ProColumns<IStoreTable>[] = [
@@ -107,6 +107,7 @@ const StoreList: React.FC = () => {
     <PageContainer>
       <ProTable<IStoreTable>
         headerTitle='门店管理'
+        actionRef={actionRef}
         rowKey='id'
         search={false}
         toolBarRender={() => [
@@ -117,16 +118,19 @@ const StoreList: React.FC = () => {
               createStoreModalStatusSwitch(true);
             }}
           >
-            <PlusOutlined /> 新建
+            <PlusOutlined /> 新建门店
           </Button>,
         ]}
         options={false}
         request={(params) => queryStoreListApi({ ...params })}
+        pagination={{
+          pageSize: 10,
+        }}
         columns={columns}
       >
       </ProTable>
-      <AddStoreModalForm visible={createStoreModalVisible} onVisibleChange={handleCreateStoreModalVisible} />
-      <EditStoreModalForm visible={editStoreModalVisible} onVisibleChange={handleEditStoreModalVisible} currentData={currentData} />
+      <AddStore actionRef={actionRef} visible={createStoreModalVisible} onVisibleChange={handleCreateStoreModalVisible} />
+      <EditStore actionRef={actionRef} visible={editStoreModalVisible} onVisibleChange={handleEditStoreModalVisible} currentData={currentData} />
     </PageContainer>
   );
 };

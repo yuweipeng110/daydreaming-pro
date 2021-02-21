@@ -4,26 +4,25 @@ import { ConnectProps } from '@/models/connect';
 import { Form, message } from 'antd';
 import ProForm, { ModalForm, ProFormSwitch, ProFormText } from '@ant-design/pro-form';
 import { addDeskApi } from '@/services/desk';
-import { IDeskTable } from '@/pages/types/desk';
 
 interface IProps extends ConnectProps {
+  actionRef: any;
   visible: boolean;
   onVisibleChange: (visible: boolean) => void;
-  currentData: IDeskTable;
 }
 
-const AddDeskModalForm: React.FC<IProps> = (props) => {
-  const { visible, onVisibleChange, currentData } = props;
-  const initialValues = { ...currentData };
+const AddDesk: React.FC<IProps> = (props) => {
+  const { actionRef, visible, onVisibleChange } = props;
   const [form] = Form.useForm();
 
-  const onSubmit = async (params: any) => {
-    const hide = message.loading('正在修改');
+  const onSubmit = async (values: any) => {
+    const hide = message.loading('正在添加');
     try {
+      const params = { ...values };
       await addDeskApi((params));
       onVisibleChange(false);
       hide();
-      message.success('修改成功');
+      message.success('添加成功');
       return true;
     } catch (error) {
       hide();
@@ -34,7 +33,7 @@ const AddDeskModalForm: React.FC<IProps> = (props) => {
 
   return (
     <ModalForm
-      title='修改桌台信息'
+      title='添加桌台信息'
       visible={visible}
       onVisibleChange={(visibleValue) => {
         form.resetFields();
@@ -47,9 +46,11 @@ const AddDeskModalForm: React.FC<IProps> = (props) => {
           return false;
         }
         onVisibleChange(false);
+        if (actionRef.current) {
+          actionRef.current.reload();
+        }
         return true;
       }}
-      initialValues={initialValues}
     >
       <ProForm.Group>
         <ProFormText
@@ -66,10 +67,11 @@ const AddDeskModalForm: React.FC<IProps> = (props) => {
         <ProFormSwitch
           name='isEnabled'
           label='是否可用'
+          width='md'
         />
       </ProForm.Group>
     </ModalForm>
   );
 };
 
-export default connect()(AddDeskModalForm);
+export default connect()(AddDesk);

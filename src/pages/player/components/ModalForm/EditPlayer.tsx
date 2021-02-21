@@ -10,20 +10,28 @@ import ProForm, {
   ProFormTextArea,
 } from '@ant-design/pro-form';
 import { IAddUserExists } from '@/pages/types/user';
+import { IUserTable } from '@/pages/types/user';
 
 interface IProps extends ConnectProps {
+  actionRef: any;
   visible: boolean;
   onVisibleChange: (visible: boolean) => void;
+  currentData: IUserTable;
 }
 
-const AddPlayerModalForm: React.FC<IProps> = (props) => {
-  const { visible, onVisibleChange } = props;
+const AddPlayer: React.FC<IProps> = (props) => {
+  const { actionRef, visible, onVisibleChange, currentData } = props;
+  const initialValues = { ...currentData };
   const [form] = Form.useForm();
 
-  const onSubmit = async (params: any) => {
-    const hide = message.loading('正在添加');
+  const onSubmit = async (values: any) => {
+    const hide = message.loading('正在修改');
+    const params = {
+      playerId: values.id,
+      ...values
+    };
     const submitRes: IAddUserExists = await props.dispatch({
-      type: 'player/addPlayerEffect',
+      type: 'player/editPlayerEffect',
       params,
     });
     if (!submitRes.phoneExists) {
@@ -41,13 +49,13 @@ const AddPlayerModalForm: React.FC<IProps> = (props) => {
     }
     onVisibleChange(false);
     hide();
-    message.success('添加成功');
+    message.success('修改成功');
     return true;
   };
 
   return (
     <ModalForm
-      title='添加玩家信息'
+      title='修改玩家信息'
       visible={visible}
       onVisibleChange={(visibleValue) => {
         form.resetFields();
@@ -59,10 +67,18 @@ const AddPlayerModalForm: React.FC<IProps> = (props) => {
         if (!success) {
           return false;
         }
+        if (actionRef.current) {
+          actionRef.current.reload();
+        }
         onVisibleChange(false);
         return true;
       }}
+      initialValues={initialValues}
     >
+      <ProFormText
+        name='id'
+        hidden
+      />
       <ProForm.Group>
         <ProFormText
           name='nickname'
@@ -126,4 +142,4 @@ const AddPlayerModalForm: React.FC<IProps> = (props) => {
   );
 };
 
-export default connect()(AddPlayerModalForm);
+export default connect()(AddPlayer);

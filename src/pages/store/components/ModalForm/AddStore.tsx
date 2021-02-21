@@ -6,17 +6,18 @@ import ProForm, { ModalForm, ProFormSwitch, ProFormText, ProFormTextArea } from 
 import { IAddStoreExists } from '@/pages/types/store';
 
 interface IProps extends ConnectProps {
+  actionRef: any;
   visible: boolean;
   onVisibleChange: (visible: boolean) => void;
 }
 
-const AddStoreModalForm: React.FC<IProps> = (props) => {
-  const { visible, onVisibleChange } = props;
+const AddStore: React.FC<IProps> = (props) => {
+  const { actionRef, visible, onVisibleChange } = props;
   const [form] = Form.useForm();
 
-  const onSubmit = async (params: any) => {
+  const onSubmit = async (values: any) => {
     const hide = message.loading('正在添加');
-
+    const params = { ...values };
     const submitRes: IAddStoreExists = await props.dispatch({
       type: 'store/addStoreEffect',
       params,
@@ -60,6 +61,9 @@ const AddStoreModalForm: React.FC<IProps> = (props) => {
           return false;
         }
         onVisibleChange(false);
+        if (actionRef.current) {
+          actionRef.current.reload();
+        }
         return true;
       }}
     >
@@ -171,4 +175,4 @@ const AddStoreModalForm: React.FC<IProps> = (props) => {
   );
 };
 
-export default connect()(AddStoreModalForm);
+export default connect()(AddStore);

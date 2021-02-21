@@ -62,16 +62,28 @@
                 component: './store',
               },
               {
+                path: '/player',
+                name: 'player',
+                icon: 'smile',
+                component: './player',
+              },
+              {
+                path: '/script',
+                name: 'script',
+                icon: 'smile',
+                component: './script',
+              },
+              {
                 path: '/desk',
                 name: 'desk',
                 icon: 'smile',
                 component: './desk',
               },
               {
-                path: '/player',
-                name: 'player',
+                path: '/order',
+                name: 'order',
                 icon: 'smile',
-                component: './player',
+                component: './order',
               },
               {
                 component: './404',
