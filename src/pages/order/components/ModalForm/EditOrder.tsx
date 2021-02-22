@@ -69,10 +69,9 @@ const EditOrder: React.FC<IProps> = (props) => {
     return [];
   };
 
-  const getUsersReq = useRequest(queryPlayerListApi, {
+  const { loading, run, cancel } = useRequest(queryPlayerListApi, {
     debounceInterval: 500,
     manual: true,
-    defaultLoading: true,
     onSuccess: (data) => {
       const valueEnumList = {};
       // eslint-disable-next-line no-return-assign
@@ -230,9 +229,12 @@ const EditOrder: React.FC<IProps> = (props) => {
           placeholder='请输入玩家电话'
           showSearch
           fieldProps={{
+            showArrow: true,
             filterOption: false,
             onSelect: (value) => handleAddPlayer(value),
-            onSearch: (value) => getUsersReq.run(value),
+            onSearch: (value) => !_.isEmpty(value) && run({ phone: value }),
+            onBlur: cancel,
+            loading,
           }}
           valueEnum={valueEnum}
         />

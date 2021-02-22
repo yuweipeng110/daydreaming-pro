@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { ConnectProps } from '@/models/connect';
 import { useRequest } from 'umi';
-import { Form, message } from 'antd';
+import { Form, message, Button, Input } from 'antd';
 import ProForm, { ModalForm, ProFormSelect, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
 import type { ProColumns } from '@ant-design/pro-table';
 import { EditableProTable } from '@ant-design/pro-table';
@@ -23,76 +23,86 @@ interface IProps extends ConnectProps {
   currentData: IDeskTable;
 }
 
+const defaultData: IOrderDetailTable[] = [{
+  "id": "111",
+  "orderId": "12",
+  "userId": "2",
+  "userInfo": {
+    "id": "2",
+    "role": "2",
+    "storeId": "1",
+    "nickname": "\u5feb\u4e50\u96be\u627e",
+    "sex": 0,
+    "phone": "",
+    "birthday": "",
+    "killerRanking": 0,
+    "killerIntegral": 0,
+    "killerTitle": "",
+    "detectiveRanking": 0,
+    "detectiveIntegral": 0,
+    "detectiveTitle": "",
+    "peopleRanking": 0,
+    "peopleIntegral": 0,
+    "peopleTitle": "",
+    "totalRanking": 0,
+    "totalIntegral": 0,
+    "totalTitle": "",
+    "activeIntegral": 0,
+    "remark": "",
+    "otime": "2020-09-13 19:50:48",
+    "accountBalance": "0.00",
+    "voucherBalance": "0.00"
+  },
+  "unitPrice": "35.00",
+  "isPay": "1",
+  "discount": "1.00",
+  "otime": "2021-02-21 17:46:47"
+}, {
+  "id": "112",
+  "orderId": "12",
+  "userId": "1",
+  "userInfo": {
+    "id": "1",
+    "role": "1",
+    "storeId": "1",
+    "nickname": "\u9a6c\u745e",
+    "sex": 0,
+    "phone": "",
+    "birthday": "",
+    "killerRanking": 0,
+    "killerIntegral": 0,
+    "killerTitle": "",
+    "detectiveRanking": 0,
+    "detectiveIntegral": 0,
+    "detectiveTitle": "",
+    "peopleRanking": 0,
+    "peopleIntegral": 0,
+    "peopleTitle": "",
+    "totalRanking": 0,
+    "totalIntegral": 0,
+    "totalTitle": "",
+    "activeIntegral": 0,
+    "remark": "",
+    "otime": "2020-09-13 19:49:32",
+    "accountBalance": "0.00",
+    "voucherBalance": "0.00"
+  },
+  "unitPrice": "35.00",
+  "isPay": "1",
+  "discount": "1.00",
+  "otime": "2021-02-21 17:46:47"
+}];
+
 const SettlementOrder: React.FC<IProps> = (props) => {
   const { actionRef, visible, onVisibleChange, currentData } = props;
   const initialValues = { ...currentData.orderInfo };
   const [form] = Form.useForm();
-  const [playerList, setPlayerList] = useState<IUserTable[]>([]);
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
   const [orderDetailList, setOrderDetailList] = useState<IOrderDetailTable[]>([]);
-  const [valueEnum, setValueEnum] = useState({});
 
   useEffect(() => {
     if (visible) setOrderDetailList(currentData.orderInfo?.detailList ?? []);
   }, [visible]);
-
-  /**
-   * /app/user/get-user-list?storeId=1&pageRecords=1000
-   */
-  const loadScriptListData = async () => {
-    const params = { pageRecords: 1000 };
-    const res = await queryScriptListApi(params);
-    if (res.code === STATUS_CODE.SUCCESS) {
-      return res.data.map(item => {
-        return {
-          label: item.title,
-          value: item.id,
-        };
-      });
-    }
-    return [];
-  };
-
-  /**
-   * /app/user/get-script-list?storeId=1&pageRecords=1000
-   */
-  const loadHostListData = async () => {
-    const res = await queryUserListApi({});
-    if (res.code === STATUS_CODE.SUCCESS) {
-      return res.data.map(item => {
-        return {
-          label: `${item.nickname}-${item.phone}`,
-          value: item.id,
-        };
-      });
-    }
-    return [];
-  };
-
-  const getUsersReq = useRequest(queryPlayerListApi, {
-    debounceInterval: 500,
-    manual: true,
-    defaultLoading: true,
-    onSuccess: (data) => {
-      const valueEnumList = {};
-      // eslint-disable-next-line no-return-assign
-      data.map((item: IUserTable) => (
-        valueEnumList[item.id] = `${item.nickname}-${item.phone}`
-      ));
-      setPlayerList(data);
-      setValueEnum(valueEnumList);
-    },
-  });
-
-  const handleAddPlayer = (userId: string) => {
-    const userInfo: IUserTable = playerList.find((user: IUserTable) => user.id === userId) || {} as IUserTable;
-    const tempOrderDetail: IOrderDetailTable = {
-      id: (Math.random() * 1000000).toFixed(0),
-      userId,
-      userInfo,
-    };
-    setOrderDetailList(_.uniqWith(_.compact([tempOrderDetail, ...orderDetailList]), _.isEqual));
-  };
 
   const onSubmit = async (values: any) => {
     if (orderDetailList.length === 0) {
@@ -149,19 +159,50 @@ const SettlementOrder: React.FC<IProps> = (props) => {
       dataIndex: ['userInfo', 'phone'],
     },
     {
-      title: '操作',
-      valueType: 'option',
-      width: 200,
-      render: (text: any, record: IOrderDetailTable) => [
-        <a
-          key='delete'
-          onClick={() => {
-            setOrderDetailList(orderDetailList.filter(item => item.id !== record.id));
-          }}
-        >
-          删除
-        </a>,
-      ],
+      title: '路人积分',
+      dataIndex: 'decs1',
+      renderFormItem: (_, { isEditable, record, recordKey }) => {
+        return isEditable ? <Button /> : <Input />;
+      },
+    },
+    {
+      title: '侦探积分',
+      dataIndex: 'decs2',
+    },
+    {
+      title: '杀手积分',
+      dataIndex: 'decs3',
+    },
+    {
+      title: '账户余额',
+      dataIndex: ['userInfo', 'accountBalance'],
+    },
+    {
+      title: '账户代金券余额',
+      dataIndex: ['userInfo', 'voucherBalance'],
+    },
+    {
+      title: '折扣',
+      dataIndex: 'discount',
+    },
+    {
+      title: '支付方式',
+      dataIndex: 'paymentMethod',
+      valueType: 'select',
+      valueEnum: {
+        0: {
+          text: '微信',
+        },
+        1: {
+          text: '支付宝',
+        },
+        2: {
+          text: '现金',
+        },
+        5: {
+          text: '账户余额',
+        },
+      }
     },
   ];
 
@@ -187,70 +228,42 @@ const SettlementOrder: React.FC<IProps> = (props) => {
       }}
       initialValues={initialValues}
     >
-      <ProFormText
-        name='id'
-        hidden
-      />
-      <ProFormText
-        name='deskId'
-        hidden
-      />
-      <ProForm.Group>
-        <ProFormSelect
-          name='scriptId'
-          label='选择剧本'
-          request={() => loadScriptListData()}
-          width='md'
-          rules={[
-            {
-              required: true,
-              message: '请选择剧本!',
-            },
-          ]}
-        />
-        <ProFormSelect
-          name='hostId'
-          label='主持人'
-          request={() => loadHostListData()}
-          width='md'
-          rules={[
-            {
-              required: true,
-              message: '请选择主持人!',
-            },
-          ]}
-        />
-      </ProForm.Group>
-      <ProForm.Group>
-        <ProFormSelect
-          name='userId'
-          label='玩家'
-          width='md'
-          placeholder='请输入玩家电话'
-          showSearch
-          fieldProps={{
-            filterOption: false,
-            onSelect: (value) => handleAddPlayer(value),
-            onSearch: (value) => getUsersReq.run(value),
-          }}
-          valueEnum={valueEnum}
-        />
-        <ProFormTextArea
-          name='remark'
-          label='备注'
-          width='md'
-        />
-      </ProForm.Group>
       <EditableProTable<IOrderDetailTable>
         headerTitle='玩家列表'
         rowKey='id'
         recordCreatorProps={false}
         columns={columns}
-        value={orderDetailList}
+        value={defaultData}
         onChange={setOrderDetailList}
+        // editable={{
+        //   type: 'multiple',
+        //   editableKeys,
+        //   onChange: setEditableRowKeys,
+        // }}
+        toolBarRender={() => {
+          return [
+            <Button
+              type="primary"
+              key="save"
+              onClick={() => {
+                // dataSource 就是当前数据，可以调用 api 将其保存
+                console.log(orderDetailList);
+              }}
+            >
+              保存数据
+            </Button>,
+          ];
+        }}
         editable={{
           type: 'multiple',
           editableKeys,
+          actionRender: (row, config, defaultDoms) => {
+            return [defaultDoms.delete];
+          },
+          onValuesChange: (record, recordList) => {
+            console.log('record',record);
+            console.log('recordList',recordList);
+          },
           onChange: setEditableRowKeys,
         }}
       />
