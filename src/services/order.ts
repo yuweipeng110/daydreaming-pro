@@ -2,7 +2,7 @@ import request from '@/utils/request'
 import { IAddOrderResponse, IOrderResponse } from '@/pages/types/order';
 
 
-export async function queryOrderListApi(params: any): Promise<any>{
+export async function queryOrderListApi(params: any): Promise<IOrderResponse>{
   return request.get('/app/order/get-order-list',{
     params
   });

@@ -13,7 +13,6 @@ export interface IOrderDetailTable {
   id?: string;
   key?: string;
   /// params
-  tempId?: string;
   discountPrice?: number;
   orderDetailIntegralList?: IOrderDetailIntegralTable[];
 }

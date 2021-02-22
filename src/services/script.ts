@@ -1,9 +1,8 @@
 import request from '@/utils/request'
 import { IAddScriptResponse, IScriptResponse } from '@/pages/types/script';
 
-
 export async function queryScriptListApi(params: any): Promise<IScriptResponse>{
-  return request.get('/app/user/get-script-list', {
+  return request.get('/app/user/get-script-list',{
     params
   });
 }

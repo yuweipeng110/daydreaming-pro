@@ -3,13 +3,14 @@ import { connect } from 'react-redux';
 import { ConnectProps } from '@/models/connect';
 import { useRequest } from 'umi';
 import { Form, message } from 'antd';
-import ProForm, { ModalForm, ProFormSelect, ProFormTextArea } from '@ant-design/pro-form';
+import ProForm, { ModalForm, ProFormSelect, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
 import type { ProColumns } from '@ant-design/pro-table';
 import { EditableProTable } from '@ant-design/pro-table';
 import { STATUS_CODE } from '@/pages/constants';
 import { IOrderDetailTable } from '@/pages/types/orderDetail';
 import { IUserTable } from '@/pages/types/user';
-import { addOrderApi } from '@/services/order';
+import { IDeskTable } from '@/pages/types/desk';
+import { editOrderApi } from '@/services/order';
 import { queryScriptListApi } from '@/services/script';
 import { queryUserListApi } from '@/services/user';
 import { queryPlayerListApi } from '@/services/player';
@@ -19,11 +20,12 @@ interface IProps extends ConnectProps {
   actionRef: any;
   visible: boolean;
   onVisibleChange: (visible: boolean) => void;
-  deskId: number;
+  currentData: IDeskTable;
 }
 
-const AddOrder: React.FC<IProps> = (props) => {
-  const { actionRef, visible, onVisibleChange, deskId } = props;
+const SettlementOrder: React.FC<IProps> = (props) => {
+  const { actionRef, visible, onVisibleChange, currentData } = props;
+  const initialValues = { ...currentData.orderInfo };
   const [form] = Form.useForm();
   const [playerList, setPlayerList] = useState<IUserTable[]>([]);
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
@@ -31,7 +33,7 @@ const AddOrder: React.FC<IProps> = (props) => {
   const [valueEnum, setValueEnum] = useState({});
 
   useEffect(() => {
-    if (visible) setOrderDetailList([]);
+    if (visible) setOrderDetailList(currentData.orderInfo?.detailList ?? []);
   }, [visible]);
 
   /**
@@ -105,20 +107,19 @@ const AddOrder: React.FC<IProps> = (props) => {
       return false;
     }
 
-    const hide = message.loading('正在开台');
+    const hide = message.loading('正在结算');
     const params = {
       ...values,
-      storeId: 1,
-      deskId,
-      // orderOperatorId: props.loginUserInfo.id,
+      orderId: values.id,
+      deskId: values.deskId,
       detailList: orderDetailList,
-      // storeId,scriptId,deskId,hostId,orderOperatorId,remark,detailList
+      // storeId,scriptId,deskId,orderOperatorId,remark,detailList
     };
-    const res = await addOrderApi((params));
+    const res = await editOrderApi((params));
     if (res.code === STATUS_CODE.SUCCESS) {
       onVisibleChange(false);
       hide();
-      message.success('开台成功');
+      message.success('结算成功');
       return true;
     }
     hide();
@@ -184,7 +185,16 @@ const AddOrder: React.FC<IProps> = (props) => {
         }
         return true;
       }}
+      initialValues={initialValues}
     >
+      <ProFormText
+        name='id'
+        hidden
+      />
+      <ProFormText
+        name='deskId'
+        hidden
+      />
       <ProForm.Group>
         <ProFormSelect
           name='scriptId'
@@ -248,4 +258,4 @@ const AddOrder: React.FC<IProps> = (props) => {
   );
 };
 
-export default connect()(AddOrder);
+export default connect()(SettlementOrder);
