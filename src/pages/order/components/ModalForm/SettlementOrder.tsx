@@ -24,80 +24,81 @@ interface IProps extends ConnectProps {
 }
 
 const defaultData: IOrderDetailTable[] = [{
-  "id": "111",
-  "orderId": "12",
-  "userId": "2",
-  "userInfo": {
-    "id": "2",
-    "role": "2",
-    "storeId": "1",
-    "nickname": "\u5feb\u4e50\u96be\u627e",
-    "sex": 0,
-    "phone": "",
-    "birthday": "",
-    "killerRanking": 0,
-    "killerIntegral": 0,
-    "killerTitle": "",
-    "detectiveRanking": 0,
-    "detectiveIntegral": 0,
-    "detectiveTitle": "",
-    "peopleRanking": 0,
-    "peopleIntegral": 0,
-    "peopleTitle": "",
-    "totalRanking": 0,
-    "totalIntegral": 0,
-    "totalTitle": "",
-    "activeIntegral": 0,
-    "remark": "",
-    "otime": "2020-09-13 19:50:48",
-    "accountBalance": "0.00",
-    "voucherBalance": "0.00"
+  'id': '111',
+  'orderId': '12',
+  'userId': '2',
+  'userInfo': {
+    'id': '2',
+    'role': '2',
+    'storeId': '1',
+    'nickname': '\u5feb\u4e50\u96be\u627e',
+    'sex': 0,
+    'phone': '',
+    'birthday': '',
+    'killerRanking': 0,
+    'killerIntegral': 0,
+    'killerTitle': '',
+    'detectiveRanking': 0,
+    'detectiveIntegral': 0,
+    'detectiveTitle': '',
+    'peopleRanking': 0,
+    'peopleIntegral': 0,
+    'peopleTitle': '',
+    'totalRanking': 0,
+    'totalIntegral': 0,
+    'totalTitle': '',
+    'activeIntegral': 0,
+    'remark': '',
+    'otime': '2020-09-13 19:50:48',
+    'accountBalance': '200.00',
+    'voucherBalance': '50.00',
   },
-  "unitPrice": "35.00",
-  "isPay": "1",
-  "discount": "1.00",
-  "otime": "2021-02-21 17:46:47"
+  'unitPrice': '35.00',
+  'isPay': '1',
+  'discount': '1.00',
+  'otime': '2021-02-21 17:46:47',
 }, {
-  "id": "112",
-  "orderId": "12",
-  "userId": "1",
-  "userInfo": {
-    "id": "1",
-    "role": "1",
-    "storeId": "1",
-    "nickname": "\u9a6c\u745e",
-    "sex": 0,
-    "phone": "",
-    "birthday": "",
-    "killerRanking": 0,
-    "killerIntegral": 0,
-    "killerTitle": "",
-    "detectiveRanking": 0,
-    "detectiveIntegral": 0,
-    "detectiveTitle": "",
-    "peopleRanking": 0,
-    "peopleIntegral": 0,
-    "peopleTitle": "",
-    "totalRanking": 0,
-    "totalIntegral": 0,
-    "totalTitle": "",
-    "activeIntegral": 0,
-    "remark": "",
-    "otime": "2020-09-13 19:49:32",
-    "accountBalance": "0.00",
-    "voucherBalance": "0.00"
+  'id': '112',
+  'orderId': '12',
+  'userId': '1',
+  'userInfo': {
+    'id': '1',
+    'role': '1',
+    'storeId': '1',
+    'nickname': '\u9a6c\u745e',
+    'sex': 0,
+    'phone': '',
+    'birthday': '',
+    'killerRanking': 0,
+    'killerIntegral': 0,
+    'killerTitle': '',
+    'detectiveRanking': 0,
+    'detectiveIntegral': 0,
+    'detectiveTitle': '',
+    'peopleRanking': 0,
+    'peopleIntegral': 0,
+    'peopleTitle': '',
+    'totalRanking': 0,
+    'totalIntegral': 0,
+    'totalTitle': '',
+    'activeIntegral': 0,
+    'remark': '',
+    'otime': '2020-09-13 19:49:32',
+    'accountBalance': '100.00',
+    'voucherBalance': '0.00',
   },
-  "unitPrice": "35.00",
-  "isPay": "1",
-  "discount": "1.00",
-  "otime": "2021-02-21 17:46:47"
+  'unitPrice': '35.00',
+  'isPay': '1',
+  'discount': '1.00',
+  'otime': '2021-02-21 17:46:47',
 }];
 
 const SettlementOrder: React.FC<IProps> = (props) => {
   const { actionRef, visible, onVisibleChange, currentData } = props;
   const initialValues = { ...currentData.orderInfo };
   const [form] = Form.useForm();
-  const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
+  const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() =>
+    defaultData.map((item) => item.id));
   const [orderDetailList, setOrderDetailList] = useState<IOrderDetailTable[]>([]);
 
   useEffect(() => {
@@ -105,19 +106,6 @@ const SettlementOrder: React.FC<IProps> = (props) => {
   }, [visible]);
 
   const onSubmit = async (values: any) => {
-    if (orderDetailList.length === 0) {
-      const orderDetailListError = {
-        name: 'userId',
-        errors: ['至少选择一名玩家'],
-      };
-      const errorList = [
-        orderDetailListError,
-      ];
-      form.setFields(errorList);
-      return false;
-    }
-
-    const hide = message.loading('正在结算');
     const params = {
       ...values,
       orderId: values.id,
@@ -125,22 +113,23 @@ const SettlementOrder: React.FC<IProps> = (props) => {
       detailList: orderDetailList,
       // storeId,scriptId,deskId,orderOperatorId,remark,detailList
     };
-    const res = await editOrderApi((params));
-    if (res.code === STATUS_CODE.SUCCESS) {
-      onVisibleChange(false);
-      hide();
-      message.success('结算成功');
-      return true;
-    }
-    hide();
-    message.error(res.msg);
+    console.log('params', params);
     return false;
   };
+
+  const changeOrderDetailRow = () => {
+    // @ts-ignore
+    setEditableRowKeys(defaultData.map((item) => item.id));
+
+  }
 
   const columns: ProColumns<IOrderDetailTable>[] = [
     {
       title: '昵称',
       dataIndex: ['userInfo', 'nickname'],
+      renderFormItem: (_, { isEditable, record }) => {
+        return isEditable && record?.userInfo?.nickname;
+      },
     },
     {
       title: '性别',
@@ -153,17 +142,20 @@ const SettlementOrder: React.FC<IProps> = (props) => {
           text: '男',
         },
       },
+      renderFormItem: (_, { isEditable, record }) => {
+        return isEditable && record?.userInfo?.sex;
+      },
     },
     {
       title: '手机号',
       dataIndex: ['userInfo', 'phone'],
+      renderFormItem: (_, { isEditable, record }) => {
+        return isEditable && record?.userInfo?.phone;
+      },
     },
     {
       title: '路人积分',
       dataIndex: 'decs1',
-      renderFormItem: (_, { isEditable, record, recordKey }) => {
-        return isEditable ? <Button /> : <Input />;
-      },
     },
     {
       title: '侦探积分',
@@ -172,14 +164,23 @@ const SettlementOrder: React.FC<IProps> = (props) => {
     {
       title: '杀手积分',
       dataIndex: 'decs3',
+
     },
     {
       title: '账户余额',
       dataIndex: ['userInfo', 'accountBalance'],
+      align: 'right',
+      renderFormItem: (_, { isEditable, record }) => {
+        return isEditable && record?.userInfo?.accountBalance;
+      },
     },
     {
       title: '账户代金券余额',
       dataIndex: ['userInfo', 'voucherBalance'],
+      align: 'right',
+      renderFormItem: (_, { isEditable, record }) => {
+        return isEditable && record?.userInfo?.voucherBalance;
+      },
     },
     {
       title: '折扣',
@@ -202,7 +203,7 @@ const SettlementOrder: React.FC<IProps> = (props) => {
         5: {
           text: '账户余额',
         },
-      }
+      },
     },
   ];
 
@@ -227,46 +228,25 @@ const SettlementOrder: React.FC<IProps> = (props) => {
         return true;
       }}
       initialValues={initialValues}
+      width='md'
     >
-      <EditableProTable<IOrderDetailTable>
-        headerTitle='玩家列表'
-        rowKey='id'
-        recordCreatorProps={false}
-        columns={columns}
-        value={defaultData}
-        onChange={setOrderDetailList}
-        // editable={{
-        //   type: 'multiple',
-        //   editableKeys,
-        //   onChange: setEditableRowKeys,
-        // }}
-        toolBarRender={() => {
-          return [
-            <Button
-              type="primary"
-              key="save"
-              onClick={() => {
-                // dataSource 就是当前数据，可以调用 api 将其保存
-                console.log(orderDetailList);
-              }}
-            >
-              保存数据
-            </Button>,
-          ];
-        }}
-        editable={{
-          type: 'multiple',
-          editableKeys,
-          actionRender: (row, config, defaultDoms) => {
-            return [defaultDoms.delete];
-          },
-          onValuesChange: (record, recordList) => {
-            console.log('record',record);
-            console.log('recordList',recordList);
-          },
-          onChange: setEditableRowKeys,
-        }}
-      />
+      <ProForm
+        name='detailList'
+      >
+        <EditableProTable<IOrderDetailTable>
+          headerTitle='玩家列表'
+          rowKey='id'
+          recordCreatorProps={false}
+          columns={columns}
+          value={orderDetailList}
+          onChange={setOrderDetailList}
+          editable={{
+            type: 'multiple',
+            editableKeys,
+            onChange: changeOrderDetailRow,
+          }}
+        />
+      </ProForm>
     </ModalForm>
   );
 };
