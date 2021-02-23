@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { ConnectProps } from '@/models/connect';
 import { useRequest } from 'umi';
-import { Form, message, Button, Input } from 'antd';
+import { Form, message, Button, InputNumber } from 'antd';
 import ProForm, { ModalForm, ProFormSelect, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
 import type { ProColumns } from '@ant-design/pro-table';
 import { EditableProTable } from '@ant-design/pro-table';
@@ -23,113 +23,40 @@ interface IProps extends ConnectProps {
   currentData: IDeskTable;
 }
 
-const defaultData: IOrderDetailTable[] = [{
-  'id': '111',
-  'orderId': '12',
-  'userId': '2',
-  'userInfo': {
-    'id': '2',
-    'role': '2',
-    'storeId': '1',
-    'nickname': '\u5feb\u4e50\u96be\u627e',
-    'sex': 0,
-    'phone': '',
-    'birthday': '',
-    'killerRanking': 0,
-    'killerIntegral': 0,
-    'killerTitle': '',
-    'detectiveRanking': 0,
-    'detectiveIntegral': 0,
-    'detectiveTitle': '',
-    'peopleRanking': 0,
-    'peopleIntegral': 0,
-    'peopleTitle': '',
-    'totalRanking': 0,
-    'totalIntegral': 0,
-    'totalTitle': '',
-    'activeIntegral': 0,
-    'remark': '',
-    'otime': '2020-09-13 19:50:48',
-    'accountBalance': '200.00',
-    'voucherBalance': '50.00',
-  },
-  'unitPrice': '35.00',
-  'isPay': '1',
-  'discount': '1.00',
-  'otime': '2021-02-21 17:46:47',
-}, {
-  'id': '112',
-  'orderId': '12',
-  'userId': '1',
-  'userInfo': {
-    'id': '1',
-    'role': '1',
-    'storeId': '1',
-    'nickname': '\u9a6c\u745e',
-    'sex': 0,
-    'phone': '',
-    'birthday': '',
-    'killerRanking': 0,
-    'killerIntegral': 0,
-    'killerTitle': '',
-    'detectiveRanking': 0,
-    'detectiveIntegral': 0,
-    'detectiveTitle': '',
-    'peopleRanking': 0,
-    'peopleIntegral': 0,
-    'peopleTitle': '',
-    'totalRanking': 0,
-    'totalIntegral': 0,
-    'totalTitle': '',
-    'activeIntegral': 0,
-    'remark': '',
-    'otime': '2020-09-13 19:49:32',
-    'accountBalance': '100.00',
-    'voucherBalance': '0.00',
-  },
-  'unitPrice': '35.00',
-  'isPay': '1',
-  'discount': '1.00',
-  'otime': '2021-02-21 17:46:47',
-}];
-
 const SettlementOrder: React.FC<IProps> = (props) => {
   const { actionRef, visible, onVisibleChange, currentData } = props;
   const initialValues = { ...currentData.orderInfo };
   const [form] = Form.useForm();
-  const [editableKeys, setEditableRowKeys] = useState<React.Key[]>(() =>
-    defaultData.map((item) => item.id));
+  const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
   const [orderDetailList, setOrderDetailList] = useState<IOrderDetailTable[]>([]);
 
   useEffect(() => {
-    if (visible) setOrderDetailList(currentData.orderInfo?.detailList ?? []);
+    if (visible) {
+      setOrderDetailList(currentData.orderInfo?.detailList ?? []);
+    }
   }, [visible]);
+
+  useEffect(() => {
+    setEditableRowKeys(orderDetailList.map((item) => Number(item.id)));
+  }, [orderDetailList]);
 
   const onSubmit = async (values: any) => {
     const params = {
       ...values,
       orderId: values.id,
       deskId: values.deskId,
-      detailList: orderDetailList,
+      // detailList: orderDetailList,
       // storeId,scriptId,deskId,orderOperatorId,remark,detailList
     };
     console.log('params', params);
     return false;
   };
 
-  const changeOrderDetailRow = () => {
-    // @ts-ignore
-    setEditableRowKeys(defaultData.map((item) => item.id));
-
-  }
-
   const columns: ProColumns<IOrderDetailTable>[] = [
     {
       title: '昵称',
       dataIndex: ['userInfo', 'nickname'],
-      renderFormItem: (_, { isEditable, record }) => {
-        return isEditable && record?.userInfo?.nickname;
-      },
+      editable: false,
     },
     {
       title: '性别',
@@ -142,49 +69,52 @@ const SettlementOrder: React.FC<IProps> = (props) => {
           text: '男',
         },
       },
-      renderFormItem: (_, { isEditable, record }) => {
-        return isEditable && record?.userInfo?.sex;
-      },
+      editable: false,
     },
     {
       title: '手机号',
       dataIndex: ['userInfo', 'phone'],
-      renderFormItem: (_, { isEditable, record }) => {
-        return isEditable && record?.userInfo?.phone;
-      },
+      editable: false,
     },
     {
       title: '路人积分',
       dataIndex: 'decs1',
+      renderFormItem: () => {
+        return <InputNumber placeholder={`max:2`} max={2} min={0}/>
+      },
     },
     {
       title: '侦探积分',
       dataIndex: 'decs2',
+      renderFormItem: () => {
+        return <InputNumber placeholder={`max:2`} max={2} min={0}/>
+      },
     },
     {
       title: '杀手积分',
       dataIndex: 'decs3',
-
+      renderFormItem: () => {
+        return <InputNumber placeholder={`max:2`} max={2} min={0}/>
+      },
     },
     {
       title: '账户余额',
       dataIndex: ['userInfo', 'accountBalance'],
       align: 'right',
-      renderFormItem: (_, { isEditable, record }) => {
-        return isEditable && record?.userInfo?.accountBalance;
-      },
+      editable: false,
     },
     {
       title: '账户代金券余额',
       dataIndex: ['userInfo', 'voucherBalance'],
       align: 'right',
-      renderFormItem: (_, { isEditable, record }) => {
-        return isEditable && record?.userInfo?.voucherBalance;
-      },
+      editable: false,
     },
     {
       title: '折扣',
       dataIndex: 'discount',
+      renderFormItem: (cur, { isEditable, record, recordKey }) => {
+        return <InputNumber />
+      },
     },
     {
       title: '支付方式',
@@ -229,9 +159,20 @@ const SettlementOrder: React.FC<IProps> = (props) => {
       }}
       initialValues={initialValues}
       width='md'
+      // onValuesChange={(changeValues) => console.log('changeValues',changeValues)}
     >
-      <ProForm
-        name='detailList'
+      <ProFormText
+        name='id'
+        hidden
+      />
+      <ProFormText
+        name='deskId'
+        hidden
+      />
+      <ProForm.Item
+        name="detailList"
+        initialValue={orderDetailList}
+        trigger="onValuesChange"
       >
         <EditableProTable<IOrderDetailTable>
           headerTitle='玩家列表'
@@ -239,14 +180,15 @@ const SettlementOrder: React.FC<IProps> = (props) => {
           recordCreatorProps={false}
           columns={columns}
           value={orderDetailList}
+          // value={orderDetailList}
           onChange={setOrderDetailList}
           editable={{
             type: 'multiple',
             editableKeys,
-            onChange: changeOrderDetailRow,
+            onChange: setEditableRowKeys,
           }}
         />
-      </ProForm>
+      </ProForm.Item>
     </ModalForm>
   );
 };
