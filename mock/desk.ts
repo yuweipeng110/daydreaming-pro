@@ -200,7 +200,7 @@ export default {
         "remark": "999",
         "otime": "2021-02-21 17:46:47",
         "detailList": [{
-          "id": "111",
+          "id": 111,
           "orderId": "12",
           "userId": "2",
           "userInfo": {
@@ -234,7 +234,7 @@ export default {
           "discount": "1.00",
           "otime": "2021-02-21 17:46:47"
         }, {
-          "id": "112",
+          "id": 112,
           "orderId": "12",
           "userId": "1",
           "userInfo": {

@@ -21,7 +21,7 @@
           {
             path: '/',
             component: '../layouts/BasicLayout',
-            authority: ['admin', 'user'],
+            // authority: ['admin', 'user'],
             routes: [
               {
                 path: '/',
@@ -84,6 +84,12 @@
                 name: 'order',
                 icon: 'smile',
                 component: './order',
+              },
+              {
+                path: '/userIntegralRank',
+                name: 'userIntegralRank',
+                icon: 'hdd',
+                component: './integral/userIntegralRank',
               },
               {
                 component: './404',

@@ -8,6 +8,7 @@ import ProForm, {
   ProFormRadio,
   ProFormText,
   ProFormTextArea,
+  ProFormUploadButton,
 } from '@ant-design/pro-form';
 import { IAddUserExists } from '@/pages/types/user';
 
@@ -31,10 +32,10 @@ const AddPlayer: React.FC<IProps> = (props) => {
     if (!submitRes.phoneExists) {
       const phoneError = submitRes.phoneExists ? {} : {
         name: 'phone',
-        errors: ['手机号码已存在']
+        errors: ['手机号码已存在'],
       };
       const errorList = [
-        phoneError
+        phoneError,
       ];
       hide();
       // @ts-ignore
@@ -68,6 +69,13 @@ const AddPlayer: React.FC<IProps> = (props) => {
         return true;
       }}
     >
+      <ProForm.Group>
+        <ProFormUploadButton
+          name='avatar'
+          label='头像'
+          action='upload.do'
+        />
+      </ProForm.Group>
       <ProForm.Group>
         <ProFormText
           name='nickname'

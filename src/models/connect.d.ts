@@ -5,7 +5,7 @@ import { call } from 'redux-saga/effects';
 import type { MenuDataItem, Settings as ProSettings } from '@ant-design/pro-layout';
 import { GlobalModelState } from './global';
 import { UserModelState } from './user';
-import type { StateType } from './login';
+import type { ILoginUserState } from './login';
 
 export { GlobalModelState, UserModelState };
 
@@ -28,7 +28,7 @@ export type ConnectState = {
   loading: Loading;
   settings: ProSettings;
   user: UserModelState;
-  login: StateType;
+  login: ILoginUserState;
   store: IStoreState;
   desk: IDeskState;
 };
