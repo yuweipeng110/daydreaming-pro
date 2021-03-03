@@ -8,7 +8,7 @@ import { IUserTable } from '@/pages/types/user';
 import { queryPlayerListApi } from '@/services/player';
 import AddPlayer from '@/pages/player/components/ModalForm/AddPlayer';
 import EditPlayer from '@/pages/player/components/ModalForm/EditPlayer';
-import AccountRecharge from "@/pages/player/components/ModalForm/AccountRecharge";
+import AccountRecharge from '@/pages/player/components/ModalForm/AccountRecharge';
 
 const PlayerList: React.FC = () => {
   const actionRef = useRef<ActionType>();
@@ -26,10 +26,13 @@ const PlayerList: React.FC = () => {
     setCurrentData(rowCurrentData);
   };
 
-  const accountRechargeModalStatusSwitch = (accountRechargeModalStatus: boolean, rowCurrentData: any) => {
+  const accountRechargeModalStatusSwitch = (
+    accountRechargeModalStatus: boolean,
+    rowCurrentData: any,
+  ) => {
     handleAccountRechargeModalVisible(accountRechargeModalStatus);
     setCurrentData(rowCurrentData);
-  }
+  };
 
   const columns: ProColumns<IUserTable>[] = [
     {
@@ -41,12 +44,10 @@ const PlayerList: React.FC = () => {
     {
       title: ' 昵称',
       dataIndex: 'nickname',
-      key: 'nickname',
     },
     {
       title: '性别',
       dataIndex: 'sex',
-      key: 'sex',
       valueEnum: {
         0: {
           text: '女',
@@ -55,65 +56,68 @@ const PlayerList: React.FC = () => {
           text: '男',
         },
       },
+      search: false,
     },
     {
       title: ' 手机号',
       dataIndex: 'phone',
-      key: 'phone',
     },
     {
       title: '生日',
       dataIndex: 'birthday',
-      key: 'birthday'
+      search: false,
     },
     {
       title: '杀手积分',
       dataIndex: 'killerIntegral',
-      key: 'killerIntegral'
+      search: false,
     },
     {
       title: '侦探积分',
       dataIndex: 'detectiveIntegral',
-      key: 'detectiveIntegral'
+      search: false,
     },
     {
       title: '路人积分',
       dataIndex: 'peopleIntegral',
-      key: 'peopleIntegral'
+      search: false,
     },
     {
       title: '总榜积分',
       dataIndex: 'totalIntegral',
-      key: 'totalIntegral'
+      search: false,
     },
     {
       title: '可用积分',
       dataIndex: 'activeIntegral',
-      key: 'activeIntegral'
+      search: false,
     },
     {
       title: '账户余额',
       dataIndex: 'accountBalance',
-      key: 'accountBalance',
-      align: 'right'
+      search: false,
+      valueType: 'money',
+      align: 'right',
     },
     {
       title: '代金卷余额',
       dataIndex: 'voucherBalance',
-      key: 'voucherBalance',
-      align: 'right'
+      search: false,
+      valueType: 'money',
+      align: 'right',
     },
     {
       title: '备注',
       dataIndex: 'remark',
-      key: 'remark'
+      key: 'remark',
+      search: false,
     },
     {
       title: '操作',
       key: 'action',
       search: false,
       render: (record: any) => (
-        <Space size='middle'>
+        <Space size="middle">
           <a onClick={() => accountRechargeModalStatusSwitch(true, record)}>充值</a>
           <a onClick={() => editPlayerModalStatusSwitch(true, record)}>修改</a>
         </Space>
@@ -124,14 +128,14 @@ const PlayerList: React.FC = () => {
   return (
     <PageContainer>
       <ProTable<IUserTable>
-        headerTitle='玩家管理'
+        headerTitle="玩家管理"
         actionRef={actionRef}
-        rowKey='id'
-        search={false}
+        rowKey="id"
+        // search={false}
         toolBarRender={() => [
           <Button
-            type='primary'
-            key='primary'
+            type="primary"
+            key="primary"
             onClick={() => {
               createPlayerModalStatusSwitch(true);
             }}
@@ -145,11 +149,24 @@ const PlayerList: React.FC = () => {
           pageSize: 10,
         }}
         columns={columns}
-      >
-      </ProTable>
-      <AddPlayer actionRef={actionRef} visible={createPlayerModalVisible} onVisibleChange={handleCreatePlayerModalVisible} />
-      <EditPlayer actionRef={actionRef} visible={editPlayerModalVisible} onVisibleChange={handleEditPlayerModalVisible} currentData={currentData} />
-      <AccountRecharge actionRef={actionRef} visible={accountRechargeModalVisible} onVisibleChange={handleAccountRechargeModalVisible} currentData={currentData} />
+      ></ProTable>
+      <AddPlayer
+        actionRef={actionRef}
+        visible={createPlayerModalVisible}
+        onVisibleChange={handleCreatePlayerModalVisible}
+      />
+      <EditPlayer
+        actionRef={actionRef}
+        visible={editPlayerModalVisible}
+        onVisibleChange={handleEditPlayerModalVisible}
+        currentData={currentData}
+      />
+      <AccountRecharge
+        actionRef={actionRef}
+        visible={accountRechargeModalVisible}
+        onVisibleChange={handleAccountRechargeModalVisible}
+        currentData={currentData}
+      />
     </PageContainer>
   );
 };

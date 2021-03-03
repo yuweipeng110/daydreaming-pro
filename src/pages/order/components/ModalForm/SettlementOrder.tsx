@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { ConnectProps } from '@/models/connect';
-import { useRequest } from 'umi';
-import { Form, message, Button, InputNumber } from 'antd';
-import ProForm, { ModalForm, ProFormSelect, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
+import { Col, Form, InputNumber, Row, Statistic } from 'antd';
+import ProForm, {
+  ModalForm,
+  ProFormSelect,
+  ProFormText,
+  ProFormTextArea,
+} from '@ant-design/pro-form';
 import type { ProColumns } from '@ant-design/pro-table';
 import { EditableProTable } from '@ant-design/pro-table';
 import { STATUS_CODE } from '@/pages/constants';
 import { IOrderDetailTable } from '@/pages/types/orderDetail';
-import { IUserTable } from '@/pages/types/user';
 import { IDeskTable } from '@/pages/types/desk';
-import { editOrderApi } from '@/services/order';
 import { queryScriptListApi } from '@/services/script';
 import { queryUserListApi } from '@/services/user';
-import { queryPlayerListApi } from '@/services/player';
 import _ from 'lodash';
 
 interface IProps extends ConnectProps {
@@ -29,6 +30,17 @@ const SettlementOrder: React.FC<IProps> = (props) => {
   const [form] = Form.useForm();
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
   const [orderDetailList, setOrderDetailList] = useState<IOrderDetailTable[]>([]);
+  const [orderReceivablePrice, setOrderReceivablePrice] = useState<number>(0);
+  const [orderRealPrice, setOrderRealPrice] = useState<number>(0);
+
+  const handleOrderDetailListChange = (record: any, recordList: any) => {
+    // @ts-ignore
+    setOrderRealPrice(
+      _.sum(
+        _.map(recordList, (item) => Number((item.unitPrice * item.discountPercentage) / 100)),
+      ).toFixed(2),
+    );
+  };
 
   useEffect(() => {
     if (visible) {
@@ -38,7 +50,42 @@ const SettlementOrder: React.FC<IProps> = (props) => {
 
   useEffect(() => {
     setEditableRowKeys(orderDetailList.map((item) => Number(item.id)));
+    setOrderReceivablePrice(_.sum(_.map(orderDetailList, (item) => Number(item.unitPrice))));
+    setOrderRealPrice(_.sum(_.map(orderDetailList, (item) => Number(item.discountPrice))));
   }, [orderDetailList]);
+
+  /**
+   * /app/user/get-user-list?storeId=1&pageRecords=1000
+   */
+  const loadScriptListData = async () => {
+    const params = { pageRecords: 1000 };
+    const res = await queryScriptListApi(params);
+    if (res.code === STATUS_CODE.SUCCESS) {
+      return res.data.map((item) => {
+        return {
+          label: item.title,
+          value: item.id,
+        };
+      });
+    }
+    return [];
+  };
+
+  /**
+   * /app/user/get-script-list?storeId=1&pageRecords=1000
+   */
+  const loadHostListData = async () => {
+    const res = await queryUserListApi({});
+    if (res.code === STATUS_CODE.SUCCESS) {
+      return res.data.map((item) => {
+        return {
+          label: `${item.nickname}-${item.phone}`,
+          value: item.id,
+        };
+      });
+    }
+    return [];
+  };
 
   const onSubmit = async (values: any) => {
     const params = {
@@ -48,6 +95,8 @@ const SettlementOrder: React.FC<IProps> = (props) => {
       // detailList: orderDetailList,
       // storeId,scriptId,deskId,orderOperatorId,remark,detailList
     };
+
+    console.log('xxxx');
     console.log('params', params);
     return false;
   };
@@ -77,43 +126,54 @@ const SettlementOrder: React.FC<IProps> = (props) => {
       editable: false,
     },
     {
-      title: '路人积分',
-      dataIndex: 'decs1',
-      renderFormItem: () => {
-        return <InputNumber placeholder={`max:2`} max={2} min={0}/>
+      title: '身份选择',
+      dataIndex: 'roleId',
+      align: 'center',
+      valueEnum: {
+        4: {
+          text: '路人',
+        },
+        3: {
+          text: '侦探',
+        },
+        2: {
+          text: '杀手',
+        },
       },
     },
     {
-      title: '侦探积分',
-      dataIndex: 'decs2',
+      title: '积分',
+      dataIndex: 'integral',
       renderFormItem: () => {
-        return <InputNumber placeholder={`max:2`} max={2} min={0}/>
-      },
-    },
-    {
-      title: '杀手积分',
-      dataIndex: 'decs3',
-      renderFormItem: () => {
-        return <InputNumber placeholder={`max:2`} max={2} min={0}/>
+        return <InputNumber min={0} max={3} />;
       },
     },
     {
       title: '账户余额',
       dataIndex: ['userInfo', 'accountBalance'],
+      valueType: 'money',
       align: 'right',
       editable: false,
     },
     {
       title: '账户代金券余额',
       dataIndex: ['userInfo', 'voucherBalance'],
+      valueType: 'money',
       align: 'right',
       editable: false,
     },
     {
       title: '折扣',
-      dataIndex: 'discount',
-      renderFormItem: (cur, { isEditable, record, recordKey }) => {
-        return <InputNumber />
+      dataIndex: 'discountPercentage',
+      renderFormItem: () => {
+        return (
+          <InputNumber
+            min={0}
+            max={100}
+            formatter={(value) => `${value}%`}
+            parser={(value: any) => value.replace('%', '')}
+          />
+        );
       },
     },
     {
@@ -121,13 +181,13 @@ const SettlementOrder: React.FC<IProps> = (props) => {
       dataIndex: 'paymentMethod',
       valueType: 'select',
       valueEnum: {
-        0: {
+        1: {
           text: '微信',
         },
-        1: {
+        2: {
           text: '支付宝',
         },
-        2: {
+        3: {
           text: '现金',
         },
         5: {
@@ -135,11 +195,20 @@ const SettlementOrder: React.FC<IProps> = (props) => {
         },
       },
     },
+    {
+      title: '付款金额',
+      key: 'discountPriceItem',
+      align: 'right',
+      render: (text: any, record: any) => {
+        const discountPrice = ((record.unitPrice * record.discountPercentage) / 100).toFixed(2);
+        return `¥${discountPrice}`;
+      },
+    },
   ];
 
   return (
     <ModalForm
-      title='创建开台信息'
+      title={`结算订单（${currentData.title}）`}
       visible={visible}
       onVisibleChange={(visibleValue) => {
         form.resetFields();
@@ -158,37 +227,58 @@ const SettlementOrder: React.FC<IProps> = (props) => {
         return true;
       }}
       initialValues={initialValues}
-      width='md'
-      // onValuesChange={(changeValues) => console.log('changeValues',changeValues)}
+      width="70%"
     >
-      <ProFormText
-        name='id'
-        hidden
-      />
-      <ProFormText
-        name='deskId'
-        hidden
-      />
+      <ProFormText name="id" hidden />
+      <ProFormText name="deskId" hidden />
+      <ProForm.Group>
+        <ProFormSelect
+          name="scriptId"
+          label="选择剧本"
+          request={() => loadScriptListData()}
+          width="md"
+          disabled
+        />
+        <ProFormSelect
+          name="hostId"
+          label="主持人"
+          request={() => loadHostListData()}
+          width="md"
+          disabled
+        />
+      </ProForm.Group>
+      <ProForm.Group>
+        <ProFormTextArea name="remark" label="备注" width="md" />
+      </ProForm.Group>
       <ProForm.Item
         name="detailList"
-        initialValue={orderDetailList}
+        // initialValue={orderDetailList}
         trigger="onValuesChange"
       >
         <EditableProTable<IOrderDetailTable>
-          headerTitle='玩家列表'
-          rowKey='id'
+          headerTitle="玩家列表"
+          rowKey="id"
           recordCreatorProps={false}
           columns={columns}
           value={orderDetailList}
-          // value={orderDetailList}
           onChange={setOrderDetailList}
           editable={{
             type: 'multiple',
             editableKeys,
             onChange: setEditableRowKeys,
+            onValuesChange: (record, recordList) => handleOrderDetailListChange(record, recordList),
           }}
         />
       </ProForm.Item>
+      <Row>
+        <Col span={18}></Col>
+        <Col span={3}>
+          <Statistic title="应收总价" value={`￥${orderReceivablePrice}`} precision={2} />
+        </Col>
+        <Col span={3}>
+          <Statistic title="实收总价" value={`￥${orderRealPrice}`} precision={2} />
+        </Col>
+      </Row>
     </ModalForm>
   );
 };

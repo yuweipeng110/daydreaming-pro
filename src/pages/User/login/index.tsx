@@ -1,7 +1,4 @@
-import {
-  LockOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Alert, message, Tabs } from 'antd';
 import React, { useState } from 'react';
 import ProForm, { ProFormText } from '@ant-design/pro-form';
@@ -10,7 +7,6 @@ import type { Dispatch } from 'umi';
 // import type { StateType } from '@/models/login';
 import type { LoginParamsType } from '@/services/login';
 import type { ConnectState } from '@/models/connect';
-
 import styles from './index.less';
 import { getPageQuery } from '@/utils/utils';
 import { history } from '@@/core/history';
@@ -49,7 +45,7 @@ const Login: React.FC<LoginProps> = (props) => {
     });
 
     setStatus(res);
-    if(res) {
+    if (res) {
       message.success('🎉 🎉 🎉  登录成功！');
       const urlParams = new URL(window.location.href);
       const params = getPageQuery();

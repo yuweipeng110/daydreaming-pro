@@ -86,6 +86,12 @@
                 component: './order',
               },
               {
+                path: '/orderHistoryList',
+                name: 'orderHistoryList',
+                icon: 'smile',
+                component: './order/OrderHistoryList',
+              },
+              {
                 path: '/userIntegralRank',
                 name: 'userIntegralRank',
                 icon: 'hdd',

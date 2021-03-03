@@ -5,26 +5,36 @@
 
   .card {
     height: 188px;
-    background: #DBEEFA;
-    background: linear-gradient(to left, #DBEEFA , #9FB4FA);
+    background: #dbeefa;
+    background: linear-gradient(to left, #dbeefa, #9fb4fa);
   }
 
-  .ant-col{
+  .ant-col {
     height: 188px;
   }
 }
 
 .newButton {
+  width: 100%;
+  height: 188px;
+  color: @text-color-secondary;
   background-color: #fff;
   border-color: @border-color-base;
   border-radius: @border-radius-sm;
-  color: @text-color-secondary;
-  width: 100%;
-  height: 188px;
 }
 
 .cardAvatar {
   max-width: 48px;
   max-height: 48px;
   border-radius: 48px;
+}
+
+.rightContent {
+  display: flex;
+  justify-content: flex-end;
+  margin: 10px 0;
+
+  span {
+    margin-left: 20px;
+  }
 }

@@ -45,12 +45,14 @@ const ScriptList: React.FC = () => {
       title: '成本价格',
       dataIndex: 'costPrice',
       key: 'costPrice',
+      valueType: 'money',
       align: 'right',
     },
     {
       title: '开本价格',
       dataIndex: 'formatPrice',
       key: 'formatPrice',
+      valueType: 'money',
       align: 'right',
     },
     {
@@ -98,7 +100,7 @@ const ScriptList: React.FC = () => {
       key: 'action',
       search: false,
       render: (record: any) => (
-        <Space size='middle'>
+        <Space size="middle">
           <a onClick={() => editScriptModalStatusSwitch(true, record)}>修改</a>
         </Space>
       ),
@@ -108,14 +110,14 @@ const ScriptList: React.FC = () => {
   return (
     <PageContainer>
       <ProTable<IScriptTable>
-        headerTitle='剧本管理'
+        headerTitle="剧本管理"
         actionRef={actionRef}
-        rowKey='id'
+        rowKey="id"
         search={false}
         toolBarRender={() => [
           <Button
-            type='primary'
-            key='primary'
+            type="primary"
+            key="primary"
             onClick={() => {
               createScriptModalStatusSwitch(true);
             }}
@@ -129,10 +131,18 @@ const ScriptList: React.FC = () => {
           pageSize: 10,
         }}
         columns={columns}
-      >
-      </ProTable>
-      <AddScript actionRef={actionRef} visible={createScriptModalVisible} onVisibleChange={handleCreateScriptModalVisible} />
-      <EditScript actionRef={actionRef} visible={editScriptModalVisible} onVisibleChange={handleEditScriptModalVisible} currentData={currentData} />
+      ></ProTable>
+      <AddScript
+        actionRef={actionRef}
+        visible={createScriptModalVisible}
+        onVisibleChange={handleCreateScriptModalVisible}
+      />
+      <EditScript
+        actionRef={actionRef}
+        visible={editScriptModalVisible}
+        onVisibleChange={handleEditScriptModalVisible}
+        currentData={currentData}
+      />
     </PageContainer>
   );
 };

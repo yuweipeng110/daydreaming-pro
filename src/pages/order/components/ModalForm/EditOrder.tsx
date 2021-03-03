@@ -3,7 +3,12 @@ import { connect } from 'react-redux';
 import { ConnectProps } from '@/models/connect';
 import { useRequest } from 'umi';
 import { Form, message } from 'antd';
-import ProForm, { ModalForm, ProFormSelect, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
+import ProForm, {
+  ModalForm,
+  ProFormSelect,
+  ProFormText,
+  ProFormTextArea,
+} from '@ant-design/pro-form';
 import type { ProColumns } from '@ant-design/pro-table';
 import { EditableProTable } from '@ant-design/pro-table';
 import { STATUS_CODE } from '@/pages/constants';
@@ -43,7 +48,7 @@ const EditOrder: React.FC<IProps> = (props) => {
     const params = { pageRecords: 1000 };
     const res = await queryScriptListApi(params);
     if (res.code === STATUS_CODE.SUCCESS) {
-      return res.data.map(item => {
+      return res.data.map((item) => {
         return {
           label: item.title,
           value: item.id,
@@ -59,7 +64,7 @@ const EditOrder: React.FC<IProps> = (props) => {
   const loadHostListData = async () => {
     const res = await queryUserListApi({});
     if (res.code === STATUS_CODE.SUCCESS) {
-      return res.data.map(item => {
+      return res.data.map((item) => {
         return {
           label: `${item.nickname}-${item.phone}`,
           value: item.id,
@@ -75,18 +80,17 @@ const EditOrder: React.FC<IProps> = (props) => {
     onSuccess: (data) => {
       const valueEnumList = {};
       // eslint-disable-next-line no-return-assign
-      data.map((item: IUserTable) => (
-        valueEnumList[item.id] = `${item.nickname}-${item.phone}`
-      ));
+      data.map((item: IUserTable) => (valueEnumList[item.id] = `${item.nickname}-${item.phone}`));
       setPlayerList(data);
       setValueEnum(valueEnumList);
     },
   });
 
   const handleAddPlayer = (userId: string) => {
-    const userInfo: IUserTable = playerList.find((user: IUserTable) => user.id === userId) || {} as IUserTable;
+    const userInfo: IUserTable =
+      playerList.find((user: IUserTable) => user.id === userId) || ({} as IUserTable);
     const tempOrderDetail: IOrderDetailTable = {
-      id: (Math.random() * 1000000).toFixed(0),
+      id: Number((Math.random() * 1000000).toFixed(0)),
       userId,
       userInfo,
     };
@@ -99,9 +103,7 @@ const EditOrder: React.FC<IProps> = (props) => {
         name: 'userId',
         errors: ['至少选择一名玩家'],
       };
-      const errorList = [
-        orderDetailListError,
-      ];
+      const errorList = [orderDetailListError];
       form.setFields(errorList);
       return false;
     }
@@ -115,7 +117,7 @@ const EditOrder: React.FC<IProps> = (props) => {
       // storeId: 1,
       // storeId,scriptId,deskId,orderOperatorId,remark,detailList
     };
-    const res = await editOrderApi((params));
+    const res = await editOrderApi(params);
     if (res.code === STATUS_CODE.SUCCESS) {
       onVisibleChange(false);
       hide();
@@ -154,9 +156,9 @@ const EditOrder: React.FC<IProps> = (props) => {
       width: 200,
       render: (text: any, record: IOrderDetailTable) => [
         <a
-          key='delete'
+          key="delete"
           onClick={() => {
-            setOrderDetailList(orderDetailList.filter(item => item.id !== record.id));
+            setOrderDetailList(orderDetailList.filter((item) => item.id !== record.id));
           }}
         >
           删除
@@ -167,7 +169,7 @@ const EditOrder: React.FC<IProps> = (props) => {
 
   return (
     <ModalForm
-      title='创建开台信息'
+      title="创建开台信息"
       visible={visible}
       onVisibleChange={(visibleValue) => {
         form.resetFields();
@@ -187,20 +189,14 @@ const EditOrder: React.FC<IProps> = (props) => {
       }}
       initialValues={initialValues}
     >
-      <ProFormText
-        name='id'
-        hidden
-      />
-      <ProFormText
-        name='deskId'
-        hidden
-      />
+      <ProFormText name="id" hidden />
+      <ProFormText name="deskId" hidden />
       <ProForm.Group>
         <ProFormSelect
-          name='scriptId'
-          label='选择剧本'
+          name="scriptId"
+          label="选择剧本"
           request={() => loadScriptListData()}
-          width='md'
+          width="md"
           rules={[
             {
               required: true,
@@ -209,10 +205,10 @@ const EditOrder: React.FC<IProps> = (props) => {
           ]}
         />
         <ProFormSelect
-          name='hostId'
-          label='主持人'
+          name="hostId"
+          label="主持人"
           request={() => loadHostListData()}
-          width='md'
+          width="md"
           rules={[
             {
               required: true,
@@ -223,10 +219,10 @@ const EditOrder: React.FC<IProps> = (props) => {
       </ProForm.Group>
       <ProForm.Group>
         <ProFormSelect
-          name='userId'
-          label='玩家'
-          width='md'
-          placeholder='请输入玩家电话'
+          name="userId"
+          label="玩家"
+          width="md"
+          placeholder="请输入玩家电话"
           showSearch
           fieldProps={{
             showArrow: true,
@@ -238,15 +234,11 @@ const EditOrder: React.FC<IProps> = (props) => {
           }}
           valueEnum={valueEnum}
         />
-        <ProFormTextArea
-          name='remark'
-          label='备注'
-          width='md'
-        />
+        <ProFormTextArea name="remark" label="备注" width="md" />
       </ProForm.Group>
       <EditableProTable<IOrderDetailTable>
-        headerTitle='玩家列表'
-        rowKey='id'
+        headerTitle="玩家列表"
+        rowKey="id"
         recordCreatorProps={false}
         columns={columns}
         value={orderDetailList}
