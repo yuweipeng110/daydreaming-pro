@@ -48,6 +48,18 @@ const AddPlayer: React.FC<IProps> = (props) => {
     return true;
   };
 
+  const onFinish = async (values: any) => {
+    const success = await onSubmit(values);
+    if (!success) {
+      return false;
+    }
+    onVisibleChange(false);
+    if (actionRef.current) {
+      actionRef.current.reload();
+    }
+    return true;
+  }
+
   return (
     <ModalForm
       title='添加玩家信息'
@@ -57,24 +69,15 @@ const AddPlayer: React.FC<IProps> = (props) => {
         onVisibleChange(visibleValue);
       }}
       form={form}
-      onFinish={async (values) => {
-        const success = await onSubmit(values);
-        if (!success) {
-          return false;
-        }
-        onVisibleChange(false);
-        if (actionRef.current) {
-          actionRef.current.reload();
-        }
-        return true;
-      }}
+      onFinish={onFinish}
     >
       <ProForm.Group>
         <ProFormUploadButton
           name='avatar'
           label='头像'
           action='upload.do'
-        />
+        >
+        </ProFormUploadButton>
       </ProForm.Group>
       <ProForm.Group>
         <ProFormText

@@ -1,64 +1,60 @@
+.card-container p {
+  margin: 0;
+}
 
-  .carousel-content {
-    height: 800px;
-    color: white;
-    font-size: 18px;
-    font-family: initial;
-    background: #1890ff;
+.ant-tabs-card .ant-tabs-content {
+  //height: 120px;
+  height: auto;
+  margin-top: -16px;
+}
 
-    .title-name {
-      padding: 10px;
-      font-size: 24px;
-    }
+.ant-tabs-card .ant-tabs-content > .ant-tabs-tabpane {
+  padding: 16px;
+  background: #fff;
+}
 
-    .title-list {
-      display: flex;
-      padding: 25px;
-      color: white;
+.ant-tabs-card > .ant-tabs-nav::before {
+  display: none;
+}
 
-      span {
-        display: flex;
-        justify-content: center;
-        width: (100% / 5);
-      }
-    }
+.ant-tabs-card .ant-tabs-tab,
+[data-theme='compact'] .ant-tabs-card .ant-tabs-tab {
+  //background: transparent;
+  //border-color: transparent;
+}
 
-    .value-list {
-      display: flex;
-      padding: 25px;
+.ant-tabs-card .ant-tabs-tab-active,
+[data-theme='compact'] .ant-tabs-card .ant-tabs-tab-active {
+  background: #fff;
+  border-color: #fff;
+}
 
-      span {
-        display: flex;
-        justify-content: center;
-        width: (100% / 5);
-      }
+#components-tabs-demo-card-top .code-box-demo {
+  padding: 24px;
+  overflow: hidden;
+  background: #f5f5f5;
+}
 
-      a {
-        width: 30px;
-        height: 30px;
-        color: white;
-        line-height: 30px;
-      }
-    }
+[data-theme='compact'] .ant-tabs-card .ant-tabs-content {
+  //height: 120px;
+  height: auto;
+  margin-top: -8px;
+}
 
-    .value-list:nth-child(3) {
-      //color: gold;
-      a {
-        background: red;
-      }
-    }
+[data-theme='dark'] .ant-tabs-card .ant-tabs-tab {
+  background: transparent;
+  border-color: transparent;
+}
 
-    .value-list:nth-child(4) {
-      //color: silver;
-      a {
-        background: orange;
-      }
-    }
+[data-theme='dark'] #components-tabs-demo-card-top .code-box-demo {
+  background: #000;
+}
 
-    .value-list:nth-child(5) {
-      //color: goldenrod;
-      a {
-        background: #FFFF00;
-      }
-    }
-  }
+[data-theme='dark'] .ant-tabs-card .ant-tabs-content > .ant-tabs-tabpane {
+  background: #141414;
+}
+
+[data-theme='dark'] .ant-tabs-card .ant-tabs-tab-active {
+  background: #141414;
+  border-color: #141414;
+}

@@ -45,6 +45,18 @@ const AccountRecharge: React.FC<IProps> = (props) => {
     return true;
   };
 
+  const onFinish = async (values: any) => {
+    const success = await onSubmit(values);
+    if (!success) {
+      return false;
+    }
+    onVisibleChange(false);
+    if (actionRef.current) {
+      actionRef.current.reload();
+    }
+    return true;
+  }
+
   return (
     <ModalForm
       title='账户充值'
@@ -54,17 +66,7 @@ const AccountRecharge: React.FC<IProps> = (props) => {
         onVisibleChange(visibleValue);
       }}
       form={form}
-      onFinish={async (values) => {
-        const success = await onSubmit(values);
-        if (!success) {
-          return false;
-        }
-        onVisibleChange(false);
-        if (actionRef.current) {
-          actionRef.current.reload();
-        }
-        return true;
-      }}
+      onFinish={onFinish}
       initialValues={initialValues}
     >
       <ProFormText

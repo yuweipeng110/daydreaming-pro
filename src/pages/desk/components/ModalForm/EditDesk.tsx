@@ -5,6 +5,7 @@ import { Form, message } from 'antd';
 import ProForm, { ModalForm, ProFormSwitch, ProFormText } from '@ant-design/pro-form';
 import { editDeskApi } from '@/services/desk';
 import { IDeskTable } from '@/pages/types/desk';
+import { STATUS_CODE } from '@/pages/constants';
 
 interface IProps extends ConnectProps {
   actionRef: any;
@@ -20,22 +21,33 @@ const AddDesk: React.FC<IProps> = (props) => {
 
   const onSubmit = async (values: any) => {
     const hide = message.loading('正在修改');
-    try {
-      const params = {
-        deskId: values.id,
-        ...values
-      };
-      await editDeskApi((params));
-      onVisibleChange(false);
+    const params = {
+      deskId: values.id,
+      ...values
+    };
+    const res = await editDeskApi((params));
+    if (Number(res.code) !== STATUS_CODE.SUCCESS) {
       hide();
-      message.success('修改成功');
-      return true;
-    } catch (error) {
-      hide();
-      message.error(error);
+      message.error(res.msg);
       return false;
     }
+    onVisibleChange(false);
+    hide();
+    message.success('修改成功');
+    return true;
   };
+
+  const onFinish = async (values: any) => {
+    const success = await onSubmit(values);
+    if (!success) {
+      return false;
+    }
+    onVisibleChange(false);
+    if (actionRef.current) {
+      actionRef.current.reload();
+    }
+    return true;
+  }
 
   return (
     <ModalForm
@@ -46,17 +58,7 @@ const AddDesk: React.FC<IProps> = (props) => {
         onVisibleChange(visibleValue);
       }}
       form={form}
-      onFinish={async (values) => {
-        const success = await onSubmit(values);
-        if (!success) {
-          return false;
-        }
-        onVisibleChange(false);
-        if (actionRef.current) {
-          actionRef.current.reload();
-        }
-        return true;
-      }}
+      onFinish={onFinish}
       initialValues={initialValues}
     >
       <ProFormText

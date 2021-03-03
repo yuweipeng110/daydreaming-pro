@@ -9,8 +9,9 @@ import ProForm, {
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-form';
-import { editScriptApi } from "@/services/script";
-import { IScriptTable } from "@/pages/types/script";
+import { editScriptApi } from '@/services/script';
+import { IScriptTable } from '@/pages/types/script';
+import { STATUS_CODE } from '@/pages/constants';
 
 interface IProps extends ConnectProps {
   actionRef: any;
@@ -26,22 +27,33 @@ const EditScript: React.FC<IProps> = (props) => {
 
   const onSubmit = async (values: any) => {
     const hide = message.loading('正在修改');
-    try {
-      const params = {
-        scriptId: values.id,
-        ...values
-      };
-      await editScriptApi((params));
-      onVisibleChange(false);
+    const params = {
+      scriptId: values.id,
+      ...values,
+    };
+    const res = await editScriptApi((params));
+    if (Number(res.code) !== STATUS_CODE.SUCCESS) {
       hide();
-      message.success('修改成功');
-      return true;
-    } catch (error) {
-      hide();
-      message.error(error);
+      message.error(res.msg);
       return false;
     }
+    onVisibleChange(false);
+    hide();
+    message.success('修改成功');
+    return true;
   };
+
+  const onFinish = async (values: any) => {
+    const success = await onSubmit(values);
+    if (!success) {
+      return false;
+    }
+    onVisibleChange(false);
+    if (actionRef.current) {
+      actionRef.current.reload();
+    }
+    return true;
+  }
 
   return (
     <ModalForm
@@ -52,17 +64,7 @@ const EditScript: React.FC<IProps> = (props) => {
         onVisibleChange(visibleValue);
       }}
       form={form}
-      onFinish={async (values) => {
-        const success = await onSubmit(values);
-        if (!success) {
-          return false;
-        }
-        onVisibleChange(false);
-        if (actionRef.current) {
-          actionRef.current.reload();
-        }
-        return true;
-      }}
+      onFinish={onFinish}
       initialValues={initialValues}
     >
       <ProFormText

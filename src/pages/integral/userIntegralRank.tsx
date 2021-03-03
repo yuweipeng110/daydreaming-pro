@@ -1,10 +1,10 @@
 import React, { useRef } from 'react';
-import { Button } from 'antd';
+import { PageContainer } from '@ant-design/pro-layout';
+import ProCard from '@ant-design/pro-card';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable, { TableDropdown } from '@ant-design/pro-table';
 import request from 'umi-request';
 import './index.less';
-import { ArrowRightOutlined } from '@ant-design/icons';
 
 type GithubIssueItem = {
   url: string;
@@ -105,34 +105,55 @@ const UserIntegralRank: React.FC = () => {
   const actionRef = useRef<ActionType>();
 
   return (
-    <ProTable<GithubIssueItem>
-      headerTitle='高级表格111'
-      actionRef={actionRef}
-      rowKey='id'
-      // search={false}
-      toolBarRender={() => [
-        <Button
-          type='primary'
-          key='primary'
-          onClick={() => {
+    <PageContainer>
+      <div className='card-container'>
+        <ProCard
+          tabs={{
+            type: 'card',
           }}
         >
-          <ArrowRightOutlined /> 跳转至登录
-        </Button>,
-      ]}
-      options={false}
-      request={async (params = {}) =>
-        request<{
-          data: GithubIssueItem[];
-        }>('https://proapi.azurewebsites.net/github/issues', {
-          params,
-        })
-      }
-      pagination={{
-        pageSize: 10,
-      }}
-      columns={columns}
-    />
+          <ProCard.TabPane key="tab1" tab="产品一">
+            <ProTable<GithubIssueItem>
+              headerTitle='高级表格111'
+              actionRef={actionRef}
+              rowKey='id'
+              // search={false}
+              options={false}
+              request={async (params = {}) =>
+                request<{
+                  data: GithubIssueItem[];
+                }>('https://proapi.azurewebsites.net/github/issues', {
+                  params,
+                })
+              }
+              pagination={{
+                pageSize: 10,
+              }}
+              columns={columns}
+            />
+          </ProCard.TabPane>
+          <ProCard.TabPane key="tab2" tab="产品二">
+            <p>Content of Tab Pane 2</p>
+            <p>Content of Tab Pane 2</p>
+            <p>Content of Tab Pane 2</p>
+            <p>Content of Tab Pane 2</p>
+            <p>Content of Tab Pane 2</p>
+            <p>Content of Tab Pane 2</p>
+            <p>Content of Tab Pane 2</p>
+            <p>Content of Tab Pane 2</p>
+            <p>Content of Tab Pane 2</p>
+            <p>Content of Tab Pane 2</p>
+            <p>Content of Tab Pane 2</p>
+            <p>Content of Tab Pane 2</p>
+            <p>Content of Tab Pane 2</p>
+            <p>Content of Tab Pane 2</p>
+            <p>Content of Tab Pane 2</p>
+            <p>Content of Tab Pane 2</p>
+            <p>Content of Tab Pane 2</p>
+          </ProCard.TabPane>
+        </ProCard>
+      </div>
+    </PageContainer>
   );
 };
 

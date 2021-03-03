@@ -53,6 +53,18 @@ interface IProps extends ConnectProps {
       return true;
     };
 
+    const onFinish = async (values: any) => {
+      const success = await onSubmit(values);
+      if (!success) {
+        return false;
+      }
+      onVisibleChange(false);
+      if (actionRef.current) {
+        actionRef.current.reload();
+      }
+      return true;
+    }
+
     return (
       <ModalForm
         title='修改玩家信息'
@@ -62,17 +74,7 @@ interface IProps extends ConnectProps {
           onVisibleChange(visibleValue);
         }}
         form={form}
-        onFinish={async (values) => {
-          const success = await onSubmit(values);
-          if (!success) {
-            return false;
-          }
-          if (actionRef.current) {
-            actionRef.current.reload();
-          }
-          onVisibleChange(false);
-          return true;
-        }}
+        onFinish={onFinish}
         initialValues={initialValues}
       >
         <ProFormText

@@ -9,7 +9,8 @@ import ProForm, {
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-form';
-import { addScriptApi } from "@/services/script";
+import { addScriptApi } from '@/services/script';
+import { STATUS_CODE } from '@/pages/constants';
 
 interface IProps extends ConnectProps {
   actionRef: any;
@@ -23,19 +24,30 @@ const AddScript: React.FC<IProps> = (props) => {
 
   const onSubmit = async (values: any) => {
     const hide = message.loading('正在添加');
-    try {
-      const params = { ...values };
-      await addScriptApi((params));
-      onVisibleChange(false);
+    const params = { ...values };
+    const res = await addScriptApi((params));
+    if (Number(res.code) !== STATUS_CODE.SUCCESS) {
       hide();
-      message.success('添加成功');
-      return true;
-    } catch (error) {
-      hide();
-      message.error(error);
+      message.error(res.msg);
       return false;
     }
+    onVisibleChange(false);
+    hide();
+    message.success('添加成功');
+    return true;
   };
+
+  const onFinish = async (values: any) => {
+    const success = await onSubmit(values);
+    if (!success) {
+      return false;
+    }
+    onVisibleChange(false);
+    if (actionRef.current) {
+      actionRef.current.reload();
+    }
+    return true;
+  }
 
   return (
     <ModalForm
@@ -46,17 +58,7 @@ const AddScript: React.FC<IProps> = (props) => {
         onVisibleChange(visibleValue);
       }}
       form={form}
-      onFinish={async (values) => {
-        const success = await onSubmit(values);
-        if (!success) {
-          return false;
-        }
-        onVisibleChange(false);
-        if (actionRef.current) {
-          actionRef.current.reload();
-        }
-        return true;
-      }}
+      onFinish={onFinish}
     >
       <ProForm.Group>
         <ProFormText

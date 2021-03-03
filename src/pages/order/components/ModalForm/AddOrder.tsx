@@ -84,7 +84,7 @@ const AddOrder: React.FC<IProps> = (props) => {
   const handleAddPlayer = (userId: string) => {
     const userInfo: IUserTable = playerList.find((user: IUserTable) => user.id === userId) || {} as IUserTable;
     const tempOrderDetail: IOrderDetailTable = {
-      id: (Math.random() * 1000000).toFixed(0),
+      id: Number(Math.random() * 1000000).toFixed(0),
       userId,
       userInfo,
     };
