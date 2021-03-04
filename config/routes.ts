@@ -4,13 +4,13 @@
     component: '../layouts/BlankLayout',
     routes: [
       {
-        path: '/user',
+        path: '/login',
         component: '../layouts/UserLayout',
         routes: [
           {
             name: 'login',
-            path: '/user/login',
-            component: './User/login',
+            path: '/login',
+            component: './login',
           },
         ],
       },
@@ -70,6 +70,12 @@
                 name: 'store',
                 icon: 'smile',
                 component: './store',
+              },
+              {
+                path: '/user',
+                name: 'user',
+                icon: 'smile',
+                component: './user',
               },
               {
                 path: '/player',

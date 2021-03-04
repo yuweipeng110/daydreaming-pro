@@ -128,20 +128,20 @@ export interface ILoginUserState {
 const partnerModel: ILoginModeType = {
   namespace: 'login',
   state: {
-    loginUserInfo: {} as ILoginUserTable
+    loginUserInfo: {} as ILoginUserTable,
   },
   effects: {
-    *loginCheckEffect({ params },{ put, call }) {
+    *loginCheckEffect({ params }, { put, call }) {
       const res: ILoginCheckResponse = yield call(loginService.loginCheckApi, params);
-      if(_.isEmpty(res)){
+      if (_.isEmpty(res)) {
         return false;
       }
       // Login successfully
-      if(Number(res.code) === STATUS_CODE.SUCCESS) {
+      if (Number(res.code) === STATUS_CODE.SUCCESS) {
         storage.saveUserToken(res.data.userToken);
         yield put({
           type: 'setLoginUserReducer',
-          loginUserInfo: res.data
+          loginUserInfo: res.data,
         });
         return true;
       }
@@ -151,10 +151,10 @@ const partnerModel: ILoginModeType = {
     logoutEffect() {
       const { redirect } = getPageQuery();
       // Note: There may be security issues, please note
-      if (window.location.pathname !== '/user/login' && !redirect) {
+      if (window.location.pathname !== '/login' && !redirect) {
         storage.removeUserToken();
         history.replace({
-          pathname: '/user/login',
+          pathname: '/login',
           search: stringify({
             redirect: window.location.href,
           }),
@@ -165,8 +165,8 @@ const partnerModel: ILoginModeType = {
   reducers: {
     setLoginUserReducer: (state, { loginUserInfo }) => {
       return { ...state, loginUserInfo };
-    }
-  }
+    },
+  },
 };
 
 export default partnerModel;

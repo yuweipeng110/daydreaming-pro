@@ -10,7 +10,12 @@ import ProForm, {
 } from '@ant-design/pro-form';
 import type { ProColumns } from '@ant-design/pro-table';
 import { EditableProTable } from '@ant-design/pro-table';
-import { STATUS_CODE, PaymentMethodEnum, UserRoleEnum, UserSexEnum } from '@/pages/constants';
+import {
+  STATUS_CODE,
+  PaymentMethodEnum,
+  ScriptPlayerRoleEnum,
+  UserSexEnum,
+} from '@/pages/constants';
 import { IOrderDetailTable } from '@/pages/types/orderDetail';
 import { IDeskTable } from '@/pages/types/desk';
 import { queryScriptListApi } from '@/services/script';
@@ -119,7 +124,7 @@ const SettlementOrder: React.FC<IProps> = (props) => {
       title: '身份选择',
       dataIndex: 'roleId',
       align: 'center',
-      valueEnum: UserRoleEnum,
+      valueEnum: ScriptPlayerRoleEnum,
     },
     {
       title: '积分',

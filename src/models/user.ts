@@ -83,3 +83,56 @@ const UserModel: UserModelType = {
 };
 
 export default UserModel;
+
+// import { Reducer } from 'redux';
+// import _ from 'lodash';
+// import { Effect } from '@/models/connect';
+// import * as userService from '@/services/user';
+// import { IUserResponse, IUserTable } from '@/pages/types/user';
+//
+// export interface IUser {
+//   [key: string]: any;
+// }
+//
+// export interface IUserModelType {
+//   namespace: 'user';
+//   state: IUserState;
+//   effects: {
+//     getUserListEffect: Effect;
+//   };
+//   reducers: {
+//     setUserListReducer: Reducer<IUser>;
+//   };
+// }
+//
+// export interface IUserState {
+//   userList: IUserTable[];
+// }
+//
+// const partnerModel: IUserModelType = {
+//   namespace: 'user',
+//   state: {
+//     userList: [],
+//   },
+//   effects: {
+//     *getUserListEffect({ params }, { put , call }) {
+//       const res: IUserResponse = yield call(userService.queryUserListApi, params);
+//       if (_.isEmpty(res)) {
+//         return false;
+//       }
+//       const userList = res.data;
+//       yield put({
+//         type: 'setUserListReducer',
+//         userList,
+//       });
+//       return userList;
+//     }
+//   },
+//   reducers: {
+//     setUserListReducer: (state, { userList }) => {
+//       return { ...state, userList };
+//     }
+//   }
+// };
+//
+// export default partnerModel;

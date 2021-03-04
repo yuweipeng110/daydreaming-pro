@@ -1,5 +1,5 @@
 import request from '@/utils/request';
-import { IUserResponse } from '@/pages/types/user';
+import { IAddUserResponse, IUserResponse } from '@/pages/types/user';
 
 export async function query(): Promise<any> {
   return request('/api/users');
@@ -13,9 +13,20 @@ export async function queryNotices(): Promise<any> {
   return request('/api/notices');
 }
 
-
-export async function queryUserListApi(params: any): Promise<IUserResponse>{
+export async function queryUserListApi(params: any): Promise<IUserResponse> {
   return request.get('/app/user/get-user-list', {
-    params
+    params,
+  });
+}
+
+export async function addUserApi(params: IAddUserResponse) {
+  return request.post('/app/user/add-user', {
+    data: params,
+  });
+}
+
+export async function editUserApi(params: IAddUserResponse) {
+  return request.post('/app/user/edit-user', {
+    data: params,
   });
 }

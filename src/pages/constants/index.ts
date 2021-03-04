@@ -12,6 +12,12 @@ export const UserSexEnum = {
 };
 
 export const UserRoleEnum = {
+  1: '店长',
+  2: '店员',
+  3: '玩家',
+};
+
+export const ScriptPlayerRoleEnum = {
   4: { text: '路人' },
   3: { text: '侦探' },
   2: { text: '杀手' },
