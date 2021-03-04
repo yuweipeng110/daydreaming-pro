@@ -15,6 +15,16 @@
         ],
       },
       {
+        path: '/test',
+        name: 'test',
+        component: './test',
+      },
+      {
+        path: '/test1',
+        name: 'test1',
+        component: './test/test1',
+      },
+      {
         path: '/',
         component: '../layouts/SecurityLayout',
         routes: [

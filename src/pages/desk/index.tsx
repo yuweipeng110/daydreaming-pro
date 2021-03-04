@@ -8,6 +8,7 @@ import { IDeskTable } from '@/pages/types/desk';
 import { queryDeskListApi } from '@/services/desk';
 import AddDesk from '@/pages/desk/components/ModalForm/AddDesk';
 import EditDesk from '@/pages/desk/components/ModalForm/EditDesk';
+import { DeskIsEnabledEnum } from '@/pages/constants';
 
 const DeskList: React.FC = () => {
   const actionRef = useRef<ActionType>();
@@ -40,23 +41,14 @@ const DeskList: React.FC = () => {
       title: '是否可用',
       dataIndex: 'isEnabled',
       key: 'isEnabled',
-      valueEnum: {
-        true: {
-          text: '是',
-          status: 'success',
-        },
-        false: {
-          text: '否',
-          status: 'error',
-        },
-      },
+      valueEnum: DeskIsEnabledEnum,
     },
     {
       title: '操作',
       key: 'action',
       search: false,
       render: (record: any) => (
-        <Space size='middle'>
+        <Space size="middle">
           <a onClick={() => editDeskModalStatusSwitch(true, record)}>修改</a>
         </Space>
       ),
@@ -66,14 +58,14 @@ const DeskList: React.FC = () => {
   return (
     <PageContainer>
       <ProTable<IDeskTable>
-        headerTitle='桌台管理'
+        headerTitle="桌台管理"
         actionRef={actionRef}
-        rowKey='id'
+        rowKey="id"
         search={false}
         toolBarRender={() => [
           <Button
-            type='primary'
-            key='primary'
+            type="primary"
+            key="primary"
             onClick={() => {
               createDeskModalStatusSwitch(true);
             }}
@@ -87,10 +79,18 @@ const DeskList: React.FC = () => {
           pageSize: 10,
         }}
         columns={columns}
-      >
-      </ProTable>
-      <AddDesk actionRef={actionRef} visible={createDeskModalVisible} onVisibleChange={handleCreateDeskModalVisible} />
-      <EditDesk actionRef={actionRef} visible={editDeskModalVisible} onVisibleChange={handleEditDeskModalVisible} currentData={currentData} />
+      ></ProTable>
+      <AddDesk
+        actionRef={actionRef}
+        visible={createDeskModalVisible}
+        onVisibleChange={handleCreateDeskModalVisible}
+      />
+      <EditDesk
+        actionRef={actionRef}
+        visible={editDeskModalVisible}
+        onVisibleChange={handleEditDeskModalVisible}
+        currentData={currentData}
+      />
     </PageContainer>
   );
 };

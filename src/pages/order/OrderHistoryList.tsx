@@ -5,13 +5,8 @@ import ProProvider from '@ant-design/pro-provider';
 import { ProFormDateRangePicker } from '@ant-design/pro-form';
 import { IOrderTable } from '@/pages/types/order';
 import { queryOrderListApi } from '@/services/order';
+import { OrderStatusEnum } from '@/pages/constants';
 import moment from 'moment';
-
-const OrderStatusEnum = {
-  0: { text: '全部', status: 'Default' },
-  10: { text: '进行中', status: 'Processing' },
-  20: { text: '完成', status: 'Success' },
-};
 
 const OrderHistoryList: React.FC = () => {
   const values = useContext(ProProvider);
@@ -55,7 +50,7 @@ const OrderHistoryList: React.FC = () => {
       title: '状态',
       dataIndex: 'status',
       valueType: 'radio',
-      initialValue: '0',
+      initialValue: 0,
       valueEnum: OrderStatusEnum,
       align: 'center',
     },

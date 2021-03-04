@@ -6,7 +6,7 @@ import { Form, message } from 'antd';
 import ProForm, { ModalForm, ProFormSelect, ProFormTextArea } from '@ant-design/pro-form';
 import type { ProColumns } from '@ant-design/pro-table';
 import { EditableProTable } from '@ant-design/pro-table';
-import { STATUS_CODE } from '@/pages/constants';
+import { STATUS_CODE, UserSexEnum } from '@/pages/constants';
 import { IOrderDetailTable } from '@/pages/types/orderDetail';
 import { IUserTable } from '@/pages/types/user';
 import { addOrderApi } from '@/services/order';
@@ -130,14 +130,7 @@ const AddOrder: React.FC<IProps> = (props) => {
     {
       title: '性别',
       dataIndex: ['userInfo', 'sex'],
-      valueEnum: {
-        0: {
-          text: '女',
-        },
-        1: {
-          text: '男',
-        },
-      },
+      valueEnum: UserSexEnum,
     },
     {
       title: '手机号',

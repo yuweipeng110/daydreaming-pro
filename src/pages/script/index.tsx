@@ -8,6 +8,7 @@ import { IScriptTable } from '@/pages/types/script';
 import { queryScriptListApi } from '@/services/script';
 import AddScript from '@/pages/script/components/ModalForm/AddScript';
 import EditScript from '@/pages/script/components/ModalForm/EditScript';
+import { ScriptIsAdaptEnum } from '@/pages/constants';
 
 const ScriptList: React.FC = () => {
   const actionRef = useRef<ActionType>();
@@ -69,16 +70,7 @@ const ScriptList: React.FC = () => {
       title: '是否改编',
       dataIndex: 'isAdapt',
       key: 'isAdapt',
-      valueEnum: {
-        true: {
-          text: '是',
-          status: 'success',
-        },
-        false: {
-          text: '否',
-          status: 'error',
-        },
-      },
+      valueEnum: ScriptIsAdaptEnum,
     },
     {
       title: '游戏时间（小时）',

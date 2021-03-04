@@ -8,6 +8,7 @@ import { IStoreTable } from '@/pages/types/store';
 import AddStore from '@/pages/store/components/ModalForm/AddStore';
 import EditStore from '@/pages/store/components/ModalForm/EditStore';
 import { queryStoreListApi } from '@/services/store';
+import { StoreStatusEnum } from '@/pages/constants';
 import _ from 'lodash';
 
 const StoreList: React.FC = () => {
@@ -40,16 +41,7 @@ const StoreList: React.FC = () => {
       title: '系统使用状态',
       dataIndex: 'status',
       key: 'status',
-      valueEnum: {
-        true: {
-          text: '使用中',
-          status: 'success',
-        },
-        false: {
-          text: '未激活',
-          status: 'error',
-        },
-      },
+      valueEnum: StoreStatusEnum,
     },
     {
       title: '管理员 (真实姓名)',
@@ -97,23 +89,23 @@ const StoreList: React.FC = () => {
       key: 'action',
       render: (record: any) => (
         <Space size="middle">
-          <a onClick={ () => editStoreModalStatusSwitch(true, record) }>修改</a>
+          <a onClick={() => editStoreModalStatusSwitch(true, record)}>修改</a>
         </Space>
-      )
+      ),
     },
   ];
 
   return (
     <PageContainer>
       <ProTable<IStoreTable>
-        headerTitle='门店管理'
+        headerTitle="门店管理"
         actionRef={actionRef}
-        rowKey='id'
+        rowKey="id"
         search={false}
         toolBarRender={() => [
           <Button
-            type='primary'
-            key='primary'
+            type="primary"
+            key="primary"
             onClick={() => {
               createStoreModalStatusSwitch(true);
             }}
@@ -127,10 +119,18 @@ const StoreList: React.FC = () => {
           pageSize: 10,
         }}
         columns={columns}
-      >
-      </ProTable>
-      <AddStore actionRef={actionRef} visible={createStoreModalVisible} onVisibleChange={handleCreateStoreModalVisible} />
-      <EditStore actionRef={actionRef} visible={editStoreModalVisible} onVisibleChange={handleEditStoreModalVisible} currentData={currentData} />
+      ></ProTable>
+      <AddStore
+        actionRef={actionRef}
+        visible={createStoreModalVisible}
+        onVisibleChange={handleCreateStoreModalVisible}
+      />
+      <EditStore
+        actionRef={actionRef}
+        visible={editStoreModalVisible}
+        onVisibleChange={handleEditStoreModalVisible}
+        currentData={currentData}
+      />
     </PageContainer>
   );
 };

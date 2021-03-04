@@ -10,7 +10,7 @@ import ProForm, {
 } from '@ant-design/pro-form';
 import type { ProColumns } from '@ant-design/pro-table';
 import { EditableProTable } from '@ant-design/pro-table';
-import { STATUS_CODE } from '@/pages/constants';
+import { STATUS_CODE, PaymentMethodEnum, UserRoleEnum, UserSexEnum } from '@/pages/constants';
 import { IOrderDetailTable } from '@/pages/types/orderDetail';
 import { IDeskTable } from '@/pages/types/desk';
 import { queryScriptListApi } from '@/services/script';
@@ -34,11 +34,8 @@ const SettlementOrder: React.FC<IProps> = (props) => {
   const [orderRealPrice, setOrderRealPrice] = useState<number>(0);
 
   const handleOrderDetailListChange = (record: any, recordList: any) => {
-    // @ts-ignore
     setOrderRealPrice(
-      _.sum(
-        _.map(recordList, (item) => Number((item.unitPrice * item.discountPercentage) / 100)),
-      ).toFixed(2),
+      _.sum(_.map(recordList, (item) => Number((item.unitPrice * item.discountPercentage) / 100))),
     );
   };
 
@@ -110,14 +107,7 @@ const SettlementOrder: React.FC<IProps> = (props) => {
     {
       title: '性别',
       dataIndex: ['userInfo', 'sex'],
-      valueEnum: {
-        0: {
-          text: '女',
-        },
-        1: {
-          text: '男',
-        },
-      },
+      valueEnum: UserSexEnum,
       editable: false,
     },
     {
@@ -129,17 +119,7 @@ const SettlementOrder: React.FC<IProps> = (props) => {
       title: '身份选择',
       dataIndex: 'roleId',
       align: 'center',
-      valueEnum: {
-        4: {
-          text: '路人',
-        },
-        3: {
-          text: '侦探',
-        },
-        2: {
-          text: '杀手',
-        },
-      },
+      valueEnum: UserRoleEnum,
     },
     {
       title: '积分',
@@ -180,20 +160,7 @@ const SettlementOrder: React.FC<IProps> = (props) => {
       title: '支付方式',
       dataIndex: 'paymentMethod',
       valueType: 'select',
-      valueEnum: {
-        1: {
-          text: '微信',
-        },
-        2: {
-          text: '支付宝',
-        },
-        3: {
-          text: '现金',
-        },
-        5: {
-          text: '账户余额',
-        },
-      },
+      valueEnum: PaymentMethodEnum,
     },
     {
       title: '付款金额',

@@ -9,6 +9,7 @@ import { queryPlayerListApi } from '@/services/player';
 import AddPlayer from '@/pages/player/components/ModalForm/AddPlayer';
 import EditPlayer from '@/pages/player/components/ModalForm/EditPlayer';
 import AccountRecharge from '@/pages/player/components/ModalForm/AccountRecharge';
+import { UserSexEnum } from '@/pages/constants';
 
 const PlayerList: React.FC = () => {
   const actionRef = useRef<ActionType>();
@@ -48,14 +49,7 @@ const PlayerList: React.FC = () => {
     {
       title: '性别',
       dataIndex: 'sex',
-      valueEnum: {
-        0: {
-          text: '女',
-        },
-        1: {
-          text: '男',
-        },
-      },
+      valueEnum: UserSexEnum,
       search: false,
     },
     {
