@@ -10,7 +10,7 @@ export interface IOrderDetailTable {
   unitPrice?: number;
   isPay?: boolean;
   discount?: number;
-  id: number;
+  id?: number;
   key?: string;
   /// params
   discountPrice?: number;

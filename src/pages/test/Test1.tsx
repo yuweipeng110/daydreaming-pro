@@ -19,6 +19,7 @@ export default (): React.ReactNode => {
   useEffect(() => {
     const getSysResult = `<strong>IV.引入智能环节：模型</strong>`;
 
+    // 回显
     const contentBlock = htmlToDraft(getSysResult);
     if (contentBlock) {
       const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { ConnectProps } from '@/models/connect';
-import { Col, Form, InputNumber, Row, Statistic } from 'antd';
+import { Button, Col, Form, InputNumber, Row, Statistic, Popconfirm, message } from 'antd';
 import ProForm, {
   ModalForm,
   ProFormSelect,
@@ -16,11 +16,15 @@ import {
   ScriptPlayerRoleEnum,
   UserSexEnum,
 } from '@/pages/constants';
+import { settlementOrderApi } from '@/services/order';
 import { IOrderDetailTable } from '@/pages/types/orderDetail';
 import { IDeskTable } from '@/pages/types/desk';
-import { queryScriptListApi } from '@/services/script';
-import { queryUserListApi } from '@/services/user';
 import _ from 'lodash';
+
+interface IOptions {
+  value: number;
+  label: string;
+}
 
 interface IProps extends ConnectProps {
   actionRef: any;
@@ -31,8 +35,16 @@ interface IProps extends ConnectProps {
 
 const SettlementOrder: React.FC<IProps> = (props) => {
   const { actionRef, visible, onVisibleChange, currentData } = props;
-  const initialValues = { ...currentData.orderInfo };
   const [form] = Form.useForm();
+  const initialValues = !_.isEmpty(currentData)
+    ? {
+        ...currentData.orderInfo,
+        scriptId: Number(currentData.id),
+        hostId: Number(currentData.orderInfo.hostInfo.id),
+      }
+    : {};
+  const [scriptOptions, setScriptOptions] = useState<IOptions[]>([]);
+  const [hostOptions, setHostOptions] = useState<IOptions[]>([]);
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
   const [orderDetailList, setOrderDetailList] = useState<IOrderDetailTable[]>([]);
   const [orderReceivablePrice, setOrderReceivablePrice] = useState<number>(0);
@@ -46,7 +58,19 @@ const SettlementOrder: React.FC<IProps> = (props) => {
 
   useEffect(() => {
     if (visible) {
-      setOrderDetailList(currentData.orderInfo?.detailList ?? []);
+      if (!_.isEmpty(currentData)) {
+        setOrderDetailList(currentData.orderInfo?.detailList ?? []);
+        // script select options
+        const scriptOptionList = { value: Number(currentData.id), label: currentData.title };
+        setScriptOptions([scriptOptionList]);
+        // host select options
+        const { hostInfo } = currentData.orderInfo;
+        const hostOptionList = {
+          value: Number(hostInfo.id),
+          label: `${hostInfo.phone}-${hostInfo.nickname}`,
+        };
+        setHostOptions([hostOptionList]);
+      }
     }
   }, [visible]);
 
@@ -56,50 +80,25 @@ const SettlementOrder: React.FC<IProps> = (props) => {
     setOrderRealPrice(_.sum(_.map(orderDetailList, (item) => Number(item.discountPrice))));
   }, [orderDetailList]);
 
-  /**
-   * /app/user/get-user-list?storeId=1&pageRecords=1000
-   */
-  const loadScriptListData = async () => {
-    const params = { pageRecords: 1000 };
-    const res = await queryScriptListApi(params);
-    if (res.code === STATUS_CODE.SUCCESS) {
-      return res.data.map((item) => {
-        return {
-          label: item.title,
-          value: item.id,
-        };
-      });
-    }
-    return [];
-  };
-
-  /**
-   * /app/user/get-script-list?storeId=1&pageRecords=1000
-   */
-  const loadHostListData = async () => {
-    const res = await queryUserListApi({});
-    if (res.code === STATUS_CODE.SUCCESS) {
-      return res.data.map((item) => {
-        return {
-          label: `${item.nickname}-${item.phone}`,
-          value: item.id,
-        };
-      });
-    }
-    return [];
-  };
-
   const onSubmit = async (values: any) => {
+    const hide = message.loading('正在结算订单');
     const params = {
       ...values,
       orderId: values.id,
       deskId: values.deskId,
+      // settlementOperatorId
       // detailList: orderDetailList,
       // storeId,scriptId,deskId,orderOperatorId,remark,detailList
     };
-
-    console.log('xxxx');
-    console.log('params', params);
+    const res = await settlementOrderApi(params);
+    if (res.code === STATUS_CODE.SUCCESS) {
+      onVisibleChange(false);
+      hide();
+      message.success('结算成功');
+      return true;
+    }
+    hide();
+    message.error(res.msg);
     return false;
   };
 
@@ -198,6 +197,26 @@ const SettlementOrder: React.FC<IProps> = (props) => {
         }
         return true;
       }}
+      submitter={{
+        render: (_props) => {
+          return [
+            <Button key="cancel" type="default" onClick={() => onVisibleChange(false)}>
+              取消
+            </Button>,
+            <Popconfirm
+              key="confirm"
+              title="确认操作？"
+              onConfirm={() => {
+                _props.form?.submit();
+              }}
+            >
+              <Button key="submit" type="primary" htmlType="submit">
+                提交
+              </Button>
+            </Popconfirm>,
+          ];
+        },
+      }}
       initialValues={initialValues}
       width="70%"
     >
@@ -207,17 +226,11 @@ const SettlementOrder: React.FC<IProps> = (props) => {
         <ProFormSelect
           name="scriptId"
           label="选择剧本"
-          request={() => loadScriptListData()}
           width="md"
+          options={scriptOptions}
           disabled
         />
-        <ProFormSelect
-          name="hostId"
-          label="主持人"
-          request={() => loadHostListData()}
-          width="md"
-          disabled
-        />
+        <ProFormSelect name="hostId" label="主持人" width="md" options={hostOptions} disabled />
       </ProForm.Group>
       <ProForm.Group>
         <ProFormTextArea name="remark" label="备注" width="md" />

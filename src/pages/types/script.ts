@@ -1,7 +1,7 @@
 import { IResponse } from '@/pages/types/public';
 
 export interface IScriptTable {
-  title?: string;
+  title: string;
   type: string;
   amount: number;
   costPrice: number;
@@ -12,7 +12,7 @@ export interface IScriptTable {
   isAdapt?: boolean;
   adaptContent: string;
   content: string;
-  id?: string;
+  id: number;
   key?: string;
 }
 

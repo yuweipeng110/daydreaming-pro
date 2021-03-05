@@ -30,7 +30,7 @@ export interface IUserTable {
   totalTitle: string;
   activeIntegral: number;
   otime: string;
-  id: string;
+  id: number;
   key: string;
 }
 
@@ -45,7 +45,7 @@ export interface IAddUserExists {
 }
 
 export interface IAddUserResponse extends IResponse {
-  data: IAddUserExists
+  data: IAddUserExists;
 }
 
 export interface ISearchUser {
