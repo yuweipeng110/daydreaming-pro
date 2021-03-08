@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { ConnectProps } from '@/models/connect';
+import { ConnectProps, ConnectState } from '@/models/connect';
 import { Form, message } from 'antd';
 import ProForm, { ModalForm, ProFormTextArea } from '@ant-design/pro-form';
 import { STATUS_CODE } from '@/pages/constants';
@@ -10,7 +10,7 @@ import ScriptSelect from '@/pages/order/components/ModalForm/ProFormSelect/Scrip
 import HostSelect from '@/pages/order/components/ModalForm/ProFormSelect/HostSelect';
 import UserSelectList from '@/pages/order/components/ModalForm/ProFormSelect/UserSelectList';
 
-interface IProps extends ConnectProps {
+interface IProps extends ConnectProps, StateProps {
   actionRef: any;
   visible: boolean;
   onVisibleChange: (visible: boolean) => void;
@@ -18,7 +18,7 @@ interface IProps extends ConnectProps {
 }
 
 const AddOrder: React.FC<IProps> = (props) => {
-  const { actionRef, visible, onVisibleChange, deskId } = props;
+  const { actionRef, visible, onVisibleChange, deskId, loginUserInfo } = props;
   const [form] = Form.useForm();
   const [orderDetailList, setOrderDetailList] = useState<IOrderDetailTable[]>([]);
 
@@ -42,7 +42,7 @@ const AddOrder: React.FC<IProps> = (props) => {
     const hide = message.loading('正在开台');
     const params = {
       ...values,
-      storeId: 1,
+      storeId: loginUserInfo.storeId,
       deskId,
       // orderOperatorId: props.loginUserInfo.id,
       detailList: orderDetailList,
@@ -96,4 +96,9 @@ const AddOrder: React.FC<IProps> = (props) => {
   );
 };
 
-export default connect()(AddOrder);
+const mapStateToProps = (state: ConnectState) => ({
+  loginUserInfo: state.login.loginUserInfo,
+});
+type StateProps = ReturnType<typeof mapStateToProps>;
+
+export default connect(mapStateToProps)(AddOrder);

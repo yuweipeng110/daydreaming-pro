@@ -1,4 +1,6 @@
 import React, { useRef, useState } from 'react';
+import { connect } from "react-redux";
+import { ConnectProps, ConnectState } from "@/models/connect";
 import { Button, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-layout';
@@ -11,7 +13,8 @@ import EditPlayer from '@/pages/player/components/ModalForm/EditPlayer';
 import AccountRecharge from '@/pages/player/components/ModalForm/AccountRecharge';
 import { UserSexEnum } from '@/pages/constants';
 
-const PlayerList: React.FC = () => {
+const PlayerList: React.FC<ConnectProps & StateProps> = (props) => {
+  const { loginUserInfo } = props;
   const actionRef = useRef<ActionType>();
   const [createPlayerModalVisible, handleCreatePlayerModalVisible] = useState<boolean>(false);
   const [editPlayerModalVisible, handleEditPlayerModalVisible] = useState<boolean>(false);
@@ -138,7 +141,7 @@ const PlayerList: React.FC = () => {
           </Button>,
         ]}
         options={false}
-        request={(params) => queryPlayerListApi({ ...params })}
+        request={(params) => queryPlayerListApi({ ...params, storeId: loginUserInfo.storeId, roleId: 3 })}
         pagination={{
           pageSize: 10,
         }}
@@ -165,4 +168,9 @@ const PlayerList: React.FC = () => {
   );
 };
 
-export default PlayerList;
+const mapStateToProps = (state: ConnectState) => ({
+  loginUserInfo: state.login.loginUserInfo,
+});
+type StateProps = ReturnType<typeof mapStateToProps>;
+
+export default connect(mapStateToProps)(PlayerList);

@@ -1,4 +1,6 @@
 import React, { useRef, useState } from 'react';
+import { connect } from "react-redux";
+import { ConnectProps, ConnectState } from "@/models/connect";
 import { Button, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-layout';
@@ -10,7 +12,8 @@ import AddUser from '@/pages/user/components/ModalForm/AddUser';
 import EditUser from '@/pages/user/components/ModalForm/EditUser';
 import { UserRoleEnum, UserSexEnum } from '@/pages/constants';
 
-const UserList: React.FC = () => {
+const UserList: React.FC<ConnectProps & StateProps> = (props) => {
+  const { loginUserInfo } = props;
   const actionRef = useRef<ActionType>();
   const [createUserModalVisible, handleCreateUserModalVisible] = useState<boolean>(false);
   const [editUserModalVisible, handleEditUserModalVisible] = useState<boolean>(false);
@@ -94,7 +97,7 @@ const UserList: React.FC = () => {
           </Button>,
         ]}
         options={false}
-        request={(params) => queryUserListApi({ ...params })}
+        request={(params) => queryUserListApi({ ...params, storeId: loginUserInfo.storeId, isHost: true })}
         pagination={{
           pageSize: 10,
         }}
@@ -114,5 +117,9 @@ const UserList: React.FC = () => {
     </PageContainer>
   );
 };
+const mapStateToProps = (state: ConnectState) => ({
+  loginUserInfo: state.login.loginUserInfo,
+});
+type StateProps = ReturnType<typeof mapStateToProps>;
 
-export default UserList;
+export default connect(mapStateToProps)(UserList);

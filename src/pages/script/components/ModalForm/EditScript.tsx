@@ -120,14 +120,14 @@ const EditScript: React.FC<IProps> = (props) => {
         />
       </ProForm.Group>
       <ProForm.Group>
-        <ProFormDigit
-          name='amount'
-          label='拥有数量'
+        <ProFormText
+          name='applicableNumber'
+          label='适用人数'
           width='md'
         />
         <ProFormDigit
-          name='applicableNumber'
-          label='适用人数'
+          name='amount'
+          label='拥有数量'
           width='md'
         />
       </ProForm.Group>
@@ -137,16 +137,15 @@ const EditScript: React.FC<IProps> = (props) => {
           label='游戏时间（小时）'
           width='md'
         />
-        <ProFormTextArea
-          name='description'
-          label='描述'
-          width='md'
-        />
-      </ProForm.Group>
-      <ProForm.Group>
         <ProFormSwitch
           name='isAdapt'
           label='是否改编'
+        />
+      </ProForm.Group>
+      <ProForm.Group>
+        <ProFormTextArea
+          name='description'
+          label='描述'
           width='md'
         />
         <ProFormTextArea

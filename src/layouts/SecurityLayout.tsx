@@ -4,25 +4,35 @@ import type { ConnectProps } from 'umi';
 import { Redirect, connect } from 'umi';
 import { stringify } from 'querystring';
 import type { ConnectState } from '@/models/connect';
-import { IUserTable } from '@/pages/types/user';
+import { userAuth } from "@/utils/useAuth";
 
 type SecurityLayoutProps = {
   loading?: boolean;
-  loginUserInfo?: IUserTable;
 } & ConnectProps;
 
 type SecurityLayoutState = {
   isReady: boolean;
+  isLogin: boolean;
 };
 
 class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayoutState> {
   state: SecurityLayoutState = {
     isReady: false,
+    isLogin: false,
   };
 
-  componentDidMount() {
+  async componentDidMount() {
+    const { isLogin, loginUserInfo } = await userAuth();
+    const { dispatch } = this.props;
+    if (dispatch) {
+      await dispatch({
+        type: 'login/setLoginUserReducer',
+        loginUserInfo
+      });
+    }
     this.setState({
       isReady: true,
+      isLogin
     });
   }
 
@@ -31,13 +41,11 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
   }
 
   render() {
-    const { isReady } = this.state;
-    const { children, loading, loginUserInfo } = this.props;
+    const { isReady, isLogin } = this.state;
+    const { children, loading } = this.props;
     // You can replace it to your authentication rule (such as check token exists)
     // 你可以把它替换成你自己的登录认证规则（比如判断 token 是否存在）
     // const isLogin = currentUser && currentUser.userid;
-    const isLogin = loginUserInfo && Number(loginUserInfo.id);
-    // const { isLogin } = this.state;
     const queryString = stringify({
       redirect: window.location.href,
     });
@@ -51,7 +59,6 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
   }
 }
 
-export default connect(({ loading, login }: ConnectState) => ({
+export default connect(({ loading }: ConnectState) => ({
   loading: loading.models.user,
-  loginUserInfo: login.loginUserInfo,
 }))(SecurityLayout);

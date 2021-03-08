@@ -8,7 +8,7 @@ export async function queryDeskListApi(params: any): Promise<IDeskResponse>{
   });
 }
 
-export async function queryOrderDeskListApi(params: []): Promise<IDeskResponse>{
+export async function queryOrderDeskListApi(params: any): Promise<IDeskResponse>{
   return request.get('/app/desk/get-desk-order-list',{
     params
   });

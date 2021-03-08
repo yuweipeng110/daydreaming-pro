@@ -3,20 +3,16 @@ import { IOrderTable } from '@/pages/types/order';
 import { IStoreTable } from '@/pages/types/store';
 
 export interface IDeskTable {
+  id: number;
   title: string;
   storeId: string;
   storeInfo: IStoreTable;
-  // storeName: string;
   orderInfo: IOrderTable;
   isEnabled: boolean;
-  id?: string;
-  key?: string;
 }
 
 export interface IDeskResponse extends IResponse {
   data: IDeskTable[];
-  dataCount: number;
-  pageCount: number;
 }
 
 export interface IAddDeskResponse extends IResponse {

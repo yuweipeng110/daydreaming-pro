@@ -7,8 +7,9 @@ export interface ISystemUserTable {
 }
 
 export interface IUserTable {
-  role: string;
-  storeId: string;
+  id: number;
+  role: number;
+  storeId: number;
   nickname: string;
   sex: number;
   phone: string;
@@ -30,14 +31,10 @@ export interface IUserTable {
   totalTitle: string;
   activeIntegral: number;
   otime: string;
-  id: number;
-  key: string;
 }
 
 export interface IUserResponse extends IResponse {
   data: IUserTable[];
-  dataCount: number;
-  pageCount: number;
 }
 
 export interface IAddUserExists {
@@ -46,12 +43,4 @@ export interface IAddUserExists {
 
 export interface IAddUserResponse extends IResponse {
   data: IAddUserExists;
-}
-
-export interface ISearchUser {
-  currentPage: number;
-  pageRecords: number;
-  storeId?: string;
-  name?: string;
-  phoneNumber?: string;
 }

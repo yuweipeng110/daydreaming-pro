@@ -16,10 +16,9 @@ import styles from './index.less';
 import _ from 'lodash';
 import moment from 'moment';
 
-const OrderList: React.FC<ConnectProps> = (props) => {
+const OrderList: React.FC<ConnectProps & StateProps> = (props) => {
+  const { loading, loginUserInfo } = props;
   const actionRef = useRef<ActionType>();
-  // @ts-ignore
-  const { loading } = props;
   const [deskId, setDeskId] = useState<number>(0);
   const [deskOrderList, setDeskOrderList] = useState<IDeskTable[]>([]);
   const [createOrderModalVisible, handleCreateOrderModalVisible] = useState<boolean>(false);
@@ -27,9 +26,9 @@ const OrderList: React.FC<ConnectProps> = (props) => {
   const [settlementOrderModalVisible, handleSettlementOrderModalVisible] = useState<boolean>(false);
   const [currentData, setCurrentData] = useState<IDeskTable>(Object.create(null));
 
-  const createOrderModalStatusSwitch = (createOrderModalStatus: boolean, rowDeskId: string | undefined) => {
+  const createOrderModalStatusSwitch = (createOrderModalStatus: boolean, rowDeskId: number) => {
     handleCreateOrderModalVisible(createOrderModalStatus);
-    setDeskId(Number(rowDeskId));
+    setDeskId(rowDeskId);
   };
 
   const editOrderModalStatusSwitch = (editOrderModalStatus: boolean, rowCurrentData: any) => {
@@ -43,7 +42,10 @@ const OrderList: React.FC<ConnectProps> = (props) => {
   };
 
   const loadOrderList = async () => {
-    const res = await queryOrderDeskListApi([]);
+    const params = {
+      storeId: loginUserInfo.storeId
+    }
+    const res = await queryOrderDeskListApi(params);
     setDeskOrderList(res.data);
   };
 
@@ -57,9 +59,9 @@ const OrderList: React.FC<ConnectProps> = (props) => {
   };
 
   const renderTime = (record: IDeskTable) => {
-    const a = moment();
-    const b = moment(record.orderInfo.orderTime);
-    return a.diff(b, 'hours', true).toFixed(2);
+    const currentTimeMoment = moment();
+    const orderTimeMoment = moment(record.orderInfo.orderTime);
+    return currentTimeMoment.diff(orderTimeMoment, 'hours', true).toFixed(2);
   };
 
   useEffect(() => {
@@ -113,6 +115,10 @@ const OrderList: React.FC<ConnectProps> = (props) => {
   );
 };
 
-export default connect(({ loading }: ConnectState) => ({
-  loading: loading.global,
-}))(OrderList);
+const mapStateToProps = (state: ConnectState) => ({
+  loading: state.loading.global,
+  loginUserInfo: state.login.loginUserInfo,
+});
+type StateProps = ReturnType<typeof mapStateToProps>;
+
+export default connect(mapStateToProps)(OrderList);

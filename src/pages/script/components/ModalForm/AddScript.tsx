@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { ConnectProps } from '@/models/connect';
+import { ConnectProps, ConnectState } from '@/models/connect';
 import { Form, message } from 'antd';
 import ProForm, {
   ModalForm,
@@ -12,19 +12,22 @@ import ProForm, {
 import { addScriptApi } from '@/services/script';
 import { STATUS_CODE } from '@/pages/constants';
 
-interface IProps extends ConnectProps {
+interface IProps extends ConnectProps, StateProps {
   actionRef: any;
   visible: boolean;
   onVisibleChange: (visible: boolean) => void;
 }
 
 const AddScript: React.FC<IProps> = (props) => {
-  const { actionRef, visible, onVisibleChange } = props;
+  const { actionRef, visible, onVisibleChange, loginUserInfo } = props;
   const [form] = Form.useForm();
 
   const onSubmit = async (values: any) => {
     const hide = message.loading('正在添加');
-    const params = { ...values };
+    const params = {
+      ...values,
+      storeId: loginUserInfo.storeId
+    };
     const res = await addScriptApi((params));
     if (Number(res.code) !== STATUS_CODE.SUCCESS) {
       hide();
@@ -109,14 +112,14 @@ const AddScript: React.FC<IProps> = (props) => {
         />
       </ProForm.Group>
       <ProForm.Group>
-        <ProFormDigit
-          name='amount'
-          label='拥有数量'
+        <ProFormText
+          name='applicableNumber'
+          label='适用人数'
           width='md'
         />
         <ProFormDigit
-          name='applicableNumber'
-          label='适用人数'
+          name='amount'
+          label='拥有数量'
           width='md'
         />
       </ProForm.Group>
@@ -126,16 +129,15 @@ const AddScript: React.FC<IProps> = (props) => {
           label='游戏时间（小时）'
           width='md'
         />
-        <ProFormTextArea
-          name='description'
-          label='描述'
-          width='md'
-        />
-      </ProForm.Group>
-      <ProForm.Group>
         <ProFormSwitch
           name='isAdapt'
           label='是否改编'
+        />
+      </ProForm.Group>
+      <ProForm.Group>
+        <ProFormTextArea
+          name='description'
+          label='描述'
           width='md'
         />
         <ProFormTextArea
@@ -148,4 +150,9 @@ const AddScript: React.FC<IProps> = (props) => {
   );
 };
 
-export default connect()(AddScript);
+const mapStateToProps = (state: ConnectState) => ({
+  loginUserInfo: state.login.loginUserInfo,
+});
+type StateProps = ReturnType<typeof mapStateToProps>;
+
+export default connect(mapStateToProps)(AddScript);

@@ -34,7 +34,7 @@ const AddUser: React.FC<IProps> = (props) => {
       type: 'user/editUserEffect',
       params,
     });
-    if (!submitRes.phoneExists) {
+    if (submitRes.phoneExists) {
       const phoneError = submitRes.phoneExists
         ? {}
         : {

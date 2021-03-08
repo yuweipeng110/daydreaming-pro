@@ -1,4 +1,6 @@
 import React, { useRef, useState } from 'react';
+import { connect } from "react-redux";
+import { ConnectProps, ConnectState } from "@/models/connect";
 import { Button, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-layout';
@@ -10,7 +12,8 @@ import AddScript from '@/pages/script/components/ModalForm/AddScript';
 import EditScript from '@/pages/script/components/ModalForm/EditScript';
 import { ScriptIsAdaptEnum } from '@/pages/constants';
 
-const ScriptList: React.FC = () => {
+const ScriptList: React.FC<ConnectProps & StateProps> = (props) => {
+  const { loginUserInfo } = props;
   const actionRef = useRef<ActionType>();
   const [createScriptModalVisible, handleCreateScriptModalVisible] = useState<boolean>(false);
   const [editScriptModalVisible, handleEditScriptModalVisible] = useState<boolean>(false);
@@ -118,7 +121,7 @@ const ScriptList: React.FC = () => {
           </Button>,
         ]}
         options={false}
-        request={(params) => queryScriptListApi({ ...params })}
+        request={(params) => queryScriptListApi({ ...params, storeId: loginUserInfo.storeId })}
         pagination={{
           pageSize: 10,
         }}
@@ -139,4 +142,9 @@ const ScriptList: React.FC = () => {
   );
 };
 
-export default ScriptList;
+const mapStateToProps = (state: ConnectState) => ({
+  loginUserInfo: state.login.loginUserInfo,
+});
+type StateProps = ReturnType<typeof mapStateToProps>;
+
+export default connect(mapStateToProps)(ScriptList);

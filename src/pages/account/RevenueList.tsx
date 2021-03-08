@@ -5,76 +5,63 @@ import { PageContainer } from '@ant-design/pro-layout';
 import ProTable, { ProColumns } from '@ant-design/pro-table';
 import ProProvider from '@ant-design/pro-provider';
 import { ProFormDateRangePicker } from '@ant-design/pro-form';
-import { IOrderTable } from '@/pages/types/order';
-import { queryOrderListApi } from '@/services/order';
-import { OrderStatusEnum } from '@/pages/constants';
+import { queryRevenueListApi } from "@/services/revenue";
+import { IRevenueTable } from "@/pages/types/revenue";
+import { PaymentMethodEnum } from '@/pages/constants';
 import moment from 'moment';
 
-const OrderHistoryList: React.FC<ConnectProps & StateProps> = (props) => {
+const RevenueList: React.FC<ConnectProps & StateProps> = (props) => {
   const { loginUserInfo } = props;
   const values = useContext(ProProvider);
 
-  const columns: ProColumns<IOrderTable, 'customDataRange'>[] = [
+  const getDataList = (params: any) => {
+    const res = queryRevenueListApi({ ...params, storeId: loginUserInfo.storeId })
+    return res;
+  }
+
+  const columns: ProColumns<IRevenueTable, 'customDataRange'>[] = [
     {
-      title: '订单号',
+      title: '用户',
       search: false,
-      dataIndex: 'orderNo',
+      dataIndex: 'user',
+      render: (text: any, record: any) => {
+        const userText = record.userInfo ? `${record.userInfo.phone}-${record.userInfo.nickname}` : '';
+        return userText;
+      },
     },
     {
-      title: '桌号',
-      search: false,
-      dataIndex: ['deskInfo', 'title'],
-    },
-    {
-      title: '剧本名称',
-      search: false,
-      dataIndex: ['scriptInfo', 'title'],
-    },
-    {
-      title: '主持人',
-      search: false,
-      dataIndex: ['hostInfo', 'nickname'],
-    },
-    {
-      title: '应收金额',
-      dataIndex: 'receivableMoney',
+      title: '变动金额',
       valueType: 'money',
       search: false,
+      dataIndex: 'changeMoney',
       align: 'right',
     },
     {
-      title: '实收金额',
-      dataIndex: 'realMoney',
-      valueType: 'money',
-      search: false,
-      align: 'right',
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      valueType: 'radio',
-      initialValue: '0',
-      valueEnum: OrderStatusEnum,
-      align: 'center',
-    },
-    {
-      title: '下单时间',
+      title: '变动时间',
       key: 'dateRange',
-      dataIndex: 'orderTime',
+      dataIndex: 'changeTime',
       valueType: 'customDataRange',
       align: 'center',
     },
     {
-      title: '结算时间',
-      dataIndex: 'settlementTime',
-      valueType: 'dateTime',
+      title: '订单号',
+      dataIndex: 'order',
       search: false,
-      align: 'center',
+      render: (text: any, record: any) => {
+        const orderText = record.orderInfo ? record.orderInfo.orderNo : '';
+        return orderText;
+      },
+    },
+    {
+      title: '结算方式',
+      dataIndex: 'paymentMethodId',
+      valueEnum: PaymentMethodEnum,
+      search: false,
     },
     {
       title: '备注',
-      dataIndex: 'remark',
       search: false,
+      dataIndex: 'remarkIncrease',
     },
   ];
 
@@ -90,7 +77,7 @@ const OrderHistoryList: React.FC<ConnectProps & StateProps> = (props) => {
                 return (
                   <ProFormDateRangePicker
                     {..._props?.fieldProps}
-                    name={['orderTime', 'dateRange']}
+                    name={['changeTime', 'dateRange']}
                     initialValue={[
                       moment().startOf('month').format('YYYY-MM-DD'),
                       moment().endOf('month').format('YYYY-MM-DD'),
@@ -102,11 +89,11 @@ const OrderHistoryList: React.FC<ConnectProps & StateProps> = (props) => {
           },
         }}
       >
-        <ProTable<IOrderTable, Record<string, any>, 'customDataRange'>
-          headerTitle="订单历史记录"
+        <ProTable<IRevenueTable, Record<string, any>, 'customDataRange'>
+          headerTitle="收入流水记录"
           rowKey="id"
           options={false}
-          request={(params) => queryOrderListApi({ ...params, storeId: loginUserInfo.storeId })}
+          request={(params) => queryRevenueListApi({ ...params, storeId: loginUserInfo.storeId })}
           pagination={{
             pageSize: 10,
           }}
@@ -122,4 +109,4 @@ const mapStateToProps = (state: ConnectState) => ({
 });
 type StateProps = ReturnType<typeof mapStateToProps>;
 
-export default connect(mapStateToProps)(OrderHistoryList);
+export default connect(mapStateToProps)(RevenueList);

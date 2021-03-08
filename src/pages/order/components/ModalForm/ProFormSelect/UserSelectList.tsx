@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { connect } from "react-redux";
+import { ConnectProps, ConnectState } from "@/models/connect";
 import { useRequest } from 'umi';
+import { Spin, Empty } from "antd";
 import ProForm, { ProFormSelect } from '@ant-design/pro-form';
 import { EditableProTable, ProColumns } from '@ant-design/pro-table';
 import { IOrderDetailTable } from '@/pages/types/orderDetail';
@@ -8,7 +11,7 @@ import { queryPlayerListApi } from '@/services/player';
 import { STATUS_CODE, UserSexEnum } from '@/pages/constants';
 import _ from 'lodash';
 
-interface IProps {
+interface IProps extends ConnectProps, StateProps{
   orderDetailList: IOrderDetailTable[];
   setOrderDetailList: (orderDetailList: IOrderDetailTable[]) => void;
 }
@@ -19,10 +22,31 @@ interface IOption {
 }
 
 const UserSelectList: React.FC<IProps> = (props) => {
-  const { orderDetailList, setOrderDetailList } = props;
+  const { orderDetailList, setOrderDetailList, loginUserInfo } = props;
   const [playerOptions, setPlayerOptions] = useState<IOption[]>([]);
   const [playerList, setPlayerList] = useState<IUserTable[]>([]);
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
+
+  const loadUserListData = async () => {
+    const params = {
+      pageSize: 10,
+      storeId: loginUserInfo.storeId,
+    };
+    const res = await queryPlayerListApi(params);
+    if (res.code === STATUS_CODE.SUCCESS) {
+      const options = res.data.map((item: IUserTable) => {
+        return {
+          value: item.id,
+          label: `${item.phone}-${item.nickname}`,
+        };
+      });
+      setPlayerOptions(options);
+    }
+  }
+
+  useEffect(() => {
+    loadUserListData();
+  }, []);
 
   const { loading: playerLoading, run: playerRun, cancel: playerCancel } = useRequest(
     queryPlayerListApi,
@@ -49,11 +73,12 @@ const UserSelectList: React.FC<IProps> = (props) => {
     setPlayerOptions([]);
     playerRun({
       pageSize: 10,
+      storeId: loginUserInfo.storeId,
       phone: value,
     });
   };
 
-  const handleAddPlayer = (userId: string) => {
+  const handleAddPlayer = (userId: number) => {
     const userInfo: IUserTable =
       playerList.find((user: IUserTable) => Number(user.id) === Number(userId)) ||
       ({} as IUserTable);
@@ -113,6 +138,7 @@ const UserSelectList: React.FC<IProps> = (props) => {
             onSearch: (value) => handleSearchPlayer(value),
             onBlur: playerCancel,
             loading: playerLoading,
+            notFoundContent: playerLoading ? <Spin size="small" /> : <Empty />,
           }}
         />
       </ProForm.Group>
@@ -133,4 +159,9 @@ const UserSelectList: React.FC<IProps> = (props) => {
   );
 };
 
-export default UserSelectList;
+const mapStateToProps = (state: ConnectState) => ({
+  loginUserInfo: state.login.loginUserInfo,
+});
+type StateProps = ReturnType<typeof mapStateToProps>;
+
+export default connect(mapStateToProps)(UserSelectList);

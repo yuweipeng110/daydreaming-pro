@@ -5,31 +5,28 @@ import { IUserTable } from '@/pages/types/user';
 import { IOrderDetailTable } from '@/pages/types/orderDetail';
 
 export interface IOrderTable {
+  id: number;
   orderNo: string;
   scriptId: number;
   scriptInfo: IScriptTable;
-  deskId: string;
+  deskId: number;
   deskInfo: IDeskTable;
-  hostId: string;
+  hostId: number;
   hostInfo: IUserTable;
-  receivableMoney?: number;
+  receivableMoney: number;
   realMoney: number;
-  orderOperatorId: string;
+  orderOperatorId: number;
   orderOperatorInfo: IUserTable;
   orderTime: string;
   settlementTime: string;
-  status: string;
+  status: number;
   statusDescription: string;
   remark: string;
-  id?: string;
-  key?: string;
   detailList?: IOrderDetailTable[];
 }
 
 export interface IOrderResponse extends IResponse {
   data: IOrderTable[];
-  dataCount: number;
-  pageCount: number;
 }
 
 export interface IAddOrderResponse extends IResponse {

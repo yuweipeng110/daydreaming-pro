@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { ConnectProps } from '@/models/connect';
+import { ConnectProps, ConnectState } from '@/models/connect';
 import { Form, message } from 'antd';
 import ProForm, {
   ModalForm,
@@ -12,24 +12,27 @@ import ProForm, {
 } from '@ant-design/pro-form';
 import { IAddUserExists } from '@/pages/types/user';
 
-interface IProps extends ConnectProps {
+interface IProps extends ConnectProps, StateProps {
   actionRef: any;
   visible: boolean;
   onVisibleChange: (visible: boolean) => void;
 }
 
 const AddUser: React.FC<IProps> = (props) => {
-  const { actionRef, visible, onVisibleChange } = props;
+  const { actionRef, visible, onVisibleChange, loginUserInfo } = props;
   const [form] = Form.useForm();
 
   const onSubmit = async (values: any) => {
     const hide = message.loading('正在添加');
-    const params = { ...values };
+    const params = {
+      ...values,
+      storeId: loginUserInfo.storeId
+    };
     const submitRes: IAddUserExists = await props.dispatch({
       type: 'user/addUserEffect',
       params,
     });
-    if (!submitRes.phoneExists) {
+    if (submitRes.phoneExists) {
       const phoneError = submitRes.phoneExists
         ? {}
         : {
@@ -129,4 +132,9 @@ const AddUser: React.FC<IProps> = (props) => {
   );
 };
 
-export default connect()(AddUser);
+const mapStateToProps = (state: ConnectState) => ({
+  loginUserInfo: state.login.loginUserInfo,
+});
+type StateProps = ReturnType<typeof mapStateToProps>;
+
+export default connect(mapStateToProps)(AddUser);

@@ -38,12 +38,6 @@ const StoreList: React.FC = () => {
       key: 'storeName',
     },
     {
-      title: '系统使用状态',
-      dataIndex: 'status',
-      key: 'status',
-      valueEnum: StoreStatusEnum,
-    },
-    {
       title: '管理员 (真实姓名)',
       key: 'realName',
       render: (record: any) => {
@@ -77,6 +71,12 @@ const StoreList: React.FC = () => {
       title: '手机 (电话)',
       dataIndex: 'phoneNumber',
       key: 'phoneNumber',
+    },
+    {
+      title: '系统使用状态',
+      dataIndex: 'status',
+      key: 'status',
+      valueEnum: StoreStatusEnum,
     },
     {
       title: '门店地址',

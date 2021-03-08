@@ -38,10 +38,10 @@ const SettlementOrder: React.FC<IProps> = (props) => {
   const [form] = Form.useForm();
   const initialValues = !_.isEmpty(currentData)
     ? {
-        ...currentData.orderInfo,
-        scriptId: Number(currentData.id),
-        hostId: Number(currentData.orderInfo.hostInfo.id),
-      }
+      ...currentData.orderInfo,
+      scriptId: Number(currentData.id),
+      hostId: Number(currentData.orderInfo.hostInfo.id),
+    }
     : {};
   const [scriptOptions, setScriptOptions] = useState<IOptions[]>([]);
   const [hostOptions, setHostOptions] = useState<IOptions[]>([]);
@@ -52,7 +52,9 @@ const SettlementOrder: React.FC<IProps> = (props) => {
 
   const handleOrderDetailListChange = (record: any, recordList: any) => {
     setOrderRealPrice(
-      _.sum(_.map(recordList, (item) => Number((item.unitPrice * item.discountPercentage) / 100))),
+      _.sum(_.map(recordList, (item) => {
+        return Number(((item.unitPrice * item.discountPercentage) / 100).toFixed(2));
+      })),
     );
   };
 
@@ -90,6 +92,8 @@ const SettlementOrder: React.FC<IProps> = (props) => {
       // detailList: orderDetailList,
       // storeId,scriptId,deskId,orderOperatorId,remark,detailList
     };
+    console.log('SettlementOrder-submit-params',params);
+    return false;
     const res = await settlementOrderApi(params);
     if (res.code === STATUS_CODE.SUCCESS) {
       onVisibleChange(false);
@@ -129,7 +133,7 @@ const SettlementOrder: React.FC<IProps> = (props) => {
       title: '积分',
       dataIndex: 'integral',
       renderFormItem: () => {
-        return <InputNumber min={0} max={3} />;
+        return <InputNumber min={0} max={3}/>;
       },
     },
     {
@@ -153,7 +157,6 @@ const SettlementOrder: React.FC<IProps> = (props) => {
         return (
           <InputNumber
             min={0}
-            max={100}
             formatter={(value) => `${value}%`}
             parser={(value: any) => value.replace('%', '')}
           />
@@ -220,24 +223,17 @@ const SettlementOrder: React.FC<IProps> = (props) => {
       initialValues={initialValues}
       width="70%"
     >
-      <ProFormText name="id" hidden />
-      <ProFormText name="deskId" hidden />
+      <ProFormText name="id" hidden/>
+      <ProFormText name="deskId" hidden/>
       <ProForm.Group>
-        <ProFormSelect
-          name="scriptId"
-          label="选择剧本"
-          width="md"
-          options={scriptOptions}
-          disabled
-        />
+        <ProFormSelect name="scriptId" label="选择剧本" width="md" options={scriptOptions} disabled />
         <ProFormSelect name="hostId" label="主持人" width="md" options={hostOptions} disabled />
       </ProForm.Group>
       <ProForm.Group>
-        <ProFormTextArea name="remark" label="备注" width="md" />
+        <ProFormTextArea name="remark" label="备注" width="md"/>
       </ProForm.Group>
       <ProForm.Item
         name="detailList"
-        // initialValue={orderDetailList}
         trigger="onValuesChange"
       >
         <EditableProTable<IOrderDetailTable>
@@ -258,10 +254,10 @@ const SettlementOrder: React.FC<IProps> = (props) => {
       <Row>
         <Col span={18}></Col>
         <Col span={3}>
-          <Statistic title="应收总价" value={`￥${orderReceivablePrice}`} precision={2} />
+          <Statistic title="应收总价" prefix={'￥'} value={orderReceivablePrice} precision={2}/>
         </Col>
         <Col span={3}>
-          <Statistic title="实收总价" value={`￥${orderRealPrice}`} precision={2} />
+          <Statistic title="实收总价" prefix={'￥'} value={orderRealPrice} precision={2}/>
         </Col>
       </Row>
     </ModalForm>

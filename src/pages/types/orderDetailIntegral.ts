@@ -2,11 +2,10 @@ import { IOrderDetailTable } from '@/pages/types/orderDetail';
 import { IRoleTable } from '@/pages/types/role';
 
 export interface IOrderDetailIntegralTable {
-  orderDetailId?: string;
+  id: number;
+  orderDetailId: number;
   orderDetailInfo?: IOrderDetailTable;
-  roleId?: string;
+  roleId: number;
   roleInfo?: IRoleTable;
-  integral?: number;
-  id?: string;
-  key?: string;
+  integral: number;
 }

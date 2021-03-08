@@ -1,24 +1,32 @@
 import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { ConnectProps, ConnectState } from '@/models/connect';
 import { useRequest } from 'umi';
 import { ProFormSelect } from '@ant-design/pro-form';
-import { Spin } from 'antd';
+import { Empty, Spin } from 'antd';
 import { STATUS_CODE } from '@/pages/constants';
 import { queryScriptListApi } from '@/services/script';
 import { IScriptTable } from '@/pages/types/script';
+import { IDeskTable } from "@/pages/types/desk";
 import _ from 'lodash';
+
+interface IProps extends ConnectProps, StateProps {
+  currentData?: IDeskTable;
+}
 
 interface IOption {
   value: number;
   label: string;
 }
 
-const ScriptSelect: React.FC = () => {
+const ScriptSelect: React.FC<IProps> = (props) => {
+  const { currentData, loginUserInfo } = props;
   const [scriptOptions, setScriptOptions] = useState<IOption[]>([]);
 
   const loadScriptListData = async () => {
     const params = {
-      storeId: 1,
-      pageRecords: 10,
+      pageSize: 10,
+      storeId: loginUserInfo.storeId,
     };
     const res = await queryScriptListApi(params);
     if (res.code === STATUS_CODE.SUCCESS) {
@@ -33,8 +41,14 @@ const ScriptSelect: React.FC = () => {
   };
 
   useEffect(() => {
-    loadScriptListData();
-  }, []);
+    if (currentData) {
+      // script select options
+      const scriptOptionList = { value: Number(currentData.id), label: currentData.title };
+      setScriptOptions([scriptOptionList]);
+    } else {
+      loadScriptListData();
+    }
+  }, [currentData]);
 
   const { loading: scriptLoading, run: scriptRun, cancel: scriptCancel } = useRequest(
     queryScriptListApi,
@@ -60,6 +74,7 @@ const ScriptSelect: React.FC = () => {
     setScriptOptions([]);
     scriptRun({
       pageSize: 10,
+      storeId: loginUserInfo.storeId,
       title: value,
     });
   };
@@ -83,10 +98,15 @@ const ScriptSelect: React.FC = () => {
         onSearch: (value) => handleSearchScript(value),
         onBlur: scriptCancel,
         loading: scriptLoading,
-        notFoundContent: scriptLoading ? <Spin size="small" /> : null,
+        notFoundContent: scriptLoading ? <Spin size="small" /> : <Empty />,
       }}
     />
   );
 };
 
-export default ScriptSelect;
+const mapStateToProps = (state: ConnectState) => ({
+  loginUserInfo: state.login.loginUserInfo,
+});
+type StateProps = ReturnType<typeof mapStateToProps>;
+
+export default connect(mapStateToProps)(ScriptSelect);

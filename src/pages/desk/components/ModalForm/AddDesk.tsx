@@ -1,24 +1,27 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { ConnectProps } from '@/models/connect';
+import { ConnectProps, ConnectState } from '@/models/connect';
 import { Form, message } from 'antd';
 import ProForm, { ModalForm, ProFormSwitch, ProFormText } from '@ant-design/pro-form';
 import { addDeskApi } from '@/services/desk';
 import { STATUS_CODE } from '@/pages/constants';
 
-interface IProps extends ConnectProps {
+interface IProps extends ConnectProps, StateProps {
   actionRef: any;
   visible: boolean;
   onVisibleChange: (visible: boolean) => void;
 }
 
 const AddDesk: React.FC<IProps> = (props) => {
-  const { actionRef, visible, onVisibleChange } = props;
+  const { actionRef, visible, onVisibleChange, loginUserInfo } = props;
   const [form] = Form.useForm();
 
   const onSubmit = async (values: any) => {
     const hide = message.loading('正在添加');
-    const params = { ...values };
+    const params = {
+      ...values,
+      storeId: loginUserInfo.storeId
+    };
     const res = await addDeskApi((params));
     if (Number(res.code) !== STATUS_CODE.SUCCESS) {
       hide();
@@ -69,11 +72,15 @@ const AddDesk: React.FC<IProps> = (props) => {
         <ProFormSwitch
           name='isEnabled'
           label='是否可用'
-          width='md'
         />
       </ProForm.Group>
     </ModalForm>
   );
 };
 
-export default connect()(AddDesk);
+const mapStateToProps = (state: ConnectState) => ({
+  loginUserInfo: state.login.loginUserInfo,
+});
+type StateProps = ReturnType<typeof mapStateToProps>;
+
+export default connect(mapStateToProps)(AddDesk);

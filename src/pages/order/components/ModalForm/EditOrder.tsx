@@ -10,6 +10,7 @@ import { editOrderApi } from '@/services/order';
 import ScriptSelect from '@/pages/order/components/ModalForm/ProFormSelect/ScriptSelect';
 import HostSelect from '@/pages/order/components/ModalForm/ProFormSelect/HostSelect';
 import UserSelectList from '@/pages/order/components/ModalForm/ProFormSelect/UserSelectList';
+import _ from "lodash";
 
 interface IProps extends ConnectProps {
   actionRef: any;
@@ -20,7 +21,13 @@ interface IProps extends ConnectProps {
 
 const EditOrder: React.FC<IProps> = (props) => {
   const { actionRef, visible, onVisibleChange, currentData } = props;
-  const initialValues = { ...currentData.orderInfo };
+  const initialValues = !_.isEmpty(currentData)
+    ? {
+      ...currentData.orderInfo,
+      scriptId: Number(currentData.id),
+      hostId: Number(currentData.orderInfo.hostInfo.id),
+    }
+    : {};
   const [form] = Form.useForm();
   const [orderDetailList, setOrderDetailList] = useState<IOrderDetailTable[]>([]);
 
@@ -45,7 +52,6 @@ const EditOrder: React.FC<IProps> = (props) => {
       orderId: values.id,
       deskId: values.deskId,
       detailList: orderDetailList,
-      // storeId: 1,
       // storeId,scriptId,deskId,orderOperatorId,remark,detailList
     };
     const res = await editOrderApi(params);
@@ -82,14 +88,14 @@ const EditOrder: React.FC<IProps> = (props) => {
       }}
       initialValues={initialValues}
     >
-      <ProFormText name="id" hidden />
-      <ProFormText name="deskId" hidden />
+      <ProFormText name="id" hidden/>
+      <ProFormText name="deskId" hidden/>
       <ProForm.Group>
-        <ScriptSelect />
-        <HostSelect />
+        <ScriptSelect currentData={currentData}/>
+        <HostSelect currentData={currentData}/>
       </ProForm.Group>
       <ProForm.Group>
-        <ProFormTextArea name="remark" label="备注" width="md" />
+        <ProFormTextArea name="remark" label="备注" width="md"/>
       </ProForm.Group>
       <UserSelectList
         orderDetailList={orderDetailList}

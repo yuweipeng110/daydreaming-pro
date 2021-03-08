@@ -2,17 +2,19 @@ import { IUserTable } from '@/pages/types/user';
 import { IOrderTable } from '@/pages/types/order';
 import { IOrderDetailIntegralTable } from '@/pages/types/orderDetailIntegral';
 
+// userSelectList temp
 export interface IOrderDetailTable {
-  orderId?: string;
+  id: number;
+  orderId?: number;
   orderInfo?: IOrderTable;
-  userId?: string;
+  userId: number;
   userInfo?: IUserTable;
   unitPrice?: number;
   isPay?: boolean;
   discount?: number;
-  id?: number;
-  key?: string;
-  /// params
+  /// extend
   discountPrice?: number;
+  discountPercentage?: number;
   orderDetailIntegralList?: IOrderDetailIntegralTable[];
 }
+

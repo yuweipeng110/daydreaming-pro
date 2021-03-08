@@ -114,6 +114,12 @@
                 component: './integral/userIntegralRank',
               },
               {
+                path: '/RevenueList',
+                name: 'RevenueList',
+                icon: 'hdd',
+                component: './account/RevenueList',
+              },
+              {
                 component: './404',
               },
             ],

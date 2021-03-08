@@ -80,7 +80,6 @@ const AddDesk: React.FC<IProps> = (props) => {
         <ProFormSwitch
           name='isEnabled'
           label='是否可用'
-          width='md'
         />
       </ProForm.Group>
     </ModalForm>
