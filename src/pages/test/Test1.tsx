@@ -17,6 +17,17 @@ export default (): React.ReactNode => {
   });
 
   useEffect(() => {
+    // oncontextmenu='return false'    禁止右键
+    // ondragstart='return false'    禁止拖动
+    // onselectstart ='return false'    禁止选中
+    // onselect='document.selection.empty()'    禁止选中
+    // oncopy='document.selection.empty()'    禁止复制
+    // onbeforecopy='return false'    禁止复制
+    // onmouseup='document.selection.empty()'
+    // body 添加
+    // oncontextmenu='return false' ondragstart='return false' onselectstart ='return false'
+    // onselect='document.selection.empty()' oncopy='document.selection.empty()' onbeforecopy='return false'
+    // onmouseup='document.selection.empty()'
     const getSysResult = `<strong>IV.引入智能环节：模型</strong>`;
 
     // 回显
@@ -33,33 +44,27 @@ export default (): React.ReactNode => {
   };
 
   return (
-    <ProForm
-      form={form}
-      onValuesChange={(changeValues) => console.log(changeValues)}
-      onFinish={async (formData) => {
-        console.log('formData', formData);
-        const editorContent = draftToHtml(convertToRaw(editState.getCurrentContent()));
-        console.log('editorContent', editorContent);
-        message.success('提交成功');
-      }}
-    >
-      <ProForm.Group>
-        <ProFormText />
-        <Editor
-          onCopy={(e: any) => {
-            console.log('e', e);
-            if (e && e.preventDefault) {
-              // add?
-              e.preventDefault();
-              e.persist();
-            }
-          }}
-          editorState={editState}
-          wrapperClassName="demo-wrapper"
-          editorClassName="demo-editor"
-          onEditorStateChange={onEditorStateChange}
-        />
-      </ProForm.Group>
-    </ProForm>
+    <div>
+      <ProForm
+        form={form}
+        onValuesChange={(changeValues) => console.log(changeValues)}
+        onFinish={async (formData) => {
+          console.log('formData', formData);
+          const editorContent = draftToHtml(convertToRaw(editState.getCurrentContent()));
+          console.log('editorContent', editorContent);
+          message.success('提交成功');
+        }}
+      >
+        <ProForm.Group>
+          <ProFormText />
+          <Editor
+            editorState={editState}
+            wrapperClassName="demo-wrapper"
+            editorClassName="demo-editor"
+            onEditorStateChange={onEditorStateChange}
+          />
+        </ProForm.Group>
+      </ProForm>
+    </div>
   );
 };
