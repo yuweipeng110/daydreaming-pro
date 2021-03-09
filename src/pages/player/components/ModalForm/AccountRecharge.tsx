@@ -11,6 +11,7 @@ import ProForm, {
   ProFormDigit,
 } from '@ant-design/pro-form';
 import { IUserTable } from '@/pages/types/user';
+import { UserSexEnum } from '@/pages/constants';
 
 interface IProps extends ConnectProps {
   actionRef: any;
@@ -29,7 +30,7 @@ const AccountRecharge: React.FC<IProps> = (props) => {
     const params = {
       userId: values.id,
       ...values,
-    }
+    };
     const submitRes: boolean = await props.dispatch({
       type: 'player/accountRechargeEffect',
       params,
@@ -55,11 +56,11 @@ const AccountRecharge: React.FC<IProps> = (props) => {
       actionRef.current.reload();
     }
     return true;
-  }
+  };
 
   return (
     <ModalForm
-      title='账户充值'
+      title="账户充值"
       visible={visible}
       onVisibleChange={(visibleValue) => {
         form.resetFields();
@@ -69,75 +70,27 @@ const AccountRecharge: React.FC<IProps> = (props) => {
       onFinish={onFinish}
       initialValues={initialValues}
     >
-      <ProFormText
-        name='id'
-        hidden
-      />
+      <ProFormText name="id" hidden />
       <ProForm.Group>
-        <ProFormText
-          name='nickname'
-          label='昵称'
-          width='md'
-          disabled
-        />
-        <ProFormRadio.Group
-          name='sex'
-          label='性别'
-          width='md'
-          options={[
-            {
-              value: '0',
-              label: '女',
-            },
-            {
-              value: '1',
-              label: '男',
-            },
-          ]}
-          disabled
-        />
+        <ProFormText name="nickname" label="昵称" width="md" disabled />
+        <ProFormRadio.Group name="sex" label="性别" width="md" valueEnum={UserSexEnum} disabled />
       </ProForm.Group>
       <ProForm.Group>
-        <ProFormText
-          name='phone'
-          label='手机号'
-          width='md'
-          disabled
-        />
-        <ProFormDatePicker
-          name='birthday'
-          label='生日'
-          width='md'
-          disabled
-        />
+        <ProFormText name="phone" label="手机号" width="md" disabled />
+        <ProFormDatePicker name="birthday" label="生日" width="md" disabled />
       </ProForm.Group>
       <ProForm.Group>
-        <ProFormTextArea
-          name='remark'
-          label='备注'
-          width='md'
-          disabled
-        />
+        <ProFormTextArea name="remark" label="备注" width="md" disabled />
       </ProForm.Group>
       <ProForm.Group>
-        <ProFormText
-          name='accountBalance'
-          label='账户余额'
-          width='md'
-          disabled
-        />
-        <ProFormText
-          name='voucherBalance'
-          label='代金卷余额'
-          width='md'
-          disabled
-        />
+        <ProFormText name="accountBalance" label="账户余额" width="md" disabled />
+        <ProFormText name="voucherBalance" label="代金卷余额" width="md" disabled />
       </ProForm.Group>
       <ProForm.Group>
         <ProFormDigit
-          name='rechargeAmount'
-          label='充值金额'
-          width='md'
+          name="rechargeAmount"
+          label="充值金额"
+          width="md"
           rules={[
             {
               required: true,
@@ -146,9 +99,9 @@ const AccountRecharge: React.FC<IProps> = (props) => {
           ]}
         />
         <ProFormRadio.Group
-          name='paymentMethodId'
-          label='充值方式'
-          width='md'
+          name="paymentMethodId"
+          label="充值方式"
+          width="md"
           options={[
             {
               value: 1,

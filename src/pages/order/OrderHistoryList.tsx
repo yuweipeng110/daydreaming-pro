@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { connect } from 'react-redux';
 import { ConnectProps, ConnectState } from '@/models/connect';
 import { PageContainer } from '@ant-design/pro-layout';
@@ -8,11 +8,19 @@ import { ProFormDateRangePicker } from '@ant-design/pro-form';
 import { IOrderTable } from '@/pages/types/order';
 import { queryOrderListApi } from '@/services/order';
 import { OrderStatusEnum } from '@/pages/constants';
+import ViewOrder from '@/pages/order/components/Modal/ViewOrder';
 import moment from 'moment';
 
 const OrderHistoryList: React.FC<ConnectProps & StateProps> = (props) => {
   const { loginUserInfo } = props;
   const values = useContext(ProProvider);
+  const [viewOrderModalVisible, handleViewOrderModalVisible] = useState<boolean>(false);
+  const [currentData, setCurrentData] = useState<IOrderTable>(Object.create(null));
+
+  const viewOrderModalStatusSwitch = (editOrderModalStatus: boolean, rowCurrentData: any) => {
+    handleViewOrderModalVisible(editOrderModalStatus);
+    setCurrentData(rowCurrentData);
+  };
 
   const columns: ProColumns<IOrderTable, 'customDataRange'>[] = [
     {
@@ -76,6 +84,12 @@ const OrderHistoryList: React.FC<ConnectProps & StateProps> = (props) => {
       dataIndex: 'remark',
       search: false,
     },
+    {
+      title: '操作',
+      key: 'action',
+      search: false,
+      render: (record: any) => <a onClick={() => viewOrderModalStatusSwitch(true, record)}>查看</a>,
+    },
   ];
 
   return (
@@ -113,6 +127,11 @@ const OrderHistoryList: React.FC<ConnectProps & StateProps> = (props) => {
           columns={columns}
         ></ProTable>
       </ProProvider.Provider>
+      <ViewOrder
+        visible={viewOrderModalVisible}
+        onVisibleChange={handleViewOrderModalVisible}
+        currentData={currentData}
+      />
     </PageContainer>
   );
 };

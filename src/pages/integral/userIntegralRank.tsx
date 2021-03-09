@@ -1,10 +1,8 @@
 import React, { useRef } from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
-import ProCard from '@ant-design/pro-card';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import ProTable, { TableDropdown } from '@ant-design/pro-table';
 import request from 'umi-request';
-import './index.less';
 
 type GithubIssueItem = {
   url: string;
@@ -49,7 +47,7 @@ const columns: ProColumns<GithubIssueItem>[] = [
     dataIndex: 'state',
     filters: true,
     onFilter: true,
-    valueType: 'select',
+    valueType: 'radioButton',
     valueEnum: {
       all: { text: '全部', status: 'Default' },
       open: {
@@ -79,18 +77,18 @@ const columns: ProColumns<GithubIssueItem>[] = [
     valueType: 'option',
     render: (text, record, _, action) => [
       <a
-        key='editable'
+        key="editable"
         onClick={() => {
           action.startEditable?.(record.id);
         }}
       >
         编辑
       </a>,
-      <a href={record.url} target='_blank' rel='noopener noreferrer' key='view'>
+      <a href={record.url} target="_blank" rel="noopener noreferrer" key="view">
         查看
       </a>,
       <TableDropdown
-        key='actionGroup'
+        key="actionGroup"
         onSelect={() => action.reload()}
         menus={[
           { key: 'copy', name: '复制' },
@@ -106,53 +104,24 @@ const UserIntegralRank: React.FC = () => {
 
   return (
     <PageContainer>
-      <div className='card-container'>
-        <ProCard
-          tabs={{
-            type: 'card',
-          }}
-        >
-          <ProCard.TabPane key="tab1" tab="产品一">
-            <ProTable<GithubIssueItem>
-              headerTitle='高级表格111'
-              actionRef={actionRef}
-              rowKey='id'
-              // search={false}
-              options={false}
-              request={async (params = {}) =>
-                request<{
-                  data: GithubIssueItem[];
-                }>('https://proapi.azurewebsites.net/github/issues', {
-                  params,
-                })
-              }
-              pagination={{
-                pageSize: 10,
-              }}
-              columns={columns}
-            />
-          </ProCard.TabPane>
-          <ProCard.TabPane key="tab2" tab="产品二">
-            <p>Content of Tab Pane 2</p>
-            <p>Content of Tab Pane 2</p>
-            <p>Content of Tab Pane 2</p>
-            <p>Content of Tab Pane 2</p>
-            <p>Content of Tab Pane 2</p>
-            <p>Content of Tab Pane 2</p>
-            <p>Content of Tab Pane 2</p>
-            <p>Content of Tab Pane 2</p>
-            <p>Content of Tab Pane 2</p>
-            <p>Content of Tab Pane 2</p>
-            <p>Content of Tab Pane 2</p>
-            <p>Content of Tab Pane 2</p>
-            <p>Content of Tab Pane 2</p>
-            <p>Content of Tab Pane 2</p>
-            <p>Content of Tab Pane 2</p>
-            <p>Content of Tab Pane 2</p>
-            <p>Content of Tab Pane 2</p>
-          </ProCard.TabPane>
-        </ProCard>
-      </div>
+      <ProTable<GithubIssueItem>
+        headerTitle="高级表格111"
+        actionRef={actionRef}
+        rowKey="id"
+        // search={false}
+        options={false}
+        request={async (params = {}) =>
+          request<{
+            data: GithubIssueItem[];
+          }>('https://proapi.azurewebsites.net/github/issues', {
+            params,
+          })
+        }
+        pagination={{
+          pageSize: 10,
+        }}
+        columns={columns}
+      />
     </PageContainer>
   );
 };

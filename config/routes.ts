@@ -25,6 +25,16 @@
         component: './test/test1',
       },
       {
+        path: '/test2',
+        name: 'test2',
+        component: './test/test2',
+      },
+      {
+        path: '/test3',
+        name: 'test3',
+        component: './test/test3',
+      },
+      {
         path: '/',
         component: '../layouts/SecurityLayout',
         routes: [
