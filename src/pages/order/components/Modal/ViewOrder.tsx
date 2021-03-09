@@ -4,7 +4,8 @@ import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import ProTable, { ProColumns } from '@ant-design/pro-table';
 import { IOrderDetailTable } from '@/pages/types/orderDetail';
-import { UserSexEnum } from '@/pages/constants';
+import { OrderStatusEnum, UserSexEnum } from '@/pages/constants';
+import React from 'react';
 
 export type OrderDetailViewProps = {
   visible: boolean;
@@ -34,8 +35,19 @@ export default (props: OrderDetailViewProps) => {
       dataIndex: ['userInfo', 'birthday'],
     },
     {
-      title: '备注',
-      dataIndex: ['userInfo', 'remark'],
+      title: 'discountPercentage',
+      dataIndex: 'discountPercentage',
+      render: (value) => <>{value}%</>,
+    },
+    {
+      title: 'paymentMethod',
+      dataIndex: 'paymentMethod',
+    },
+    {
+      title: 'settlementPrice',
+      dataIndex: 'settlementPrice',
+      valueType: 'money',
+      align: 'right',
     },
   ];
 
@@ -82,32 +94,17 @@ export default (props: OrderDetailViewProps) => {
     {
       title: 'status',
       dataIndex: 'status',
+      valueEnum: OrderStatusEnum,
     },
     {
       title: 'remark',
       dataIndex: 'remark',
     },
-    {
-      title: 'detailList',
-      dataIndex: 'detailList',
-      render: () => {
-        return (
-          <ProTable<IOrderDetailTable>
-            headerTitle="detailList"
-            rowKey="id"
-            search={false}
-            options={false}
-            dataSource={currentData.detailList}
-            columns={orderDetailColumns}
-          />
-        );
-      },
-    },
   ];
 
   return (
     <Modal
-      title="order-detail-view"
+      title={false}
       visible={visible}
       width="70%"
       centered={true}
@@ -117,6 +114,15 @@ export default (props: OrderDetailViewProps) => {
       footer={false}
     >
       <ProDescriptions column={2} title="view-order" dataSource={currentData} columns={columns} />
+      <ProTable<IOrderDetailTable>
+        headerTitle="detailList"
+        rowKey="id"
+        search={false}
+        options={false}
+        dataSource={currentData.detailList}
+        pagination={false}
+        columns={orderDetailColumns}
+      />
     </Modal>
   );
 };

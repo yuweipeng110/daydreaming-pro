@@ -5,8 +5,8 @@ import { PageContainer } from '@ant-design/pro-layout';
 import ProTable, { ProColumns } from '@ant-design/pro-table';
 import ProProvider from '@ant-design/pro-provider';
 import { ProFormDateRangePicker } from '@ant-design/pro-form';
-import { queryRevenueListApi } from "@/services/revenue";
-import { IRevenueTable } from "@/pages/types/revenue";
+import { queryRevenueListApi } from '@/services/revenue';
+import { IRevenueTable } from '@/pages/types/revenue';
 import { PaymentMethodEnum } from '@/pages/constants';
 import moment from 'moment';
 
@@ -14,18 +14,15 @@ const RevenueList: React.FC<ConnectProps & StateProps> = (props) => {
   const { loginUserInfo } = props;
   const values = useContext(ProProvider);
 
-  const getDataList = (params: any) => {
-    const res = queryRevenueListApi({ ...params, storeId: loginUserInfo.storeId })
-    return res;
-  }
-
   const columns: ProColumns<IRevenueTable, 'customDataRange'>[] = [
     {
       title: '用户',
       search: false,
       dataIndex: 'user',
       render: (text: any, record: any) => {
-        const userText = record.userInfo ? `${record.userInfo.phone}-${record.userInfo.nickname}` : '';
+        const userText = record.userInfo
+          ? `${record.userInfo.phone}-${record.userInfo.nickname}`
+          : '';
         return userText;
       },
     },
