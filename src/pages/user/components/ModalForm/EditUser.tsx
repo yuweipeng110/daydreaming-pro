@@ -9,8 +9,10 @@ import ProForm, {
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-form';
-import { IAddUserExists } from '@/pages/types/user';
+import { IAddUserResponse } from '@/pages/types/user';
 import { IUserTable } from '@/pages/types/user';
+import { addUserApi, editUserApi } from '@/services/user';
+import { STATUS_CODE } from '@/pages/constants';
 
 export type TProps = {
   actionRef: any;
@@ -21,7 +23,7 @@ export type TProps = {
 } & ConnectProps;
 
 const EditUser: React.FC<TProps> = (props) => {
-  const { actionRef, visible, onVisibleChange, currentData, loginUserInfo, dispatch } = props;
+  const { actionRef, visible, onVisibleChange, currentData, loginUserInfo } = props;
   const initialValues = { ...currentData };
   const [form] = Form.useForm();
 
@@ -33,20 +35,14 @@ const EditUser: React.FC<TProps> = (props) => {
       userId: values.id,
       storeId: loginUserInfo.storeId,
     };
-    let submitRes: IAddUserExists;
+    let res: IAddUserResponse;
     if (!currentData) {
-      submitRes = await dispatch({
-        type: 'user/addUserEffect',
-        params,
-      });
+      res = await addUserApi(params);
     } else {
-      submitRes = await dispatch({
-        type: 'user/editUserEffect',
-        params,
-      });
+      res = await editUserApi(params);
     }
-    if (submitRes.phoneExists) {
-      const phoneError = submitRes.phoneExists
+    if (Number(res.code) === STATUS_CODE.CHECK_ERROR) {
+      const phoneError = res.data.phoneExists
         ? {}
         : {
             name: 'phone',

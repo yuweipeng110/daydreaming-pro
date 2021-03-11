@@ -4,13 +4,13 @@ import { ConnectProps } from '@/models/connect';
 import { Form, message } from 'antd';
 import ProForm, { ModalForm, ProFormText, ProFormTextArea } from '@ant-design/pro-form';
 import { STATUS_CODE } from '@/pages/constants';
-import { IOrderDetailTable } from '@/pages/types/orderDetail';
+import { TOrderDetailTable } from '@/pages/types/orderDetail';
 import { IDeskTable } from '@/pages/types/desk';
 import { editOrderApi } from '@/services/order';
 import ScriptSelect from '@/pages/order/components/ModalForm/ProFormSelect/ScriptSelect';
 import HostSelect from '@/pages/order/components/ModalForm/ProFormSelect/HostSelect';
 import UserSelectList from '@/pages/order/components/ModalForm/ProFormSelect/UserSelectList';
-import _ from "lodash";
+import _ from 'lodash';
 
 interface IProps extends ConnectProps {
   actionRef: any;
@@ -23,13 +23,13 @@ const EditOrder: React.FC<IProps> = (props) => {
   const { actionRef, visible, onVisibleChange, currentData } = props;
   const initialValues = !_.isEmpty(currentData)
     ? {
-      ...currentData.orderInfo,
-      scriptId: Number(currentData.id),
-      hostId: Number(currentData.orderInfo.hostInfo.id),
-    }
+        ...currentData.orderInfo,
+        scriptId: Number(currentData.id),
+        hostId: Number(currentData.orderInfo.hostInfo.id),
+      }
     : {};
   const [form] = Form.useForm();
-  const [orderDetailList, setOrderDetailList] = useState<IOrderDetailTable[]>([]);
+  const [orderDetailList, setOrderDetailList] = useState<TOrderDetailTable[]>([]);
 
   useEffect(() => {
     if (visible) setOrderDetailList(currentData.orderInfo?.detailList ?? []);
@@ -81,21 +81,22 @@ const EditOrder: React.FC<IProps> = (props) => {
           return false;
         }
         onVisibleChange(false);
-        if (actionRef.current) {
-          actionRef.current.reload();
-        }
+        actionRef();
+        // if (actionRef.current) {
+        //   actionRef.current.reload();
+        // }
         return true;
       }}
       initialValues={initialValues}
     >
-      <ProFormText name="id" hidden/>
-      <ProFormText name="deskId" hidden/>
+      <ProFormText name="id" hidden />
+      <ProFormText name="deskId" hidden />
       <ProForm.Group>
-        <ScriptSelect currentData={currentData}/>
-        <HostSelect currentData={currentData}/>
+        <ScriptSelect currentData={currentData} />
+        <HostSelect currentData={currentData} />
       </ProForm.Group>
       <ProForm.Group>
-        <ProFormTextArea name="remark" label="备注" width="md"/>
+        <ProFormTextArea name="remark" label="备注" width="md" />
       </ProForm.Group>
       <UserSelectList
         orderDetailList={orderDetailList}

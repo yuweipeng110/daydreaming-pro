@@ -36,22 +36,25 @@ const OrderList: React.FC<ConnectProps & StateProps> = (props) => {
     setCurrentData(rowCurrentData);
   };
 
-  const settlementOrderModalStatusSwitch = (settlementOrderModalStatus: boolean, rowCurrentData: any) => {
+  const settlementOrderModalStatusSwitch = (
+    settlementOrderModalStatus: boolean,
+    rowCurrentData: any,
+  ) => {
     handleSettlementOrderModalVisible(settlementOrderModalStatus);
     setCurrentData(rowCurrentData);
   };
 
   const loadOrderList = async () => {
     const params = {
-      storeId: loginUserInfo.storeId
-    }
+      storeId: loginUserInfo.storeId,
+    };
     const res = await queryOrderDeskListApi(params);
     setDeskOrderList(res.data);
   };
 
   const renderOpenOrderButton = (record: any) => {
     return (
-      <Space size='middle'>
+      <Space size="middle">
         <a onClick={() => editOrderModalStatusSwitch(true, record)}>修改</a>
         <a onClick={() => settlementOrderModalStatusSwitch(true, record)}>结算</a>
       </Space>
@@ -72,17 +75,21 @@ const OrderList: React.FC<ConnectProps & StateProps> = (props) => {
     <PageContainer>
       <div className={styles.cardList}>
         <ProList
-          headerTitle='订单管理'
+          headerTitle="订单管理"
           actionRef={actionRef}
-          rowKey='id'
+          rowKey="id"
           grid={{ column: 4, gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }}
           dataSource={[...deskOrderList]}
           loading={loading}
           renderItem={(item: IDeskTable) =>
             !_.isEmpty(item.orderInfo) ? (
               <List.Item key={item.id}>
-                <ProCard title={item.orderInfo.scriptInfo.title} extra={renderOpenOrderButton(item)} layout='center'
-                         className={styles.card}>
+                <ProCard
+                  title={item.orderInfo.scriptInfo.title}
+                  extra={renderOpenOrderButton(item)}
+                  layout="center"
+                  className={styles.card}
+                >
                   {`桌号：${item.title}`}
                   <br />
                   {`剧本名称：${item.orderInfo.scriptInfo.title}`}
@@ -96,8 +103,11 @@ const OrderList: React.FC<ConnectProps & StateProps> = (props) => {
               </List.Item>
             ) : (
               <List.Item key={item.id}>
-                <Button type='dashed' className={styles.newButton}
-                        onClick={() => createOrderModalStatusSwitch(true, item.id)}>
+                <Button
+                  type="dashed"
+                  className={styles.newButton}
+                  onClick={() => createOrderModalStatusSwitch(true, item.id)}
+                >
                   <PlusOutlined /> {`${item.id}-${item.title}`}
                 </Button>
               </List.Item>
@@ -105,12 +115,24 @@ const OrderList: React.FC<ConnectProps & StateProps> = (props) => {
           }
         />
       </div>
-      <AddOrder actionRef={actionRef} visible={createOrderModalVisible} onVisibleChange={handleCreateOrderModalVisible}
-                deskId={deskId} />
-      <EditOrder actionRef={actionRef} visible={editOrderModalVisible} onVisibleChange={handleEditOrderModalVisible}
-                 currentData={currentData} />
-      <SettlementOrder actionRef={actionRef} visible={settlementOrderModalVisible}
-                       onVisibleChange={handleSettlementOrderModalVisible} currentData={currentData} />
+      <AddOrder
+        actionRef={loadOrderList}
+        visible={createOrderModalVisible}
+        onVisibleChange={handleCreateOrderModalVisible}
+        deskId={deskId}
+      />
+      <EditOrder
+        actionRef={loadOrderList}
+        visible={editOrderModalVisible}
+        onVisibleChange={handleEditOrderModalVisible}
+        currentData={currentData}
+      />
+      <SettlementOrder
+        actionRef={actionRef}
+        visible={settlementOrderModalVisible}
+        onVisibleChange={handleSettlementOrderModalVisible}
+        currentData={currentData}
+      />
     </PageContainer>
   );
 };

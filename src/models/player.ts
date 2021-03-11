@@ -25,16 +25,12 @@ export interface IPlayerModelType {
 
 export interface IPlayerState {
   playerList: IUserTable[];
-  dataCount: number;
-  pageCount: number;
 }
 
 const partnerModel: IPlayerModelType = {
   namespace: 'player',
   state: {
     playerList: [],
-    dataCount: 0,
-    pageCount: 0,
   },
   effects: {
     *getPlayerListEffect({ params }, { put, call }) {
@@ -46,8 +42,6 @@ const partnerModel: IPlayerModelType = {
       yield put({
         type: 'setPlayerListReducer',
         playerList,
-        dataCount: Number(res.dataCount),
-        pageCount: Number(res.pageCount),
       });
       return playerList;
     },
@@ -102,11 +96,10 @@ const partnerModel: IPlayerModelType = {
     },
   },
   reducers: {
-    setPlayerListReducer: (state, { playerList, dataCount, pageCount }) => {
-      return { ...state, playerList, dataCount, pageCount };
+    setPlayerListReducer: (state, { playerList }) => {
+      return { ...state, playerList };
     },
   },
 };
-
 
 export default partnerModel;

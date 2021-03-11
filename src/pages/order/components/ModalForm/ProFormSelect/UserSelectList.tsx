@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { connect } from "react-redux";
-import { ConnectProps, ConnectState } from "@/models/connect";
+import { connect } from 'react-redux';
+import { ConnectProps, ConnectState } from '@/models/connect';
 import { useRequest } from 'umi';
-import { Spin, Empty } from "antd";
+import { Spin, Empty } from 'antd';
 import ProForm, { ProFormSelect } from '@ant-design/pro-form';
 import { EditableProTable, ProColumns } from '@ant-design/pro-table';
-import { IOrderDetailTable } from '@/pages/types/orderDetail';
+import { TOrderDetailTable } from '@/pages/types/orderDetail';
 import { IUserTable } from '@/pages/types/user';
 import { queryPlayerListApi } from '@/services/player';
 import { STATUS_CODE, UserSexEnum } from '@/pages/constants';
 import _ from 'lodash';
 
-interface IProps extends ConnectProps, StateProps{
-  orderDetailList: IOrderDetailTable[];
-  setOrderDetailList: (orderDetailList: IOrderDetailTable[]) => void;
+interface IProps extends ConnectProps, StateProps {
+  orderDetailList: TOrderDetailTable[];
+  setOrderDetailList: (orderDetailList: TOrderDetailTable[]) => void;
 }
 
 interface IOption {
@@ -40,9 +40,10 @@ const UserSelectList: React.FC<IProps> = (props) => {
           label: `${item.phone}-${item.nickname}`,
         };
       });
+      setPlayerList(res.data);
       setPlayerOptions(options);
     }
-  }
+  };
 
   useEffect(() => {
     loadUserListData();
@@ -82,7 +83,7 @@ const UserSelectList: React.FC<IProps> = (props) => {
     const userInfo: IUserTable =
       playerList.find((user: IUserTable) => Number(user.id) === Number(userId)) ||
       ({} as IUserTable);
-    const tempOrderDetail: IOrderDetailTable = {
+    const tempOrderDetail: TOrderDetailTable = {
       id: Number((Math.random() * 1000000).toFixed(0)),
       userId,
       userInfo,
@@ -90,7 +91,7 @@ const UserSelectList: React.FC<IProps> = (props) => {
     setOrderDetailList(_.uniqBy(_.compact([tempOrderDetail, ...orderDetailList]), 'userId'));
   };
 
-  const columns: ProColumns<IOrderDetailTable>[] = [
+  const columns: ProColumns<TOrderDetailTable>[] = [
     {
       title: '昵称',
       dataIndex: ['userInfo', 'nickname'],
@@ -108,7 +109,7 @@ const UserSelectList: React.FC<IProps> = (props) => {
       title: '操作',
       valueType: 'option',
       width: 200,
-      render: (text: any, record: IOrderDetailTable) => [
+      render: (text: any, record: TOrderDetailTable) => [
         <a
           key="delete"
           onClick={() => {
@@ -142,7 +143,7 @@ const UserSelectList: React.FC<IProps> = (props) => {
           }}
         />
       </ProForm.Group>
-      <EditableProTable<IOrderDetailTable>
+      <EditableProTable<TOrderDetailTable>
         headerTitle="玩家列表"
         rowKey="id"
         recordCreatorProps={false}

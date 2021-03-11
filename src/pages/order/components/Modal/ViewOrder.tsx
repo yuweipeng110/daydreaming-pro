@@ -31,10 +31,6 @@ export default (props: OrderDetailViewProps) => {
       dataIndex: ['userInfo', 'phone'],
     },
     {
-      title: '生日',
-      dataIndex: ['userInfo', 'birthday'],
-    },
-    {
       title: 'discountPercentage',
       dataIndex: 'discountPercentage',
       render: (value) => <>{value}%</>,

@@ -4,7 +4,7 @@ import { ConnectProps, ConnectState } from '@/models/connect';
 import { Form, message } from 'antd';
 import ProForm, { ModalForm, ProFormTextArea } from '@ant-design/pro-form';
 import { STATUS_CODE } from '@/pages/constants';
-import { IOrderDetailTable } from '@/pages/types/orderDetail';
+import { TOrderDetailTable } from '@/pages/types/orderDetail';
 import { addOrderApi } from '@/services/order';
 import ScriptSelect from '@/pages/order/components/ModalForm/ProFormSelect/ScriptSelect';
 import HostSelect from '@/pages/order/components/ModalForm/ProFormSelect/HostSelect';
@@ -20,7 +20,7 @@ interface IProps extends ConnectProps, StateProps {
 const AddOrder: React.FC<IProps> = (props) => {
   const { actionRef, visible, onVisibleChange, deskId, loginUserInfo } = props;
   const [form] = Form.useForm();
-  const [orderDetailList, setOrderDetailList] = useState<IOrderDetailTable[]>([]);
+  const [orderDetailList, setOrderDetailList] = useState<TOrderDetailTable[]>([]);
 
   useEffect(() => {
     if (visible) {
@@ -75,9 +75,10 @@ const AddOrder: React.FC<IProps> = (props) => {
           return false;
         }
         onVisibleChange(false);
-        if (actionRef.current) {
-          actionRef.current.reload();
-        }
+        actionRef();
+        // if (actionRef.current) {
+        //   actionRef.current.reload();
+        // }
         return true;
       }}
     >
