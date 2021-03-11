@@ -112,16 +112,22 @@
                 component: './order',
               },
               {
+                path: '/promotions',
+                name: 'promotions',
+                icon: 'hdd',
+                component: './promotions',
+              },
+              {
                 path: '/orderHistoryList',
                 name: 'orderHistoryList',
                 icon: 'smile',
                 component: './order/OrderHistoryList',
               },
               {
-                path: '/userIntegralRank',
-                name: 'userIntegralRank',
+                path: '/UserIntegralRank',
+                name: 'UserIntegralRank',
                 icon: 'hdd',
-                component: './integral/userIntegralRank',
+                component: './account/UserIntegralRankList',
               },
               {
                 path: '/RevenueList',

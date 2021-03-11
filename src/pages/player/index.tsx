@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
-import { connect } from "react-redux";
-import { ConnectProps, ConnectState } from "@/models/connect";
+import { connect } from 'react-redux';
+import { ConnectProps, ConnectState } from '@/models/connect';
 import { Button, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-layout';
@@ -8,31 +8,35 @@ import type { ProColumns } from '@ant-design/pro-table';
 import ProTable, { ActionType } from '@ant-design/pro-table';
 import { IUserTable } from '@/pages/types/user';
 import { queryPlayerListApi } from '@/services/player';
-import AddPlayer from '@/pages/player/components/ModalForm/AddPlayer';
 import EditPlayer from '@/pages/player/components/ModalForm/EditPlayer';
 import AccountRecharge from '@/pages/player/components/ModalForm/AccountRecharge';
 import { UserSexEnum } from '@/pages/constants';
+import ViewUser from '@/pages/user/components/Modal/ViewUser';
 
 const PlayerList: React.FC<ConnectProps & StateProps> = (props) => {
   const { loginUserInfo } = props;
   const actionRef = useRef<ActionType>();
-  const [createPlayerModalVisible, handleCreatePlayerModalVisible] = useState<boolean>(false);
   const [editPlayerModalVisible, handleEditPlayerModalVisible] = useState<boolean>(false);
+  const [viewPlayerModalVisible, handleViewPlayerModalVisible] = useState<boolean>(false);
   const [accountRechargeModalVisible, handleAccountRechargeModalVisible] = useState<boolean>(false);
   const [currentData, setCurrentData] = useState<IUserTable>(Object.create(null));
-
-  const createPlayerModalStatusSwitch = (createPlayerModalStatus: boolean) => {
-    handleCreatePlayerModalVisible(createPlayerModalStatus);
-  };
 
   const editPlayerModalStatusSwitch = (editPlayerModalStatus: boolean, rowCurrentData?: any) => {
     handleEditPlayerModalVisible(editPlayerModalStatus);
     setCurrentData(rowCurrentData);
   };
 
+  const viewPlayerModalStatusSwitch = (
+    viewPlayerModalStatus: boolean,
+    rowCurrentData: IUserTable,
+  ) => {
+    handleViewPlayerModalVisible(viewPlayerModalStatus);
+    setCurrentData(rowCurrentData);
+  };
+
   const accountRechargeModalStatusSwitch = (
     accountRechargeModalStatus: boolean,
-    rowCurrentData: any,
+    rowCurrentData: IUserTable,
   ) => {
     handleAccountRechargeModalVisible(accountRechargeModalStatus);
     setCurrentData(rowCurrentData);
@@ -117,6 +121,7 @@ const PlayerList: React.FC<ConnectProps & StateProps> = (props) => {
         <Space size="middle">
           <a onClick={() => accountRechargeModalStatusSwitch(true, record)}>充值</a>
           <a onClick={() => editPlayerModalStatusSwitch(true, record)}>修改</a>
+          <a onClick={() => viewPlayerModalStatusSwitch(true, record)}>查看</a>
         </Space>
       ),
     },
@@ -134,23 +139,20 @@ const PlayerList: React.FC<ConnectProps & StateProps> = (props) => {
             type="primary"
             key="primary"
             onClick={() => {
-              createPlayerModalStatusSwitch(true);
+              editPlayerModalStatusSwitch(true);
             }}
           >
             <PlusOutlined /> 添加玩家
           </Button>,
         ]}
         options={false}
-        request={(params) => queryPlayerListApi({ ...params, storeId: loginUserInfo.storeId, roleId: 3 })}
+        request={(params) =>
+          queryPlayerListApi({ ...params, storeId: loginUserInfo.storeId, roleId: 3 })
+        }
         pagination={{
           pageSize: 10,
         }}
         columns={columns}
-      ></ProTable>
-      <AddPlayer
-        actionRef={actionRef}
-        visible={createPlayerModalVisible}
-        onVisibleChange={handleCreatePlayerModalVisible}
       />
       <EditPlayer
         actionRef={actionRef}
@@ -162,6 +164,11 @@ const PlayerList: React.FC<ConnectProps & StateProps> = (props) => {
         actionRef={actionRef}
         visible={accountRechargeModalVisible}
         onVisibleChange={handleAccountRechargeModalVisible}
+        currentData={currentData}
+      />
+      <ViewUser
+        visible={viewPlayerModalVisible}
+        onVisibleChange={handleViewPlayerModalVisible}
         currentData={currentData}
       />
     </PageContainer>

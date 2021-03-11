@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { connect } from 'react-redux';
 import { ConnectProps, ConnectState } from '@/models/connect';
 import { PageContainer } from '@ant-design/pro-layout';
@@ -8,11 +8,32 @@ import { ProFormDateRangePicker } from '@ant-design/pro-form';
 import { queryRevenueListApi } from '@/services/revenue';
 import { IRevenueTable } from '@/pages/types/revenue';
 import { PaymentMethodEnum } from '@/pages/constants';
+import { IUserTable } from '@/pages/types/user';
+import ViewUser from '@/pages/user/components/Modal/ViewUser';
+import { IOrderTable } from '@/pages/types/order';
 import moment from 'moment';
+import ViewOrder from '@/pages/order/components/Modal/ViewOrder';
 
 const RevenueList: React.FC<ConnectProps & StateProps> = (props) => {
   const { loginUserInfo } = props;
   const values = useContext(ProProvider);
+  const [viewUserModalVisible, handleViewUserModalVisible] = useState<boolean>(false);
+  const [userData, setUserData] = useState<IUserTable>(Object.create(null));
+  const [viewOrderModalVisible, handleViewOrderModalVisible] = useState<boolean>(false);
+  const [orderData, setOrderData] = useState<IOrderTable>(Object.create(null));
+
+  const viewUserModalStatusSwitch = (viewUserModalStatus: boolean, rowCurrentData: IUserTable) => {
+    handleViewUserModalVisible(viewUserModalStatus);
+    setUserData(rowCurrentData);
+  };
+
+  const viewOrderModalStatusSwitch = (
+    viewOrderModalStatus: boolean,
+    rowCurrentData: IOrderTable,
+  ) => {
+    handleViewOrderModalVisible(viewOrderModalStatus);
+    setOrderData(rowCurrentData);
+  };
 
   const columns: ProColumns<IRevenueTable, 'customDataRange'>[] = [
     {
@@ -23,7 +44,7 @@ const RevenueList: React.FC<ConnectProps & StateProps> = (props) => {
         const userText = record.userInfo
           ? `${record.userInfo.phone}-${record.userInfo.nickname}`
           : '';
-        return userText;
+        return <a onClick={() => viewUserModalStatusSwitch(true, record.userInfo)}>{userText}</a>;
       },
     },
     {
@@ -46,7 +67,9 @@ const RevenueList: React.FC<ConnectProps & StateProps> = (props) => {
       search: false,
       render: (text: any, record: any) => {
         const orderText = record.orderInfo ? record.orderInfo.orderNo : '';
-        return orderText;
+        return (
+          <a onClick={() => viewOrderModalStatusSwitch(true, record.orderInfo)}>{orderText}</a>
+        );
       },
     },
     {
@@ -95,8 +118,18 @@ const RevenueList: React.FC<ConnectProps & StateProps> = (props) => {
             pageSize: 10,
           }}
           columns={columns}
-        ></ProTable>
+        />
       </ProProvider.Provider>
+      <ViewUser
+        visible={viewUserModalVisible}
+        onVisibleChange={handleViewUserModalVisible}
+        currentData={userData}
+      />
+      <ViewOrder
+        visible={viewOrderModalVisible}
+        onVisibleChange={handleViewOrderModalVisible}
+        currentData={orderData}
+      />
     </PageContainer>
   );
 };

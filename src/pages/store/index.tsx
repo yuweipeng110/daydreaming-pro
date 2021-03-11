@@ -1,27 +1,20 @@
 import React, { useRef, useState } from 'react';
-import { Button, Space } from 'antd';
+import { Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { PageContainer } from '@ant-design/pro-layout';
 import type { ProColumns } from '@ant-design/pro-table';
 import ProTable, { ActionType } from '@ant-design/pro-table';
 import { IStoreTable } from '@/pages/types/store';
-import AddStore from '@/pages/store/components/ModalForm/AddStore';
 import EditStore from '@/pages/store/components/ModalForm/EditStore';
 import { queryStoreListApi } from '@/services/store';
 import { StoreStatusEnum } from '@/pages/constants';
-import _ from 'lodash';
 
 const StoreList: React.FC = () => {
   const actionRef = useRef<ActionType>();
-  const [createStoreModalVisible, handleCreateStoreModalVisible] = useState<boolean>(false);
   const [editStoreModalVisible, handleEditStoreModalVisible] = useState<boolean>(false);
   const [currentData, setCurrentData] = useState<IStoreTable>(Object.create(null));
 
-  const createStoreModalStatusSwitch = (createStoreModalStatus: boolean) => {
-    handleCreateStoreModalVisible(createStoreModalStatus);
-  };
-
-  const editStoreModalStatusSwitch = (editStoreModalStatus: boolean, rowCurrentData: any) => {
+  const editStoreModalStatusSwitch = (editStoreModalStatus: boolean, rowCurrentData?: any) => {
     handleEditStoreModalVisible(editStoreModalStatus);
     setCurrentData(rowCurrentData);
   };
@@ -40,31 +33,22 @@ const StoreList: React.FC = () => {
     {
       title: '管理员 (真实姓名)',
       key: 'realName',
-      render: (record: any) => {
-        if (!_.isEmpty(record.bossInfo)) {
-          return record.bossInfo.realName;
-        }
-        return '';
+      render: (dom, entity) => {
+        return entity.bossInfo ? entity.bossInfo.realName : '';
       },
     },
     {
       title: '管理员 (账号)',
       key: 'realName',
-      render: (record: any) => {
-        if (!_.isEmpty(record.bossInfo)) {
-          return record.bossInfo.userName;
-        }
-        return '';
+      render: (dom, entity) => {
+        return entity.bossInfo ? entity.bossInfo.userName : '';
       },
     },
     {
       title: '管理员 (密码)',
       key: 'passWord',
-      render: (record: any) => {
-        if (!_.isEmpty(record.bossInfo)) {
-          return record.bossInfo.password;
-        }
-        return '';
+      render: (dom, entity) => {
+        return entity.bossInfo ? entity.bossInfo.password : '';
       },
     },
     {
@@ -87,11 +71,7 @@ const StoreList: React.FC = () => {
     {
       title: '操作',
       key: 'action',
-      render: (record: any) => (
-        <Space size="middle">
-          <a onClick={() => editStoreModalStatusSwitch(true, record)}>修改</a>
-        </Space>
-      ),
+      render: (dom, entity) => <a onClick={() => editStoreModalStatusSwitch(true, entity)}>修改</a>,
     },
   ];
 
@@ -107,7 +87,7 @@ const StoreList: React.FC = () => {
             type="primary"
             key="primary"
             onClick={() => {
-              createStoreModalStatusSwitch(true);
+              editStoreModalStatusSwitch(true);
             }}
           >
             <PlusOutlined /> 新建门店
@@ -119,11 +99,6 @@ const StoreList: React.FC = () => {
           pageSize: 10,
         }}
         columns={columns}
-      ></ProTable>
-      <AddStore
-        actionRef={actionRef}
-        visible={createStoreModalVisible}
-        onVisibleChange={handleCreateStoreModalVisible}
       />
       <EditStore
         actionRef={actionRef}

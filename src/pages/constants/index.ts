@@ -21,6 +21,7 @@ export const ScriptPlayerRoleEnum = {
   4: { text: '路人' },
   3: { text: '侦探' },
   2: { text: '杀手' },
+  1: { text: '总榜' },
 };
 
 export const OrderStatusEnum = {
@@ -48,5 +49,10 @@ export const DeskIsEnabledEnum = {
 
 export const StoreStatusEnum = {
   true: { text: '使用中', status: 'Success' },
+  false: { text: '未激活', status: 'Error' },
+};
+
+export const PromotionsIsActiveEnum = {
+  true: { text: '已激活', status: 'Success' },
   false: { text: '未激活', status: 'Error' },
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { ConnectProps } from '@/models/connect';
+import { ConnectProps, ConnectState } from '@/models/connect';
 import { Form, message } from 'antd';
 import ProForm, {
   ModalForm,
@@ -12,28 +12,39 @@ import ProForm, {
 import { IAddUserExists } from '@/pages/types/user';
 import { IUserTable } from '@/pages/types/user';
 
-interface IProps extends ConnectProps {
+export type TProps = {
   actionRef: any;
   visible: boolean;
   onVisibleChange: (visible: boolean) => void;
   currentData: IUserTable;
-}
+  loginUserInfo: IUserTable;
+} & ConnectProps;
 
-const AddUser: React.FC<IProps> = (props) => {
-  const { actionRef, visible, onVisibleChange, currentData } = props;
+const EditUser: React.FC<TProps> = (props) => {
+  const { actionRef, visible, onVisibleChange, currentData, loginUserInfo, dispatch } = props;
   const initialValues = { ...currentData };
   const [form] = Form.useForm();
 
   const onSubmit = async (values: any) => {
-    const hide = message.loading('正在修改');
+    const loadingKey = 'loadingKey';
+    const hide = message.loading({ content: '正在保存...', key: loadingKey });
     const params = {
-      userId: values.id,
       ...values,
+      userId: values.id,
+      storeId: loginUserInfo.storeId,
     };
-    const submitRes: IAddUserExists = await props.dispatch({
-      type: 'user/editUserEffect',
-      params,
-    });
+    let submitRes: IAddUserExists;
+    if (!currentData) {
+      submitRes = await dispatch({
+        type: 'user/addUserEffect',
+        params,
+      });
+    } else {
+      submitRes = await dispatch({
+        type: 'user/editUserEffect',
+        params,
+      });
+    }
     if (submitRes.phoneExists) {
       const phoneError = submitRes.phoneExists
         ? {}
@@ -48,8 +59,7 @@ const AddUser: React.FC<IProps> = (props) => {
       return false;
     }
     onVisibleChange(false);
-    hide();
-    message.success('修改成功');
+    message.success({ content: '保存成功!', key: loadingKey, duration: 2 });
     return true;
   };
 
@@ -133,4 +143,6 @@ const AddUser: React.FC<IProps> = (props) => {
   );
 };
 
-export default connect()(AddUser);
+export default connect((state: ConnectState) => ({
+  loginUserInfo: state.login.loginUserInfo,
+}))(EditUser);

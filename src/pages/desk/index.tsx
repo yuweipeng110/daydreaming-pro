@@ -8,22 +8,16 @@ import type { ProColumns } from '@ant-design/pro-table';
 import ProTable, { ActionType } from '@ant-design/pro-table';
 import { IDeskTable } from '@/pages/types/desk';
 import { queryDeskListApi } from '@/services/desk';
-import AddDesk from '@/pages/desk/components/ModalForm/AddDesk';
 import EditDesk from '@/pages/desk/components/ModalForm/EditDesk';
 import { DeskIsEnabledEnum } from '@/pages/constants';
 
 const DeskList: React.FC<ConnectProps & StateProps> = (props) => {
   const { loginUserInfo } = props;
   const actionRef = useRef<ActionType>();
-  const [createDeskModalVisible, handleCreateDeskModalVisible] = useState<boolean>(false);
   const [editDeskModalVisible, handleEditDeskModalVisible] = useState<boolean>(false);
   const [currentData, setCurrentData] = useState<IDeskTable>(Object.create(null));
 
-  const createDeskModalStatusSwitch = (createDeskModalStatus: boolean) => {
-    handleCreateDeskModalVisible(createDeskModalStatus);
-  };
-
-  const editDeskModalStatusSwitch = (editDeskModalStatus: boolean, rowCurrentData: any) => {
+  const editDeskModalStatusSwitch = (editDeskModalStatus: boolean, rowCurrentData?: any) => {
     handleEditDeskModalVisible(editDeskModalStatus);
     setCurrentData(rowCurrentData);
   };
@@ -70,7 +64,7 @@ const DeskList: React.FC<ConnectProps & StateProps> = (props) => {
             type="primary"
             key="primary"
             onClick={() => {
-              createDeskModalStatusSwitch(true);
+              editDeskModalStatusSwitch(true);
             }}
           >
             <PlusOutlined /> 创建桌台
@@ -82,11 +76,6 @@ const DeskList: React.FC<ConnectProps & StateProps> = (props) => {
           pageSize: 10,
         }}
         columns={columns}
-      ></ProTable>
-      <AddDesk
-        actionRef={actionRef}
-        visible={createDeskModalVisible}
-        onVisibleChange={handleCreateDeskModalVisible}
       />
       <EditDesk
         actionRef={actionRef}

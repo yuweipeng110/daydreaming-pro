@@ -23,16 +23,12 @@ export interface IStoreModelType {
 
 export interface IStoreState {
   storeList: IStoreTable[];
-  dataCount: number;
-  pageCount: number;
 }
 
 const partnerModel: IStoreModelType = {
   namespace: 'store',
   state: {
     storeList: [],
-    dataCount: 0,
-    pageCount: 0,
   },
   effects: {
     *getStoreListEffect({ params }, { call, put }) {
@@ -43,12 +39,11 @@ const partnerModel: IStoreModelType = {
       yield put({
         type: 'setStoreListReducer',
         storeList: res.data,
-        dataCount: Number(res.dataCount),
-        pageCount: Number(res.pageCount),
       });
       return true;
     },
     *addStoreEffect({ params }, { call, put }) {
+      console.log('addStoreEffect');
       const addRes: IAddStoreResponse = yield call(StoreService.addStoreApi, params);
       if (_.isEmpty(addRes)) {
         return {};
@@ -87,8 +82,8 @@ const partnerModel: IStoreModelType = {
     },
   },
   reducers: {
-    setStoreListReducer: (state, { storeList, dataCount, pageCount }) => {
-      return { ...state, storeList, dataCount, pageCount };
+    setStoreListReducer: (state, { storeList }) => {
+      return { ...state, storeList };
     },
   },
 };

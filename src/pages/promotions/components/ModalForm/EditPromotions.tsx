@@ -1,22 +1,27 @@
 import React from 'react';
+import { Form, message } from 'antd';
+import ProForm, {
+  ModalForm,
+  ProFormDatePicker,
+  ProFormDigit,
+  ProFormText,
+} from '@ant-design/pro-form';
+import { STATUS_CODE } from '@/pages/constants';
+import { addPromotionsApi, editPromotionsApi } from '@/services/promotions';
+import { IAddPromotionsResponse, IPromotionsTable } from '@/pages/types/promotions';
 import { connect } from 'react-redux';
 import { ConnectProps, ConnectState } from '@/models/connect';
-import { Form, message } from 'antd';
-import ProForm, { ModalForm, ProFormSwitch, ProFormText } from '@ant-design/pro-form';
-import { addDeskApi, editDeskApi } from '@/services/desk';
-import { STATUS_CODE } from '@/pages/constants';
-import { IAddDeskResponse, IDeskTable } from '@/pages/types/desk';
 import { IUserTable } from '@/pages/types/user';
 
 export type TProps = {
   actionRef: any;
   visible: boolean;
   onVisibleChange: (visible: boolean) => void;
-  currentData: IDeskTable;
+  currentData: IPromotionsTable;
   loginUserInfo: IUserTable;
 } & ConnectProps;
 
-const EditDesk: React.FC<TProps> = (props) => {
+const EditPromotions: React.FC<TProps> = (props) => {
   const { actionRef, visible, onVisibleChange, currentData, loginUserInfo } = props;
   const initialValues = { ...currentData };
   const [form] = Form.useForm();
@@ -26,14 +31,14 @@ const EditDesk: React.FC<TProps> = (props) => {
     message.loading({ content: '正在保存...', key: loadingKey });
     const params = {
       ...values,
-      deskId: values.id,
+      promotionsId: values.id,
       storeId: loginUserInfo.storeId,
     };
-    let res: IAddDeskResponse;
+    let res: IAddPromotionsResponse;
     if (!currentData) {
-      res = await addDeskApi(params);
+      res = await addPromotionsApi(params);
     } else {
-      res = await editDeskApi(params);
+      res = await editPromotionsApi(params);
     }
     if (Number(res.code) !== STATUS_CODE.SUCCESS) {
       message.error({ content: res.msg, key: loadingKey, duration: 2 });
@@ -58,7 +63,7 @@ const EditDesk: React.FC<TProps> = (props) => {
 
   return (
     <ModalForm
-      title="桌台信息"
+      title="EditPromotions"
       visible={visible}
       onVisibleChange={(visibleValue) => {
         form.resetFields();
@@ -72,16 +77,63 @@ const EditDesk: React.FC<TProps> = (props) => {
       <ProForm.Group>
         <ProFormText
           name="title"
-          label="桌号"
+          label="title"
           width="md"
           rules={[
             {
               required: true,
-              message: '输入桌号!',
+              message: '输入名称!',
             },
           ]}
         />
-        <ProFormSwitch name="isEnabled" label="是否可用" />
+      </ProForm.Group>
+      <ProForm.Group>
+        <ProFormDatePicker
+          name="startTime"
+          label="startTime"
+          width="md"
+          rules={[
+            {
+              required: true,
+              message: '输入startTime!',
+            },
+          ]}
+        />
+        <ProFormDatePicker
+          name="endTime"
+          label="endTime"
+          width="md"
+          rules={[
+            {
+              required: true,
+              message: '输入endTime!',
+            },
+          ]}
+        />
+      </ProForm.Group>
+      <ProForm.Group>
+        <ProFormDigit
+          label="rechargeMoney"
+          name="rechargeMoney"
+          width="md"
+          rules={[
+            {
+              required: true,
+              message: '输入rechargeMoney!',
+            },
+          ]}
+        />
+        <ProFormDigit
+          label="voucherMoney"
+          name="voucherMoney"
+          width="md"
+          rules={[
+            {
+              required: true,
+              message: '输入voucherMoney!',
+            },
+          ]}
+        />
       </ProForm.Group>
     </ModalForm>
   );
@@ -89,4 +141,4 @@ const EditDesk: React.FC<TProps> = (props) => {
 
 export default connect((state: ConnectState) => ({
   loginUserInfo: state.login.loginUserInfo,
-}))(EditDesk);
+}))(EditPromotions);

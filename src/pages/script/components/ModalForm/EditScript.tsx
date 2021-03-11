@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { ConnectProps } from '@/models/connect';
+import { ConnectProps, ConnectState } from '@/models/connect';
 import { Form, message } from 'antd';
 import ProForm, {
   ModalForm,
@@ -9,37 +9,44 @@ import ProForm, {
   ProFormText,
   ProFormTextArea,
 } from '@ant-design/pro-form';
-import { editScriptApi } from '@/services/script';
+import { addScriptApi, editScriptApi } from '@/services/script';
 import { IScriptTable } from '@/pages/types/script';
 import { STATUS_CODE } from '@/pages/constants';
+import { IUserTable } from '@/pages/types/user';
 
-interface IProps extends ConnectProps {
+export type TProps = {
   actionRef: any;
   visible: boolean;
   onVisibleChange: (visible: boolean) => void;
   currentData: IScriptTable;
-}
+  loginUserInfo: IUserTable;
+} & ConnectProps;
 
-const EditScript: React.FC<IProps> = (props) => {
-  const { actionRef, visible, onVisibleChange, currentData } = props;
+const EditScript: React.FC<TProps> = (props) => {
+  const { actionRef, visible, onVisibleChange, currentData, loginUserInfo } = props;
   const initialValues = { ...currentData };
   const [form] = Form.useForm();
 
   const onSubmit = async (values: any) => {
-    const hide = message.loading('正在修改');
+    const loadingKey = 'loadingKey';
+    message.loading({ content: '正在保存...', key: loadingKey });
     const params = {
-      scriptId: values.id,
       ...values,
+      scriptId: values.id,
+      storeId: loginUserInfo.storeId,
     };
-    const res = await editScriptApi((params));
+    let res: any = Object.create(null);
+    if (!currentData) {
+      res = await addScriptApi(params);
+    } else {
+      res = await editScriptApi(params);
+    }
     if (Number(res.code) !== STATUS_CODE.SUCCESS) {
-      hide();
-      message.error(res.msg);
+      message.error({ content: res.msg, key: loadingKey, duration: 2 });
       return false;
     }
     onVisibleChange(false);
-    hide();
-    message.success('修改成功');
+    message.success({ content: '保存成功!', key: loadingKey, duration: 2 });
     return true;
   };
 
@@ -53,11 +60,11 @@ const EditScript: React.FC<IProps> = (props) => {
       actionRef.current.reload();
     }
     return true;
-  }
+  };
 
   return (
     <ModalForm
-      title='修改剧本信息'
+      title="剧本信息"
       visible={visible}
       onVisibleChange={(visibleValue) => {
         form.resetFields();
@@ -67,15 +74,12 @@ const EditScript: React.FC<IProps> = (props) => {
       onFinish={onFinish}
       initialValues={initialValues}
     >
-      <ProFormText
-        name='id'
-        hidden
-      />
+      <ProFormText name="id" hidden />
       <ProForm.Group>
         <ProFormText
-          name='title'
-          label='剧本名称'
-          width='md'
+          name="title"
+          label="剧本名称"
+          width="md"
           rules={[
             {
               required: true,
@@ -84,9 +88,9 @@ const EditScript: React.FC<IProps> = (props) => {
           ]}
         />
         <ProFormText
-          name='type'
-          label='类型'
-          width='md'
+          name="type"
+          label="类型"
+          width="md"
           rules={[
             {
               required: true,
@@ -97,9 +101,9 @@ const EditScript: React.FC<IProps> = (props) => {
       </ProForm.Group>
       <ProForm.Group>
         <ProFormText
-          name='costPrice'
-          label='成本价格'
-          width='md'
+          name="costPrice"
+          label="成本价格"
+          width="md"
           rules={[
             {
               required: true,
@@ -108,9 +112,9 @@ const EditScript: React.FC<IProps> = (props) => {
           ]}
         />
         <ProFormText
-          name='formatPrice'
-          label='开本价格'
-          width='md'
+          name="formatPrice"
+          label="开本价格"
+          width="md"
           rules={[
             {
               required: true,
@@ -120,42 +124,21 @@ const EditScript: React.FC<IProps> = (props) => {
         />
       </ProForm.Group>
       <ProForm.Group>
-        <ProFormText
-          name='applicableNumber'
-          label='适用人数'
-          width='md'
-        />
-        <ProFormDigit
-          name='amount'
-          label='拥有数量'
-          width='md'
-        />
+        <ProFormText name="applicableNumber" label="适用人数" width="md" />
+        <ProFormDigit name="amount" label="拥有数量" width="md" />
       </ProForm.Group>
       <ProForm.Group>
-        <ProFormText
-          name='gameTime'
-          label='游戏时间（小时）'
-          width='md'
-        />
-        <ProFormSwitch
-          name='isAdapt'
-          label='是否改编'
-        />
+        <ProFormText name="gameTime" label="游戏时间（小时）" width="md" />
+        <ProFormSwitch name="isAdapt" label="是否改编" />
       </ProForm.Group>
       <ProForm.Group>
-        <ProFormTextArea
-          name='description'
-          label='描述'
-          width='md'
-        />
-        <ProFormTextArea
-          name='adaptContent'
-          label='改编内容'
-          width='md'
-        />
+        <ProFormTextArea name="description" label="描述" width="md" />
+        <ProFormTextArea name="adaptContent" label="改编内容" width="md" />
       </ProForm.Group>
     </ModalForm>
   );
 };
 
-export default connect()(EditScript);
+export default connect((state: ConnectState) => ({
+  loginUserInfo: state.login.loginUserInfo,
+}))(EditScript);
