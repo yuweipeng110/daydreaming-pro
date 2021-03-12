@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { ConnectProps } from '@/models/connect';
-import { Form, message } from 'antd';
+import { ConnectProps, ConnectState } from '@/models/connect';
+import { Form, message, Statistic } from 'antd';
 import ProForm, {
   ModalForm,
   ProFormDatePicker,
@@ -11,22 +11,57 @@ import ProForm, {
   ProFormDigit,
 } from '@ant-design/pro-form';
 import { IUserTable } from '@/pages/types/user';
-import { UserSexEnum } from '@/pages/constants';
+import { STATUS_CODE, UserSexEnum } from '@/pages/constants';
+import { IPromotionsTable } from '@/pages/types/promotions';
+import { queryPromotionsListApi } from '@/services/promotions';
 
-interface IProps extends ConnectProps {
+export type TProps = {
   actionRef: any;
   visible: boolean;
   onVisibleChange: (visible: boolean) => void;
   currentData: IUserTable;
-}
+  loginUserInfo: IUserTable;
+} & ConnectProps;
 
-const AccountRecharge: React.FC<IProps> = (props) => {
-  const { actionRef, visible, onVisibleChange, currentData } = props;
+const AccountRecharge: React.FC<TProps> = (props) => {
+  const { actionRef, visible, onVisibleChange, currentData, loginUserInfo } = props;
   const initialValues = { ...currentData };
   const [form] = Form.useForm();
 
+  const [promotionsList, setPromotionsList] = useState<IPromotionsTable[]>([]);
+  const [voucherMoney, setVoucherMoney] = useState<number>(0);
+
+  const loadPromotionsListData = async () => {
+    const params = {
+      pageSize: 10,
+      storeId: loginUserInfo.storeId,
+      isActive: true,
+    };
+    const res = await queryPromotionsListApi(params);
+    if (res.code === STATUS_CODE.SUCCESS) {
+      setPromotionsList(res.data);
+    }
+  };
+
+  useEffect(() => {
+    if (visible) {
+      loadPromotionsListData();
+    }
+  }, [visible]);
+
+  const onchangeRechargeAmount = (value: number) => {
+    setVoucherMoney(0);
+    // eslint-disable-next-line array-callback-return
+    promotionsList.map((item) => {
+      if (item.isActive && item.rechargeMoney <= value) {
+        setVoucherMoney(item.voucherMoney);
+      }
+    });
+  };
+
   const onSubmit = async (values: any) => {
-    const hide = message.loading('正在充值');
+    const loadingKey = 'loadingKey';
+    message.loading({ content: '正在充值...', key: loadingKey, duration: 0 });
     const params = {
       userId: values.id,
       ...values,
@@ -36,13 +71,11 @@ const AccountRecharge: React.FC<IProps> = (props) => {
       params,
     });
     if (!submitRes) {
-      hide();
-      message.error('充值失败！');
+      message.error({ content: '充值失败!', key: loadingKey, duration: 2 });
       return false;
     }
     onVisibleChange(false);
-    hide();
-    message.success('充值成功');
+    message.success({ content: '充值成功!', key: loadingKey, duration: 2 });
     return true;
   };
 
@@ -97,6 +130,11 @@ const AccountRecharge: React.FC<IProps> = (props) => {
               message: '请输入充值金额!',
             },
           ]}
+          fieldProps={{
+            onChange: (value: number) => onchangeRechargeAmount(value),
+            formatter: (value: number) => `￥${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+            parser: (value: string) => value.replace(/￥\s?|(,*)/g, ''),
+          }}
         />
         <ProFormRadio.Group
           name="paymentMethodId"
@@ -124,8 +162,13 @@ const AccountRecharge: React.FC<IProps> = (props) => {
           ]}
         />
       </ProForm.Group>
+      <ProForm.Group>
+        <Statistic title="赠送金额" prefix={'￥'} value={voucherMoney} precision={2} />
+      </ProForm.Group>
     </ModalForm>
   );
 };
 
-export default connect()(AccountRecharge);
+export default connect((state: ConnectState) => ({
+  loginUserInfo: state.login.loginUserInfo,
+}))(AccountRecharge);

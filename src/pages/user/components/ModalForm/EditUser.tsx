@@ -29,7 +29,7 @@ const EditUser: React.FC<TProps> = (props) => {
 
   const onSubmit = async (values: any) => {
     const loadingKey = 'loadingKey';
-    const hide = message.loading({ content: '正在保存...', key: loadingKey });
+    const hide = message.loading({ content: '正在保存...', key: loadingKey, duration: 0 });
     const params = {
       ...values,
       userId: values.id,

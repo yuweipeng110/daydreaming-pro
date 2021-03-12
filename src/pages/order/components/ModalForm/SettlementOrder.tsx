@@ -12,7 +12,7 @@ import type { ProColumns } from '@ant-design/pro-table';
 import { EditableProTable } from '@ant-design/pro-table';
 import {
   STATUS_CODE,
-  PaymentMethodEnum,
+  SettlementMethodEnum,
   ScriptPlayerRoleEnum,
   UserSexEnum,
 } from '@/pages/constants';
@@ -169,7 +169,7 @@ const SettlementOrder: React.FC<IProps> = (props) => {
       title: '支付方式',
       dataIndex: 'paymentMethod',
       valueType: 'select',
-      valueEnum: PaymentMethodEnum,
+      valueEnum: SettlementMethodEnum,
     },
     {
       title: '付款金额',

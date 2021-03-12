@@ -7,7 +7,7 @@ import ProProvider from '@ant-design/pro-provider';
 import { ProFormDateRangePicker } from '@ant-design/pro-form';
 import { queryRevenueListApi } from '@/services/revenue';
 import { IRevenueTable } from '@/pages/types/revenue';
-import { PaymentMethodEnum } from '@/pages/constants';
+import { SettlementMethodEnum } from '@/pages/constants';
 import { IUserTable } from '@/pages/types/user';
 import ViewUser from '@/pages/user/components/Modal/ViewUser';
 import { IOrderTable } from '@/pages/types/order';
@@ -75,7 +75,7 @@ const RevenueList: React.FC<ConnectProps & StateProps> = (props) => {
     {
       title: '结算方式',
       dataIndex: 'paymentMethodId',
-      valueEnum: PaymentMethodEnum,
+      valueEnum: SettlementMethodEnum,
       search: false,
     },
     {

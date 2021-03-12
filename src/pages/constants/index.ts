@@ -39,6 +39,12 @@ export const PaymentMethodEnum = {
   1: { text: '微信' },
   2: { text: '支付宝' },
   3: { text: '现金' },
+};
+
+export const SettlementMethodEnum = {
+  1: { text: '微信' },
+  2: { text: '支付宝' },
+  3: { text: '现金' },
   5: { text: '账户余额' },
 };
 

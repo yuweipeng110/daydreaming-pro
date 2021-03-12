@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import ProForm, { ProFormText } from '@ant-design/pro-form';
+import ProForm from '@ant-design/pro-form';
 import { Form, message } from 'antd';
 import { Editor } from 'react-draft-wysiwyg';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
@@ -56,7 +56,7 @@ export default (): React.ReactNode => {
         }}
       >
         <ProForm.Group>
-          <ProFormText />
+          <div onCopy={(e) => e.preventDefault()}>wqeqweasdasdasdzxc</div>
           <Editor
             editorState={editState}
             wrapperClassName="demo-wrapper"

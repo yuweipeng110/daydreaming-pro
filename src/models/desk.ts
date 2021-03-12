@@ -25,8 +25,6 @@ export interface IDeskModeType {
 export interface IDeskState {
   deskList: IDeskTable[];
   deskOrderList: IDeskTable[];
-  dataCount: number;
-  pageCount: number;
 }
 
 const partnerModel: IDeskModeType = {
@@ -34,30 +32,26 @@ const partnerModel: IDeskModeType = {
   state: {
     deskList: [],
     deskOrderList: [],
-    dataCount: 0,
-    pageCount: 0,
   },
   effects: {
-    *getDeskListEffect({ params },{ put, call }) {
+    *getDeskListEffect({ params }, { put, call }) {
       const res: IDeskResponse = yield call(deskService.queryDeskListApi, params);
-      if(_.isEmpty(res)){
+      if (_.isEmpty(res)) {
         return;
       }
       yield put({
         type: 'setDeskListReducer',
         deskList: res.data,
-        dataCount: Number(res.dataCount),
-        pageCount: Number(res.pageCount)
       });
     },
     *addDeskEffect({ params }, { put, call }) {
       const addRes: IAddDeskResponse = yield call(deskService.addDeskApi, params);
-      if(_.isEmpty(addRes)){
+      if (_.isEmpty(addRes)) {
         return false;
       }
-      if(addRes.code === STATUS_CODE.SUCCESS) {
+      if (addRes.code === STATUS_CODE.SUCCESS) {
         yield put({
-          type: 'getDeskListEffect'
+          type: 'getDeskListEffect',
         });
         return true;
       }
@@ -65,36 +59,36 @@ const partnerModel: IDeskModeType = {
     },
     *editDeskEffect({ params }, { put, call }) {
       const editRes: IAddDeskResponse = yield call(deskService.editDeskApi, params);
-      if(_.isEmpty(editRes)){
+      if (_.isEmpty(editRes)) {
         return false;
       }
-      if(editRes.code === STATUS_CODE.SUCCESS){
+      if (editRes.code === STATUS_CODE.SUCCESS) {
         yield put({
-          type: 'getDeskListEffect'
+          type: 'getDeskListEffect',
         });
         return true;
       }
       return false;
     },
-    *getOrderDeskListEffect({ params },{ put, call }) {
+    *getOrderDeskListEffect({ params }, { put, call }) {
       const res: IDeskResponse = yield call(deskService.queryOrderDeskListApi, params);
-      if(_.isEmpty(res)){
+      if (_.isEmpty(res)) {
         return;
       }
       yield put({
         type: 'setDeskOrderListReducer',
-        deskOrderList: res.data
+        deskOrderList: res.data,
       });
     },
   },
   reducers: {
-    setDeskListReducer: (state, { deskList, dataCount, pageCount }) => {
-      return { ...state, deskList, dataCount, pageCount };
+    setDeskListReducer: (state, { deskList }) => {
+      return { ...state, deskList };
     },
     setDeskOrderListReducer: (state, { deskOrderList }) => {
       return { ...state, deskOrderList };
     },
-  }
+  },
 };
 
 export default partnerModel;

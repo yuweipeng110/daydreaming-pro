@@ -10,15 +10,25 @@ import { IScriptTable } from '@/pages/types/script';
 import { queryScriptListApi } from '@/services/script';
 import EditScript from '@/pages/script/components/ModalForm/EditScript';
 import { ScriptIsAdaptEnum } from '@/pages/constants';
+import EditorScript from '@/pages/script/components/ModalForm/EditorScript';
 
 const ScriptList: React.FC<ConnectProps & StateProps> = (props) => {
   const { loginUserInfo } = props;
   const actionRef = useRef<ActionType>();
   const [editScriptModalVisible, handleEditScriptModalVisible] = useState<boolean>(false);
+  const [editorScriptModalVisible, handleEditorScriptModalVisible] = useState<boolean>(false);
   const [currentData, setCurrentData] = useState<IScriptTable>(Object.create(null));
 
   const editScriptModalStatusSwitch = (editScriptModalStatus: boolean, rowCurrentData?: any) => {
     handleEditScriptModalVisible(editScriptModalStatus);
+    setCurrentData(rowCurrentData);
+  };
+
+  const editorScriptModalStatusSwitch = (
+    editorScriptModalStatus: boolean,
+    rowCurrentData?: any,
+  ) => {
+    handleEditorScriptModalVisible(editorScriptModalStatus);
     setCurrentData(rowCurrentData);
   };
 
@@ -79,6 +89,7 @@ const ScriptList: React.FC<ConnectProps & StateProps> = (props) => {
       render: (record: any) => (
         <Space size="middle">
           <a onClick={() => editScriptModalStatusSwitch(true, record)}>修改</a>
+          <a onClick={() => editorScriptModalStatusSwitch(true, record)}>内容</a>
         </Space>
       ),
     },
@@ -113,6 +124,12 @@ const ScriptList: React.FC<ConnectProps & StateProps> = (props) => {
         actionRef={actionRef}
         visible={editScriptModalVisible}
         onVisibleChange={handleEditScriptModalVisible}
+        currentData={currentData}
+      />
+      <EditorScript
+        actionRef={actionRef}
+        visible={editorScriptModalVisible}
+        onVisibleChange={handleEditorScriptModalVisible}
         currentData={currentData}
       />
     </PageContainer>

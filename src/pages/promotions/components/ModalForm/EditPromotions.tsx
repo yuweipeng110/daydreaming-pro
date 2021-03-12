@@ -28,7 +28,7 @@ const EditPromotions: React.FC<TProps> = (props) => {
 
   const onSubmit = async (values: any) => {
     const loadingKey = 'loadingKey';
-    message.loading({ content: '正在保存...', key: loadingKey });
+    message.loading({ content: '正在保存...', key: loadingKey, duration: 0 });
     const params = {
       ...values,
       promotionsId: values.id,
