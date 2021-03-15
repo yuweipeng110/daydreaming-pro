@@ -4,7 +4,7 @@ import { ConnectState } from '@/models/connect';
 import ProTable, { ProColumns } from '@ant-design/pro-table';
 import { IUserTable } from '@/pages/types/user';
 import { queryUserIntegralRankListApi } from '@/services/account';
-import { ScriptPlayerRoleEnum, UserSexEnum } from '@/pages/constants';
+import { StoreRoleEnum, UserSexEnum } from '@/pages/constants';
 import { PageContainer } from '@ant-design/pro-layout';
 
 export type TProps = {
@@ -129,7 +129,7 @@ const UserIntegralRankList: React.FC<TProps> = (props) => {
     {
       title: 'roleId',
       dataIndex: 'roleId',
-      valueEnum: ScriptPlayerRoleEnum,
+      valueEnum: StoreRoleEnum,
       valueType: 'radio',
       initialValue: '1',
       hideInTable: true,

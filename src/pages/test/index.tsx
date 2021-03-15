@@ -2,7 +2,7 @@ import React from 'react';
 import { Tree, Input, Form, message } from 'antd';
 import ProForm, { ProFormText } from '@ant-design/pro-form';
 
-const Test: React.FC = () => {
+export default () => {
   const [form] = Form.useForm();
   // get-promotions-list params isActive
   // get-user-list params isHost
@@ -63,5 +63,3 @@ const Test: React.FC = () => {
     </div>
   );
 };
-
-export default Test;
