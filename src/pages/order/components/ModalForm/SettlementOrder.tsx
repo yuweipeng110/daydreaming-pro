@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { ConnectProps } from '@/models/connect';
+import { ConnectProps, ConnectState } from '@/models/connect';
 import { Button, Col, Form, InputNumber, Row, Statistic, Popconfirm, message } from 'antd';
 import ProForm, {
   ModalForm,
@@ -19,6 +19,7 @@ import {
 import { settlementOrderApi } from '@/services/order';
 import { TOrderDetailTable } from '@/pages/types/orderDetail';
 import { IDeskTable } from '@/pages/types/desk';
+import { IUserTable } from '@/pages/types/user';
 import _ from 'lodash';
 
 interface IOptions {
@@ -26,15 +27,16 @@ interface IOptions {
   label: string;
 }
 
-interface IProps extends ConnectProps {
+export type TProps = {
   actionRef: any;
   visible: boolean;
   onVisibleChange: (visible: boolean) => void;
   currentData: IDeskTable;
-}
+  loginUserInfo: IUserTable;
+} & ConnectProps;
 
-const SettlementOrder: React.FC<IProps> = (props) => {
-  const { actionRef, visible, onVisibleChange, currentData } = props;
+const SettlementOrder: React.FC<TProps> = (props) => {
+  const { actionRef, visible, onVisibleChange, currentData, loginUserInfo } = props;
   const [form] = Form.useForm();
   const initialValues = !_.isEmpty(currentData)
     ? {
@@ -85,27 +87,36 @@ const SettlementOrder: React.FC<IProps> = (props) => {
   }, [orderDetailList]);
 
   const onSubmit = async (values: any) => {
-    const hide = message.loading('正在结算订单');
+    const loadingKey = 'loadingKey';
+    message.loading({ content: '正在结算订单...', key: loadingKey, duration: 0 });
     const params = {
       ...values,
       orderId: values.id,
       deskId: values.deskId,
-      // settlementOperatorId
-      // detailList: orderDetailList,
+      settlementOperatorId: loginUserInfo.id,
+      orderDetailList: values.detailList,
       // storeId,scriptId,deskId,orderOperatorId,remark,detailList
     };
-    console.log('SettlementOrder-submit-params', params);
-    return false;
+    // console.log('SettlementOrder-submit-params', params);
+    // return false;
     const res = await settlementOrderApi(params);
-    if (res.code === STATUS_CODE.SUCCESS) {
-      onVisibleChange(false);
-      hide();
-      message.success('结算成功');
-      return true;
+    if (Number(res.code) !== STATUS_CODE.SUCCESS) {
+      message.error({ content: res.msg, key: loadingKey, duration: 2 });
+      return false;
     }
-    hide();
-    message.error(res.msg);
-    return false;
+    onVisibleChange(false);
+    message.success({ content: '结算成功!', key: loadingKey, duration: 2 });
+    return true;
+  };
+
+  const onFinish = async (values: any) => {
+    const success = await onSubmit(values);
+    if (!success) {
+      return false;
+    }
+    onVisibleChange(false);
+    actionRef();
+    return true;
   };
 
   const columns: ProColumns<TOrderDetailTable>[] = [
@@ -127,7 +138,7 @@ const SettlementOrder: React.FC<IProps> = (props) => {
     },
     {
       title: '身份选择',
-      dataIndex: 'roleId',
+      dataIndex: 'gameRole',
       align: 'center',
       valueEnum: ScriptPlayerRoleEnum,
     },
@@ -167,7 +178,7 @@ const SettlementOrder: React.FC<IProps> = (props) => {
     },
     {
       title: '支付方式',
-      dataIndex: 'paymentMethod',
+      dataIndex: 'paymentMethodId',
       valueType: 'select',
       valueEnum: SettlementMethodEnum,
     },
@@ -191,17 +202,7 @@ const SettlementOrder: React.FC<IProps> = (props) => {
         onVisibleChange(visibleValue);
       }}
       form={form}
-      onFinish={async (values) => {
-        const success = await onSubmit(values);
-        if (!success) {
-          return false;
-        }
-        onVisibleChange(false);
-        if (actionRef.current) {
-          actionRef.current.reload();
-        }
-        return true;
-      }}
+      onFinish={onFinish}
       submitter={{
         render: (_props) => {
           return [
@@ -269,4 +270,6 @@ const SettlementOrder: React.FC<IProps> = (props) => {
   );
 };
 
-export default connect()(SettlementOrder);
+export default connect((state: ConnectState) => ({
+  loginUserInfo: state.login.loginUserInfo,
+}))(SettlementOrder);

@@ -44,7 +44,7 @@ const AddOrder: React.FC<IProps> = (props) => {
       ...values,
       storeId: loginUserInfo.storeId,
       deskId,
-      // orderOperatorId: props.loginUserInfo.id,
+      orderOperatorId: loginUserInfo.id,
       detailList: orderDetailList,
       // storeId,scriptId,deskId,hostId,orderOperatorId,remark,detailList
     };
