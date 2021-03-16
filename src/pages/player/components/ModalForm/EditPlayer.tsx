@@ -79,7 +79,6 @@ const EditPlayer: React.FC<TProps> = (props) => {
       form.setFields(errorList);
       return false;
     }
-    onVisibleChange(false);
     message.success({ content: '保存成功!', key: loadingKey, duration: 2 });
     return true;
   };

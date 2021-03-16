@@ -44,7 +44,6 @@ const EditPromotions: React.FC<TProps> = (props) => {
       message.error({ content: res.msg, key: loadingKey, duration: 2 });
       return false;
     }
-    onVisibleChange(false);
     message.success({ content: '保存成功!', key: loadingKey, duration: 2 });
     return true;
   };
