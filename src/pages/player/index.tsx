@@ -84,15 +84,15 @@ const PlayerList: React.FC<ConnectProps & StateProps> = (props) => {
       search: false,
     },
     {
-      title: '总榜积分',
+      title: '总积分',
       dataIndex: 'totalIntegral',
       search: false,
     },
-    {
-      title: '可用积分',
-      dataIndex: 'activeIntegral',
-      search: false,
-    },
+    // {
+    //   title: '可用积分',
+    //   dataIndex: 'activeIntegral',
+    //   search: false,
+    // },
     {
       title: '账户余额',
       dataIndex: 'accountBalance',

@@ -4,8 +4,7 @@ import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import ProTable, { ProColumns } from '@ant-design/pro-table';
 import { IOrderDetailTable } from '@/pages/types/orderDetail';
-import { OrderStatusEnum, UserSexEnum } from '@/pages/constants';
-import React from 'react';
+import { OrderStatusEnum, SettlementMethodEnum, UserSexEnum } from '@/pages/constants';
 
 export type OrderDetailViewProps = {
   visible: boolean;
@@ -38,6 +37,7 @@ export default (props: OrderDetailViewProps) => {
     {
       title: 'paymentMethod',
       dataIndex: 'paymentMethod',
+      valueEnum: SettlementMethodEnum
     },
     {
       title: 'settlementPrice',

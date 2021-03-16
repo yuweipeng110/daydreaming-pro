@@ -125,7 +125,7 @@ const OrderHistoryList: React.FC<ConnectProps & StateProps> = (props) => {
             pageSize: 10,
           }}
           columns={columns}
-        ></ProTable>
+        />
       </ProProvider.Provider>
       <ViewOrder
         visible={viewOrderModalVisible}

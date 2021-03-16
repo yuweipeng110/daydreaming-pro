@@ -128,7 +128,7 @@ const OrderList: React.FC<ConnectProps & StateProps> = (props) => {
         currentData={currentData}
       />
       <SettlementOrder
-        actionRef={actionRef}
+        actionRef={loadOrderList}
         visible={settlementOrderModalVisible}
         onVisibleChange={handleSettlementOrderModalVisible}
         currentData={currentData}

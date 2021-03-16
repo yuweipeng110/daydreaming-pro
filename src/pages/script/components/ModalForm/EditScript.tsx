@@ -35,7 +35,7 @@ const EditScript: React.FC<TProps> = (props) => {
       scriptId: values.id,
       storeId: loginUserInfo.storeId,
     };
-    let res: any = Object.create(null);
+    let res;
     if (!currentData) {
       res = await addScriptApi(params);
     } else {
