@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { Form, message } from 'antd';
-import ProForm, { ModalForm, ProFormText } from '@ant-design/pro-form';
+import { ModalForm, ProFormText } from '@ant-design/pro-form';
 import { ConnectProps, ConnectState } from '@/models/connect';
 import { IAddScriptResponse, IScriptTable } from '@/pages/types/script';
 import { editScriptApi } from '@/services/script';
