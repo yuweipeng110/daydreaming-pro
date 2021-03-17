@@ -35,6 +35,11 @@
         component: './test/test3',
       },
       {
+        path: '/rankList',
+        name: 'userIntegralRankList',
+        component: './statistics/userIntegralRankList',
+      },
+      {
         path: '/',
         component: '../layouts/SecurityLayout',
         routes: [
