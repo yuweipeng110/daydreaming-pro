@@ -14,97 +14,97 @@ export default (props: ViewUserProps) => {
 
   const columns: ProDescriptionsItemProps<IUserTable>[] = [
     {
-      title: 'role',
+      title: '角色',
       dataIndex: 'role',
       valueEnum: UserRoleEnum,
     },
     {
-      title: 'nickname',
+      title: '昵称',
       dataIndex: 'nickname',
     },
     {
-      title: 'sex',
+      title: '性别',
       dataIndex: 'sex',
       valueEnum: UserSexEnum,
     },
     {
-      title: 'phone',
+      title: '电话',
       dataIndex: 'phone',
     },
     {
-      title: 'birthday',
+      title: '生日',
       dataIndex: 'birthday',
       valueType: 'date',
     },
     {
-      title: 'otime',
+      title: '创建时间',
       dataIndex: 'otime',
       valueType: 'dateTime',
     },
     {
-      title: 'killerRanking',
+      title: '杀手排行',
       dataIndex: 'killerRanking',
     },
     {
-      title: 'killerIntegral',
+      title: '杀手积分',
       dataIndex: 'killerIntegral',
     },
     {
-      title: 'killerTitle',
+      title: '杀手称号',
       dataIndex: 'killerTitle',
     },
     {
-      title: 'detectiveRanking',
+      title: '侦探排行',
       dataIndex: 'detectiveRanking',
     },
     {
-      title: 'detectiveIntegral',
+      title: '侦探积分',
       dataIndex: 'detectiveIntegral',
     },
     {
-      title: 'detectiveTitle',
+      title: '侦探称号',
       dataIndex: 'detectiveTitle',
     },
     {
-      title: 'peopleRanking',
+      title: '路人排行',
       dataIndex: 'peopleRanking',
     },
     {
-      title: 'peopleIntegral',
+      title: '路人积分',
       dataIndex: 'peopleIntegral',
     },
     {
-      title: 'peopleTitle',
+      title: '路人称号',
       dataIndex: 'peopleTitle',
     },
     {
-      title: 'totalRanking',
+      title: '总榜排行',
       dataIndex: 'totalRanking',
     },
     {
-      title: 'totalIntegral',
+      title: '总积分',
       dataIndex: 'totalIntegral',
     },
     {
-      title: 'totalTitle',
+      title: '总榜称号',
       dataIndex: 'totalTitle',
     },
     {
-      title: 'accountBalance',
+      title: '账户余额',
       dataIndex: 'accountBalance',
       valueType: 'money',
     },
     {
-      title: 'voucherBalance',
+      title: '代金劵余额',
       dataIndex: 'voucherBalance',
       valueType: 'money',
     },
     {
-      title: 'activeIntegral',
+      title: '可用积分',
       dataIndex: 'activeIntegral',
     },
     {
-      title: 'remark',
+      title: '备注',
       dataIndex: 'remark',
       span: 3,
     },
@@ -112,7 +112,7 @@ export default (props: ViewUserProps) => {
 
   return (
     <Modal
-      title="user-info-view"
+      title="用户信息"
       visible={visible}
       width="70%"
       centered={true}
@@ -121,7 +121,7 @@ export default (props: ViewUserProps) => {
       }}
       footer={false}
     >
-      <ProDescriptions column={3} title="view-user" dataSource={currentData} columns={columns} />
+      <ProDescriptions column={3} title="用户基本信息" dataSource={currentData} columns={columns} />
     </Modal>
   );
 };

@@ -62,7 +62,7 @@ const EditPromotions: React.FC<TProps> = (props) => {
 
   return (
     <ModalForm
-      title="EditPromotions"
+      title="活动信息"
       visible={visible}
       onVisibleChange={(visibleValue) => {
         form.resetFields();
@@ -75,61 +75,61 @@ const EditPromotions: React.FC<TProps> = (props) => {
       <ProFormText name="id" hidden />
       <ProForm.Group>
         <ProFormText
-          name="title"
+          name="活动名称"
           label="title"
           width="md"
           rules={[
             {
               required: true,
-              message: '输入名称!',
+              message: '输入活动名称!',
             },
           ]}
         />
       </ProForm.Group>
       <ProForm.Group>
         <ProFormDatePicker
-          name="startTime"
+          name="活动开始时间"
           label="startTime"
           width="md"
           rules={[
             {
               required: true,
-              message: '输入startTime!',
+              message: '输入活动开始时间!',
             },
           ]}
         />
         <ProFormDatePicker
-          name="endTime"
+          name="活动结束时间"
           label="endTime"
           width="md"
           rules={[
             {
               required: true,
-              message: '输入endTime!',
+              message: '输入活动结束时间!',
             },
           ]}
         />
       </ProForm.Group>
       <ProForm.Group>
         <ProFormDigit
-          label="rechargeMoney"
+          label="充值金额"
           name="rechargeMoney"
           width="md"
           rules={[
             {
               required: true,
-              message: '输入rechargeMoney!',
+              message: '输入充值金额!',
             },
           ]}
         />
         <ProFormDigit
-          label="voucherMoney"
+          label="赠送金额(代金劵)"
           name="voucherMoney"
           width="md"
           rules={[
             {
               required: true,
-              message: '输入voucherMoney!',
+              message: '输入赠送金额!',
             },
           ]}
         />

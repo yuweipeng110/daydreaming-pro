@@ -15,17 +15,17 @@ const UserIntegralRankList: React.FC<TProps> = (props) => {
   const { loginUserInfo } = props;
   const defaultRoleColumns: ProColumns<IUserTable>[] = [
     {
-      title: 'totalRanking',
+      title: '排行',
       dataIndex: 'totalRanking',
       search: false,
     },
     {
-      title: 'totalIntegral',
+      title: '积分',
       dataIndex: 'totalIntegral',
       search: false,
     },
     {
-      title: 'totalTitle',
+      title: '称号',
       dataIndex: 'totalTitle',
       search: false,
     },
@@ -40,17 +40,17 @@ const UserIntegralRankList: React.FC<TProps> = (props) => {
       case 2:
         currentRoleColumns = [
           {
-            title: 'killerRanking',
+            title: '排行',
             dataIndex: 'killerRanking',
             search: false,
           },
           {
-            title: 'killerIntegral',
+            title: '积分',
             dataIndex: 'killerIntegral',
             search: false,
           },
           {
-            title: 'killerTitle',
+            title: '称号',
             dataIndex: 'killerTitle',
             search: false,
           },
@@ -59,17 +59,17 @@ const UserIntegralRankList: React.FC<TProps> = (props) => {
       case 3:
         currentRoleColumns = [
           {
-            title: 'detectiveRanking',
+            title: '排行',
             dataIndex: 'detectiveRanking',
             search: false,
           },
           {
-            title: 'detectiveIntegral',
+            title: '积分',
             dataIndex: 'detectiveIntegral',
             search: false,
           },
           {
-            title: 'detectiveTitle',
+            title: '称号',
             dataIndex: 'detectiveTitle',
             search: false,
           },
@@ -78,17 +78,17 @@ const UserIntegralRankList: React.FC<TProps> = (props) => {
       case 4:
         currentRoleColumns = [
           {
-            title: 'peopleRanking',
+            title: '排行',
             dataIndex: 'peopleRanking',
             search: false,
           },
           {
-            title: 'peopleIntegral',
+            title: '积分',
             dataIndex: 'peopleIntegral',
             search: false,
           },
           {
-            title: 'peopleTitle',
+            title: '称号',
             dataIndex: 'peopleTitle',
             search: false,
           },

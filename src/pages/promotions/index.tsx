@@ -36,38 +36,38 @@ const PromotionsList: React.FC<TProps> = (props) => {
       valueType: 'indexBorder',
     },
     {
-      title: 'title',
+      title: '活动名称',
       dataIndex: 'title',
       search: false,
     },
     {
-      title: 'isActive',
+      title: '是否激活',
       dataIndex: 'isActive',
       valueEnum: PromotionsIsActiveEnum,
     },
     {
-      title: 'startTime',
+      title: '活动开始时间',
       dataIndex: 'startTime',
       valueType: 'dateTime',
       align: 'center',
       search: false,
     },
     {
-      title: 'endTime',
+      title: '活动结束时间',
       dataIndex: 'endTime',
       valueType: 'dateTime',
       align: 'center',
       search: false,
     },
     {
-      title: 'rechargeMoney',
+      title: '充值金额',
       dataIndex: 'rechargeMoney',
       valueType: 'money',
       align: 'right',
       search: false,
     },
     {
-      title: 'voucherMoney',
+      title: '代金劵金额',
       dataIndex: 'voucherMoney',
       valueType: 'money',
       align: 'right',
@@ -85,7 +85,7 @@ const PromotionsList: React.FC<TProps> = (props) => {
   return (
     <PageContainer>
       <ProTable<IPromotionsTable>
-        headerTitle="promotions"
+        headerTitle="活动"
         actionRef={actionRef}
         rowKey="id"
         toolBarRender={() => [
@@ -96,7 +96,7 @@ const PromotionsList: React.FC<TProps> = (props) => {
               editPromotionsModalStatusSwitch(true);
             }}
           >
-            <PlusOutlined /> AddPromotions
+            <PlusOutlined /> 添加活动
           </Button>,
         ]}
         options={false}

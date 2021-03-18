@@ -30,17 +30,17 @@ export default (props: OrderDetailViewProps) => {
       dataIndex: ['userInfo', 'phone'],
     },
     {
-      title: 'discountPercentage',
+      title: '折扣(%)',
       dataIndex: 'discountPercentage',
       render: (value) => <>{value}%</>,
     },
     {
-      title: 'paymentMethod',
+      title: '结算方式',
       dataIndex: 'paymentMethod',
-      valueEnum: SettlementMethodEnum
+      valueEnum: SettlementMethodEnum,
     },
     {
-      title: 'settlementPrice',
+      title: '结算金额',
       dataIndex: 'settlementPrice',
       valueType: 'money',
       align: 'right',
@@ -49,51 +49,51 @@ export default (props: OrderDetailViewProps) => {
 
   const columns: ProDescriptionsItemProps<IOrderTable>[] = [
     {
-      title: 'orderNo',
+      title: '订单号',
       dataIndex: 'orderNo',
     },
     {
-      title: 'scriptTitle',
+      title: '剧本名称',
       dataIndex: ['scriptInfo', 'title'],
     },
     {
-      title: 'deskTitle',
+      title: '桌号',
       dataIndex: ['deskInfo', 'title'],
     },
     {
-      title: 'host',
+      title: '主持人',
       dataIndex: 'host',
       render: (dom, entity) => {
         return `${entity.hostInfo.phone}-${entity.hostInfo.nickname}`;
       },
     },
     {
-      title: 'receivableMoney',
+      title: '应收金额',
       dataIndex: 'receivableMoney',
       valueType: 'money',
     },
     {
-      title: 'realMoney',
+      title: '实收金额',
       dataIndex: 'realMoney',
       valueType: 'money',
     },
     {
-      title: 'orderTime',
+      title: '下单时间',
       dataIndex: 'orderTime',
       valueType: 'dateTime',
     },
     {
-      title: 'settlementTime',
+      title: '结算时间',
       dataIndex: 'settlementTime',
       valueType: 'dateTime',
     },
     {
-      title: 'status',
+      title: '状态',
       dataIndex: 'status',
       valueEnum: OrderStatusEnum,
     },
     {
-      title: 'remark',
+      title: '备注',
       dataIndex: 'remark',
     },
   ];
@@ -109,9 +109,9 @@ export default (props: OrderDetailViewProps) => {
       }}
       footer={false}
     >
-      <ProDescriptions column={2} title="view-order" dataSource={currentData} columns={columns} />
+      <ProDescriptions column={2} title="订单基本信息" dataSource={currentData} columns={columns} />
       <ProTable<IOrderDetailTable>
-        headerTitle="detailList"
+        headerTitle="订单明细"
         rowKey="id"
         search={false}
         options={false}
