@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { ConnectProps, ConnectState } from '@/models/connect';
 import { Form, message } from 'antd';
@@ -26,6 +26,10 @@ const EditUser: React.FC<TProps> = (props) => {
   const { actionRef, visible, onVisibleChange, currentData, loginUserInfo } = props;
   const initialValues = { ...currentData };
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    console.log('EditUser',loginUserInfo);
+  },[])
 
   const onSubmit = async (values: any) => {
     const loadingKey = 'loadingKey';

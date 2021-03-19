@@ -4,16 +4,18 @@ import React from 'react';
 import type { ConnectProps } from 'umi';
 import { history, connect } from 'umi';
 import type { ConnectState } from '@/models/connect';
-import type { CurrentUser } from '@/models/user';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
+import type { IUserTable } from '@/pages/types/user';
+import DefaultAvatar from '../../assets/default_avatar.png';
 
 export type GlobalHeaderRightProps = {
-  currentUser?: CurrentUser;
+  loginUserInfo: IUserTable;
   menu?: boolean;
-} & Partial<ConnectProps>;
+} & ConnectProps;
 
 class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
+
   onMenuClick = (event: {
     key: React.Key;
     keyPath: React.Key[];
@@ -39,9 +41,9 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
 
   render(): React.ReactNode {
     const {
-      currentUser = {
+      loginUserInfo = {
         avatar: '',
-        name: '',
+        nickname: '',
       },
       menu,
     } = this.props;
@@ -67,11 +69,11 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
         </Menu.Item>
       </Menu>
     );
-    return currentUser && currentUser.name ? (
+    return loginUserInfo ? (
       <HeaderDropdown overlay={menuHeaderDropdown}>
         <span className={`${styles.action} ${styles.account}`}>
-          <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
-          <span className={`${styles.name} anticon`}>{currentUser.name}</span>
+          <Avatar size="small" className={styles.avatar} src={DefaultAvatar} alt="avatar" />
+          <span className={`${styles.name} anticon`}>{loginUserInfo.nickname}</span>
         </span>
       </HeaderDropdown>
     ) : (
@@ -88,6 +90,6 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
   }
 }
 
-export default connect(({ user }: ConnectState) => ({
-  currentUser: user.currentUser,
+export default connect((state: ConnectState) => ({
+  loginUserInfo: state.login.loginUserInfo,
 }))(AvatarDropdown);

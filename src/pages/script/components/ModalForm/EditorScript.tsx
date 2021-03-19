@@ -7,12 +7,20 @@ import { IAddScriptResponse, IScriptTable } from '@/pages/types/script';
 import { editScriptApi } from '@/services/script';
 import { IUserTable } from '@/pages/types/user';
 import { STATUS_CODE } from '@/pages/constants';
-import { Editor } from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { EditorState, convertToRaw, ContentState } from 'draft-js';
-import draftToHtml from 'draftjs-to-html';
-import htmlToDraft from 'html-to-draftjs';
+import BraftEditor, { EditorState } from 'braft-editor';
+import Table from 'braft-extensions/dist/table';
+import 'braft-editor/dist/index.css';
+import 'braft-extensions/dist/table.css';
 import '../../index.less';
+
+// 输出表格默认不带边框，如果需要边框，设置参数exportAttrString为'border="1" style="border-collapse: collapse"'
+const options = {
+  defaultColumns: 5, // 默认列数
+  defaultRows: 5, // 默认行数
+  withDropdown: true, // 插入表格前是否弹出下拉菜单
+  columnResizable: true, // 是否允许拖动调整列宽，默认false
+  exportAttrString: 'border="1"', // 指定输出HTML时附加到table标签上的属性字符串
+};
 
 export type TProps = {
   actionRef: any;
@@ -26,16 +34,14 @@ const EditorScript: React.FC<TProps> = (props) => {
   const { actionRef, visible, onVisibleChange, currentData, loginUserInfo } = props;
   const initialValues = { ...currentData };
   const [form] = Form.useForm();
-  const [editState, setEditState] = useState(EditorState.createEmpty());
+  BraftEditor.use(Table(options));
+
+  const [editorContent, setEditorContent] = useState(BraftEditor.createEditorState(null));
+  const [outputHTML, setOutputHTML] = useState<string>('');
 
   // 内容回显
   const editorContentEcho = () => {
-    const contentBlock = htmlToDraft(currentData.content);
-    if (contentBlock) {
-      const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-      const tempEditorState = EditorState.createWithContent(contentState);
-      setEditState(tempEditorState);
-    }
+    setEditorContent(BraftEditor.createEditorState(currentData.content));
   };
 
   useEffect(() => {
@@ -44,8 +50,9 @@ const EditorScript: React.FC<TProps> = (props) => {
     }
   }, [visible]);
 
-  const onEditorStateChange = (value: any) => {
-    setEditState(value);
+  const handleChange = (v: EditorState) => {
+    setEditorContent(v);
+    setOutputHTML(v.toHTML());
   };
 
   const onSubmit = async (values: any) => {
@@ -55,7 +62,7 @@ const EditorScript: React.FC<TProps> = (props) => {
       ...values,
       scriptId: values.id,
       storeId: loginUserInfo.storeId,
-      content: draftToHtml(convertToRaw(editState.getCurrentContent())),
+      content: outputHTML,
     };
     const res: IAddScriptResponse = await editScriptApi(params);
     if (Number(res.code) !== STATUS_CODE.SUCCESS) {
@@ -88,15 +95,14 @@ const EditorScript: React.FC<TProps> = (props) => {
       }}
       form={form}
       onFinish={onFinish}
-      width="90%"
+      width="95%"
       initialValues={initialValues}
     >
       <ProFormText name="id" hidden />
-      <Editor
-        editorState={editState}
-        wrapperClassName="demo-wrapper"
-        editorClassName="demo-editor"
-        onEditorStateChange={onEditorStateChange}
+      <BraftEditor
+        className='demo-editor'
+        value={editorContent}
+        onChange={handleChange}
       />
     </ModalForm>
   );

@@ -19,9 +19,6 @@ export async function getFakeCaptcha(mobile: string) {
   return request(`/api/login/captcha?mobile=${mobile}`);
 }
 
-
-
-
 export async function loginCheckApi(params: any): Promise<ILoginCheckResponse>{
   return request.post('/app/signin/login-check',{
     data: params
