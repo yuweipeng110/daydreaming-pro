@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { Form, message } from 'antd';
+import { Button, Form, message } from 'antd';
 import { ModalForm, ProFormText } from '@ant-design/pro-form';
 import { ConnectProps, ConnectState } from '@/models/connect';
 import { IAddScriptResponse, IScriptTable } from '@/pages/types/script';
@@ -60,7 +60,7 @@ const EditorScript: React.FC<TProps> = (props) => {
     message.loading({ content: '正在保存...', key: loadingKey, duration: 0 });
     const params = {
       ...values,
-      scriptId: values.id,
+      scriptId: initialValues.id,
       storeId: loginUserInfo.storeId,
       content: outputHTML,
     };
@@ -87,18 +87,41 @@ const EditorScript: React.FC<TProps> = (props) => {
 
   return (
     <ModalForm
-      title="内容详情"
+      title='内容详情'
       visible={visible}
       onVisibleChange={(visibleValue) => {
         form.resetFields();
         onVisibleChange(visibleValue);
       }}
       form={form}
-      onFinish={onFinish}
-      width="95%"
+      onFinish={async () => {
+        return false;
+      }}
+      submitter={{
+        submitButtonProps: {
+          style: {
+            display: 'none',
+          },
+        },
+        render: (tmpProps, defaultDoms) => {
+          return [
+            ...defaultDoms,
+            <Button
+              key='save'
+              type='primary'
+              onClick={() => {
+                onFinish({});
+              }}
+            >
+              保存内容
+            </Button>,
+          ];
+        },
+      }}
+      width='95%'
       initialValues={initialValues}
     >
-      <ProFormText name="id" hidden />
+      <ProFormText name='id' hidden />
       <BraftEditor
         className='demo-editor'
         value={editorContent}

@@ -51,20 +51,24 @@ const ScriptList: React.FC<ConnectProps & StateProps> = (props) => {
       dataIndex: 'costPrice',
       valueType: 'money',
       align: 'right',
+      search: false,
     },
     {
       title: '开本价格',
       dataIndex: 'formatPrice',
       valueType: 'money',
       align: 'right',
+      search: false,
     },
     {
       title: '拥有数量',
       dataIndex: 'amount',
+      search: false,
     },
     {
       title: '适用人数',
       dataIndex: 'applicableNumber',
+      search: false,
     },
     {
       title: '是否改编',
@@ -74,20 +78,23 @@ const ScriptList: React.FC<ConnectProps & StateProps> = (props) => {
     {
       title: '游戏时间（小时）',
       dataIndex: 'gameTime',
+      search: false,
     },
     {
       title: '改编内容',
       dataIndex: 'adaptContent',
+      search: false,
     },
     {
       title: '描述',
       dataIndex: 'description',
+      search: false,
     },
     {
       title: '操作',
       search: false,
       render: (record: any) => (
-        <Space size="middle">
+        <Space size='middle'>
           <a onClick={() => editScriptModalStatusSwitch(true, record)}>修改</a>
           <a onClick={() => editorScriptModalStatusSwitch(true, record)}>内容</a>
         </Space>
@@ -98,14 +105,13 @@ const ScriptList: React.FC<ConnectProps & StateProps> = (props) => {
   return (
     <PageContainer>
       <ProTable<IScriptTable>
-        headerTitle="剧本管理"
+        headerTitle='剧本管理'
         actionRef={actionRef}
-        rowKey="id"
-        search={false}
+        rowKey='id'
         toolBarRender={() => [
           <Button
-            type="primary"
-            key="primary"
+            type='primary'
+            key='primary'
             onClick={() => {
               editScriptModalStatusSwitch(true);
             }}

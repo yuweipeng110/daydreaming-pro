@@ -23,33 +23,25 @@ const StoreList: React.FC = () => {
     {
       title: 'ID',
       dataIndex: 'id',
-      key: 'id',
+      search: false,
     },
     {
       title: '门店名称',
       dataIndex: 'storeName',
-      key: 'storeName',
     },
     {
       title: '管理员 (真实姓名)',
-      key: 'realName',
-      render: (dom, entity) => {
-        return entity.bossInfo ? entity.bossInfo.realName : '';
-      },
+      dataIndex: ['bossInfo', 'realName'],
     },
     {
       title: '管理员 (账号)',
-      key: 'realName',
-      render: (dom, entity) => {
-        return entity.bossInfo ? entity.bossInfo.userName : '';
-      },
+      dataIndex: ['bossInfo', 'userName'],
+      search: false,
     },
     {
       title: '管理员 (密码)',
-      key: 'passWord',
-      render: (dom, entity) => {
-        return entity.bossInfo ? entity.bossInfo.password : '';
-      },
+      dataIndex: ['bossInfo', 'passWord'],
+      search: false,
     },
     {
       title: '手机 (电话)',
@@ -59,18 +51,16 @@ const StoreList: React.FC = () => {
     {
       title: '系统使用状态',
       dataIndex: 'status',
-      key: 'status',
       valueEnum: StoreStatusEnum,
     },
     {
       title: '门店地址',
       dataIndex: 'address',
-      key: 'address',
       width: '30%',
+      search: false,
     },
     {
       title: '操作',
-      key: 'action',
       render: (dom, entity) => <a onClick={() => editStoreModalStatusSwitch(true, entity)}>修改</a>,
     },
   ];
@@ -78,14 +68,16 @@ const StoreList: React.FC = () => {
   return (
     <PageContainer>
       <ProTable<IStoreTable>
-        headerTitle="门店管理"
+        headerTitle='门店管理'
         actionRef={actionRef}
-        rowKey="id"
-        search={false}
+        rowKey='id'
+        search={{
+          labelWidth: 'auto',
+        }}
         toolBarRender={() => [
           <Button
-            type="primary"
-            key="primary"
+            type='primary'
+            key='primary'
             onClick={() => {
               editStoreModalStatusSwitch(true);
             }}

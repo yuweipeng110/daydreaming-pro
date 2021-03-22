@@ -54,7 +54,7 @@ const OrderList: React.FC<ConnectProps & StateProps> = (props) => {
 
   const renderOpenOrderButton = (record: any) => {
     return (
-      <Space size="middle">
+      <Space size='middle'>
         <a onClick={() => editOrderModalStatusSwitch(true, record)}>修改</a>
         <a onClick={() => settlementOrderModalStatusSwitch(true, record)}>结算</a>
       </Space>
@@ -75,9 +75,9 @@ const OrderList: React.FC<ConnectProps & StateProps> = (props) => {
     <PageContainer>
       <div className={styles.cardList}>
         <ProList
-          headerTitle="订单管理"
+          headerTitle='订单管理'
           actionRef={actionRef}
-          rowKey="id"
+          rowKey='id'
           grid={{ column: 4, gutter: 24, lg: 3, md: 2, sm: 1, xs: 1 }}
           dataSource={[...deskOrderList]}
           loading={loading}
@@ -87,7 +87,7 @@ const OrderList: React.FC<ConnectProps & StateProps> = (props) => {
                 <ProCard
                   title={item.orderInfo.scriptInfo.title}
                   extra={renderOpenOrderButton(item)}
-                  layout="center"
+                  layout='center'
                   className={styles.card}
                 >
                   {`桌号：${item.title}`}
@@ -104,7 +104,7 @@ const OrderList: React.FC<ConnectProps & StateProps> = (props) => {
             ) : (
               <List.Item key={item.id}>
                 <Button
-                  type="dashed"
+                  type='dashed'
                   className={styles.newButton}
                   onClick={() => createOrderModalStatusSwitch(true, item.id)}
                 >
