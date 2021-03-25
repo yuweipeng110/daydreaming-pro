@@ -82,25 +82,25 @@
               {
                 path: '/store',
                 name: '门店管理',
-                icon: 'smile',
+                icon: 'dashboard',
                 component: './store',
               },
               {
                 path: '/user',
                 name: '用户管理',
-                icon: 'smile',
+                icon: 'form',
                 component: './user',
               },
               {
                 path: '/player',
                 name: '玩家管理',
-                icon: 'smile',
+                icon: 'user',
                 component: './player',
               },
               {
                 path: '/script',
                 name: '剧本管理',
-                icon: 'smile',
+                icon: 'profile',
                 component: './script',
               },
               {
@@ -112,7 +112,7 @@
               {
                 path: '/order',
                 name: '订单管理',
-                icon: 'smile',
+                icon: 'table',
                 component: './order',
               },
               {
@@ -124,19 +124,19 @@
               {
                 path: '/orderHistoryList',
                 name: '订单历史记录',
-                icon: 'smile',
+                icon: 'HistoryOutlined',
                 component: './order/OrderHistoryList',
               },
               {
                 path: '/UserIntegralRank',
                 name: '用户排行',
-                icon: 'hdd',
+                icon: 'ContactsOutlined',
                 component: './account/UserIntegralRankList',
               },
               {
                 path: '/RevenueList',
                 name: '营收记录',
-                icon: 'hdd',
+                icon: 'RedEnvelopeOutlined',
                 component: './account/RevenueList',
               },
               {

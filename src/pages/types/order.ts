@@ -8,11 +8,11 @@ export interface IOrderTable {
   id: number;
   orderNo: string;
   scriptId: number;
-  scriptInfo: IScriptTable;
+  scriptInfo?: IScriptTable;
   deskId: number;
-  deskInfo: IDeskTable;
+  deskInfo?: IDeskTable;
   hostId: number;
-  hostInfo: IUserTable;
+  hostInfo?: IUserTable;
   receivableMoney: number;
   realMoney: number;
   orderOperatorId: number;

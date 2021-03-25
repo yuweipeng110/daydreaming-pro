@@ -43,7 +43,6 @@ const partnerModel: IStoreModelType = {
       return true;
     },
     *addStoreEffect({ params }, { call, put }) {
-      console.log('addStoreEffect');
       const addRes: IAddStoreResponse = yield call(StoreService.addStoreApi, params);
       if (_.isEmpty(addRes)) {
         return {};

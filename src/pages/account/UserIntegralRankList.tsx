@@ -127,7 +127,7 @@ const UserIntegralRankList: React.FC<TProps> = (props) => {
       search: false,
     },
     {
-      title: 'roleId',
+      title: '游戏角色',
       dataIndex: 'roleId',
       valueEnum: StoreRoleEnum,
       valueType: 'radio',
@@ -145,6 +145,9 @@ const UserIntegralRankList: React.FC<TProps> = (props) => {
         headerTitle="用户积分排名"
         rowKey="id"
         options={false}
+        search={{
+          labelWidth: 'auto',
+        }}
         request={handleRequest}
         pagination={{
           pageSize: 10,

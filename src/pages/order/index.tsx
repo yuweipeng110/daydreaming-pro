@@ -63,7 +63,7 @@ const OrderList: React.FC<ConnectProps & StateProps> = (props) => {
 
   const renderTime = (record: IDeskTable) => {
     const currentTimeMoment = moment();
-    const orderTimeMoment = moment(record.orderInfo.orderTime);
+    const orderTimeMoment = moment(record.orderInfo?.orderTime);
     return currentTimeMoment.diff(orderTimeMoment, 'hours', true).toFixed(2);
   };
 
@@ -85,20 +85,20 @@ const OrderList: React.FC<ConnectProps & StateProps> = (props) => {
             !_.isEmpty(item.orderInfo) ? (
               <List.Item key={item.id}>
                 <ProCard
-                  title={item.orderInfo.scriptInfo.title}
+                  title={item.orderInfo?.scriptInfo?.title}
                   extra={renderOpenOrderButton(item)}
                   layout='center'
                   className={styles.card}
                 >
                   {`桌号：${item.title}`}
                   <br />
-                  {`剧本名称：${item.orderInfo.scriptInfo.title}`}
+                  {`剧本名称：${item.orderInfo?.scriptInfo?.title}`}
                   <br />
-                  {`开台时间：${item.orderInfo.orderTime}`}
+                  {`开台时间：${item.orderInfo?.orderTime}`}
                   <br />
                   {`已过时间：${renderTime(item)}（小时）`}
                   <br />
-                  {`游戏人数：${item.orderInfo.detailList?.length}`}
+                  {`游戏人数：${item.orderInfo?.detailList?.length}`}
                 </ProCard>
               </List.Item>
             ) : (

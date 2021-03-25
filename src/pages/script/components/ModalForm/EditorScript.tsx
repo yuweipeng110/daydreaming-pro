@@ -19,7 +19,7 @@ const options = {
   defaultRows: 5, // 默认行数
   withDropdown: true, // 插入表格前是否弹出下拉菜单
   columnResizable: true, // 是否允许拖动调整列宽，默认false
-  exportAttrString: 'border="1"', // 指定输出HTML时附加到table标签上的属性字符串
+  exportAttrString: 'border="1" style="border-collapse: collapse"', // 指定输出HTML时附加到table标签上的属性字符串
 };
 
 export type TProps = {
@@ -41,6 +41,7 @@ const EditorScript: React.FC<TProps> = (props) => {
 
   // 内容回显
   const editorContentEcho = () => {
+    console.log('currentData.content',currentData.content);
     setEditorContent(BraftEditor.createEditorState(currentData.content));
   };
 

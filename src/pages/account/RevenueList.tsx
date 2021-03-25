@@ -168,7 +168,6 @@ const RevenueList: React.FC<TProps> = (props) => {
             }}
           />
         )
-
       },
     },
   ];

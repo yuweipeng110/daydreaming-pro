@@ -44,10 +44,10 @@ const HostSelect: React.FC<IProps> = (props) => {
   useEffect(() => {
     if (currentData) {
       // host select options
-      const { hostInfo } = currentData.orderInfo;
+      const { hostInfo } = currentData.orderInfo!;
       const hostOptionList = {
-        value: Number(hostInfo.id),
-        label: `${hostInfo.phone}-${hostInfo.nickname}`,
+        value: Number(hostInfo?.id),
+        label: `${hostInfo?.phone}-${hostInfo?.nickname}`,
       };
       setHostOptions([hostOptionList]);
     } else {

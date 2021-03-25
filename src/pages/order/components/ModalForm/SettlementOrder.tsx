@@ -42,7 +42,7 @@ const SettlementOrder: React.FC<TProps> = (props) => {
     ? {
         ...currentData.orderInfo,
         scriptId: Number(currentData.id),
-        hostId: Number(currentData.orderInfo.hostInfo.id),
+        hostId: Number(currentData.orderInfo?.hostInfo?.id),
       }
     : {};
   const [scriptOptions, setScriptOptions] = useState<IOptions[]>([]);
@@ -70,10 +70,10 @@ const SettlementOrder: React.FC<TProps> = (props) => {
         const scriptOptionList = { value: Number(currentData.id), label: currentData.title };
         setScriptOptions([scriptOptionList]);
         // host select options
-        const { hostInfo } = currentData.orderInfo;
+        const { hostInfo } = currentData.orderInfo!;
         const hostOptionList = {
-          value: Number(hostInfo.id),
-          label: `${hostInfo.phone}-${hostInfo.nickname}`,
+          value: Number(hostInfo?.id),
+          label: `${hostInfo?.phone}-${hostInfo?.nickname}`,
         };
         setHostOptions([hostOptionList]);
       }
@@ -97,8 +97,6 @@ const SettlementOrder: React.FC<TProps> = (props) => {
       orderDetailList: values.detailList,
       // storeId,scriptId,deskId,orderOperatorId,remark,detailList
     };
-    // console.log('SettlementOrder-submit-params', params);
-    // return false;
     const res = await settlementOrderApi(params);
     if (Number(res.code) !== STATUS_CODE.SUCCESS) {
       message.error({ content: res.msg, key: loadingKey, duration: 2 });

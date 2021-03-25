@@ -8,7 +8,7 @@ export interface IStoreTable {
   phoneNumber: string;
   address: string;
   bossId: number;
-  bossInfo: ISystemUserTable;
+  bossInfo?: ISystemUserTable;
 }
 
 export interface IStoreResponse extends IResponse {

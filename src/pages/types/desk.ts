@@ -6,8 +6,8 @@ export interface IDeskTable {
   id: number;
   title: string;
   storeId: string;
-  storeInfo: IStoreTable;
-  orderInfo: IOrderTable;
+  storeInfo?: IStoreTable;
+  orderInfo?: IOrderTable;
   isEnabled: boolean;
 }
 

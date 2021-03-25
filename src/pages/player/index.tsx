@@ -46,7 +46,6 @@ const PlayerList: React.FC<ConnectProps & StateProps> = (props) => {
     {
       title: 'ID',
       dataIndex: 'id',
-      key: 'id',
       search: false,
     },
     {
@@ -110,12 +109,10 @@ const PlayerList: React.FC<ConnectProps & StateProps> = (props) => {
     {
       title: '备注',
       dataIndex: 'remark',
-      key: 'remark',
       search: false,
     },
     {
       title: '操作',
-      key: 'action',
       search: false,
       render: (record: any) => (
         <Space size="middle">

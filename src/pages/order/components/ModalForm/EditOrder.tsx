@@ -25,7 +25,7 @@ const EditOrder: React.FC<IProps> = (props) => {
     ? {
         ...currentData.orderInfo,
         scriptId: Number(currentData.id),
-        hostId: Number(currentData.orderInfo.hostInfo.id),
+        hostId: Number(currentData.orderInfo?.hostInfo?.id),
       }
     : {};
   const [form] = Form.useForm();
