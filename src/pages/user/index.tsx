@@ -59,6 +59,7 @@ const UserList: React.FC<ConnectProps & StateProps> = (props) => {
       dataIndex: 'remark',
       key: 'remark',
       search: false,
+      ellipsis: true,
     },
     {
       title: '操作',

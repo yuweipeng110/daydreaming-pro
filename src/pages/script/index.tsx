@@ -84,17 +84,19 @@ const ScriptList: React.FC<ConnectProps & StateProps> = (props) => {
       title: '改编内容',
       dataIndex: 'adaptContent',
       search: false,
+      ellipsis: true,
     },
     {
       title: '描述',
       dataIndex: 'description',
       search: false,
+      ellipsis: true,
     },
     {
       title: '操作',
       search: false,
       render: (record: any) => (
-        <Space size='middle'>
+        <Space size="middle">
           <a onClick={() => editScriptModalStatusSwitch(true, record)}>修改</a>
           <a onClick={() => editorScriptModalStatusSwitch(true, record)}>内容</a>
         </Space>
@@ -105,13 +107,13 @@ const ScriptList: React.FC<ConnectProps & StateProps> = (props) => {
   return (
     <PageContainer>
       <ProTable<IScriptTable>
-        headerTitle='剧本管理'
+        headerTitle="剧本管理"
         actionRef={actionRef}
-        rowKey='id'
+        rowKey="id"
         toolBarRender={() => [
           <Button
-            type='primary'
-            key='primary'
+            type="primary"
+            key="primary"
             onClick={() => {
               editScriptModalStatusSwitch(true);
             }}

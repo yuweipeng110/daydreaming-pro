@@ -83,6 +83,7 @@ const OrderHistoryList: React.FC<ConnectProps & StateProps> = (props) => {
       title: '备注',
       dataIndex: 'remark',
       search: false,
+      ellipsis: true,
     },
     {
       title: '操作',

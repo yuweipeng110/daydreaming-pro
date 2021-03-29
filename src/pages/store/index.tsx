@@ -58,6 +58,7 @@ const StoreList: React.FC = () => {
       dataIndex: 'address',
       width: '30%',
       search: false,
+      ellipsis: true,
     },
     {
       title: '操作',
@@ -68,16 +69,16 @@ const StoreList: React.FC = () => {
   return (
     <PageContainer>
       <ProTable<IStoreTable>
-        headerTitle='门店管理'
+        headerTitle="门店管理"
         actionRef={actionRef}
-        rowKey='id'
+        rowKey="id"
         search={{
           labelWidth: 'auto',
         }}
         toolBarRender={() => [
           <Button
-            type='primary'
-            key='primary'
+            type="primary"
+            key="primary"
             onClick={() => {
               editStoreModalStatusSwitch(true);
             }}
