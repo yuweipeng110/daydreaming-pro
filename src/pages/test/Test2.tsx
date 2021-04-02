@@ -3,8 +3,8 @@ import { Menu, Dropdown } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import moment from 'moment';
 
-export default () => {
-  const timerHandle = useRef();
+const Test2: React.FC = () => {
+  const timerHandle = useRef<NodeJS.Timeout>();
   const [nums, setNums] = useState<number>(5);
 
   useEffect(() => {
@@ -13,12 +13,13 @@ export default () => {
 
   useEffect(() => {
     if (nums !== 0) {
-      // @ts-ignore
       timerHandle.current = setInterval(() => {
         // 这时候的num由于闭包的原因，一直是0，所以这里不能用setNum(num-1)
         setNums((n) => {
           if (n === 1) {
-            clearInterval(timerHandle.current);
+            if (timerHandle.current) {
+              clearInterval(timerHandle.current);
+            }
           }
           return n - 1;
         });
@@ -27,7 +28,9 @@ export default () => {
     console.log('nums', nums);
     return () => {
       // 组件销毁时，清除定时器
-      clearInterval(timerHandle.current);
+      if (timerHandle.current) {
+        clearInterval(timerHandle.current);
+      }
     };
   }, [nums]);
 
@@ -62,3 +65,5 @@ export default () => {
     </>
   );
 };
+
+export default Test2;
