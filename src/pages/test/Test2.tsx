@@ -30,6 +30,7 @@ const Test2: React.FC = () => {
       console.log('componentWillUnmount');
       console.log('componentWillUnmountTest');
       console.log('componentWillUnmountTest22');
+      console.log('componentWillUnmountTest33');
       // 组件销毁时，清除定时器
       if (timerHandle.current) {
         clearInterval(timerHandle.current);
