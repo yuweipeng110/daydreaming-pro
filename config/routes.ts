@@ -40,6 +40,11 @@
         component: './test/test4',
       },
       {
+        path: '/test5',
+        name: 'test5',
+        component: './test/test5',
+      },
+      {
         path: '/rankList',
         name: 'userIntegralRankList',
         component: './statistics/userIntegralRankList',
