@@ -32,7 +32,7 @@ export default (props: OrderDetailViewProps) => {
     {
       title: '折扣(%)',
       dataIndex: 'discountPercentage',
-      render: (value) => <>{value}%</>,
+      valueType: 'percent',
     },
     {
       title: '结算方式',
@@ -63,8 +63,8 @@ export default (props: OrderDetailViewProps) => {
     {
       title: '主持人',
       dataIndex: 'host',
-      render: (dom, entity) => {
-        return `${entity.hostInfo.phone}-${entity.hostInfo.nickname}`;
+      render: (value, record) => {
+        return `${record.hostInfo?.phone}-${record.hostInfo?.nickname}`;
       },
     },
     {
@@ -86,6 +86,9 @@ export default (props: OrderDetailViewProps) => {
       title: '结算时间',
       dataIndex: 'settlementTime',
       valueType: 'dateTime',
+      render: (value, record) => {
+        return record.settlementTime === '0000-00-00 00:00:00' ? '-' : value;
+      }
     },
     {
       title: '状态',

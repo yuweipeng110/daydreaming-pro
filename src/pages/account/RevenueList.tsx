@@ -100,15 +100,17 @@ const RevenueList: React.FC<TProps> = (props) => {
 
   const columns: ProColumns<IRevenueTable, 'customDataRange'>[] = [
     {
-      title: '用户',
-      search: false,
+      title: '用户昵称',
       dataIndex: 'user',
+      search: false,
       render: (text: any, record: any) => {
-        const userText = record.userInfo
-          ? `${record.userInfo.phone}-${record.userInfo.nickname}`
-          : '';
-        return <a onClick={() => viewUserModalStatusSwitch(true, record.userInfo)}>{userText}</a>;
+        return <a onClick={() => viewUserModalStatusSwitch(true, record.userInfo)}>{record.userInfo.nickname}</a>;
       },
+    },
+    {
+      title: '手机号',
+      dataIndex: ['userInfo','phone'],
+      search: false,
     },
     {
       title: '变动金额',
@@ -128,10 +130,10 @@ const RevenueList: React.FC<TProps> = (props) => {
       title: '订单号',
       dataIndex: 'order',
       search: false,
-      render: (text: any, record: any) => {
+      render: (value, record) => {
         const orderText = record.orderInfo ? record.orderInfo.orderNo : '';
         return (
-          <a onClick={() => viewOrderModalStatusSwitch(true, record.orderInfo)}>{orderText}</a>
+          <a onClick={() => viewOrderModalStatusSwitch(true, record.orderInfo!)}>{orderText}</a>
         );
       },
     },
@@ -179,7 +181,7 @@ const RevenueList: React.FC<TProps> = (props) => {
           ...values,
           valueTypeMap: {
             customDataRange: {
-              render: (text) => <a>{text}</a>,
+              render: (text) => text,
               renderFormItem: (_text, _props) => {
                 return (
                   <ProFormDateRangePicker

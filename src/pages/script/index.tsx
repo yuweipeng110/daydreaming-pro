@@ -34,11 +34,6 @@ const ScriptList: React.FC<ConnectProps & StateProps> = (props) => {
 
   const columns: ProColumns<IScriptTable>[] = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      search: false,
-    },
-    {
       title: ' 剧本名称',
       dataIndex: 'title',
     },

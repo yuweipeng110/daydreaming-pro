@@ -24,10 +24,9 @@ const DeskList: React.FC<ConnectProps & StateProps> = (props) => {
 
   const columns: ProColumns<IDeskTable>[] = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
-      search: false,
+      title: 'index',
+      dataIndex: 'index',
+      valueType: 'indexBorder',
     },
     {
       title: ' 桌号',

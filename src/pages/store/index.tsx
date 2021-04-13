@@ -21,11 +21,6 @@ const StoreList: React.FC = () => {
 
   const columns: ProColumns<IStoreTable>[] = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      search: false,
-    },
-    {
       title: '门店名称',
       dataIndex: 'storeName',
     },
@@ -56,7 +51,7 @@ const StoreList: React.FC = () => {
     {
       title: '门店地址',
       dataIndex: 'address',
-      width: '30%',
+      width: '20%',
       search: false,
       ellipsis: true,
     },

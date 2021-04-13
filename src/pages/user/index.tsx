@@ -24,12 +24,6 @@ const UserList: React.FC<ConnectProps & StateProps> = (props) => {
 
   const columns: ProColumns<IUserTable>[] = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
-      search: false,
-    },
-    {
       title: ' 昵称',
       dataIndex: 'nickname',
     },

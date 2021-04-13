@@ -108,7 +108,7 @@ const OrderList: React.FC<ConnectProps & StateProps> = (props) => {
                   className={styles.newButton}
                   onClick={() => createOrderModalStatusSwitch(true, item.id)}
                 >
-                  <PlusOutlined /> {`${item.id}-${item.title}`}
+                  <PlusOutlined /> {item.title}
                 </Button>
               </List.Item>
             )

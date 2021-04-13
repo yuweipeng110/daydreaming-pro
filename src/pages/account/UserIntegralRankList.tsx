@@ -6,6 +6,8 @@ import { IUserTable } from '@/pages/types/user';
 import { queryUserIntegralRankListApi } from '@/services/account';
 import { StoreRoleEnum, UserSexEnum } from '@/pages/constants';
 import { PageContainer } from '@ant-design/pro-layout';
+import { Carousel } from 'antd';
+import ViewUser from '@/pages/user/components/Modal/ViewUser';
 
 export type TProps = {
   loginUserInfo: IUserTable;
@@ -32,7 +34,14 @@ const UserIntegralRankList: React.FC<TProps> = (props) => {
   ];
   const [scriptPlayerRoleId, setScriptPlayerRoleId] = useState<number>(1);
   const [roleColumns, setRoleColumns] = useState<ProColumns<IUserTable>[]>(defaultRoleColumns);
+  const [viewUserModalVisible, handleViewUserModalVisible] = useState<boolean>(false);
+  const [userData, setUserData] = useState<IUserTable>(Object.create(null));
   const [rankingColumns, integralColumns, titleColumns] = roleColumns;
+
+  const viewUserModalStatusSwitch = (viewUserModalStatus: boolean, rowCurrentData: IUserTable) => {
+    handleViewUserModalVisible(viewUserModalStatus);
+    setUserData(rowCurrentData);
+  };
 
   const setCurrentRoleColumns = () => {
     let currentRoleColumns: ProColumns<IUserTable>[] = [];
@@ -114,6 +123,9 @@ const UserIntegralRankList: React.FC<TProps> = (props) => {
     {
       title: ' 昵称',
       dataIndex: 'nickname',
+      render: (value, record) => {
+        return <a onClick={() => viewUserModalStatusSwitch(true, record)}>{value}</a>;
+      },
     },
     {
       title: '性别',
@@ -153,6 +165,11 @@ const UserIntegralRankList: React.FC<TProps> = (props) => {
           pageSize: 10,
         }}
         columns={columns}
+      />
+      <ViewUser
+        visible={viewUserModalVisible}
+        onVisibleChange={handleViewUserModalVisible}
+        currentData={userData}
       />
     </PageContainer>
   );

@@ -75,8 +75,8 @@ const EditPromotions: React.FC<TProps> = (props) => {
       <ProFormText name="id" hidden />
       <ProForm.Group>
         <ProFormText
-          name="活动名称"
-          label="title"
+          label="活动名称"
+          name="title"
           width="md"
           rules={[
             {
@@ -88,8 +88,8 @@ const EditPromotions: React.FC<TProps> = (props) => {
       </ProForm.Group>
       <ProForm.Group>
         <ProFormDatePicker
-          name="活动开始时间"
-          label="startTime"
+          label="活动开始时间"
+          name="startTime"
           width="md"
           rules={[
             {
@@ -99,8 +99,8 @@ const EditPromotions: React.FC<TProps> = (props) => {
           ]}
         />
         <ProFormDatePicker
-          name="活动结束时间"
-          label="endTime"
+          label="活动结束时间"
+          name="endTime"
           width="md"
           rules={[
             {

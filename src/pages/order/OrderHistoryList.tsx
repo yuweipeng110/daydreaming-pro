@@ -78,6 +78,9 @@ const OrderHistoryList: React.FC<ConnectProps & StateProps> = (props) => {
       valueType: 'dateTime',
       search: false,
       align: 'center',
+      render: (value, record) => {
+        return record.settlementTime === '0000-00-00 00:00:00' ? '-' : value;
+      }
     },
     {
       title: '备注',
@@ -100,7 +103,7 @@ const OrderHistoryList: React.FC<ConnectProps & StateProps> = (props) => {
           ...values,
           valueTypeMap: {
             customDataRange: {
-              render: (text) => <a>{text}</a>,
+              render: (text) => text,
               renderFormItem: (_text, _props) => {
                 return (
                   <ProFormDateRangePicker

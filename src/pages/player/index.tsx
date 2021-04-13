@@ -44,11 +44,6 @@ const PlayerList: React.FC<ConnectProps & StateProps> = (props) => {
 
   const columns: ProColumns<IUserTable>[] = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      search: false,
-    },
-    {
       title: ' 昵称',
       dataIndex: 'nickname',
     },
@@ -115,6 +110,8 @@ const PlayerList: React.FC<ConnectProps & StateProps> = (props) => {
     {
       title: '操作',
       search: false,
+      align: 'center',
+      width: '10%',
       render: (record: any) => (
         <Space size="middle">
           <a onClick={() => accountRechargeModalStatusSwitch(true, record)}>充值</a>

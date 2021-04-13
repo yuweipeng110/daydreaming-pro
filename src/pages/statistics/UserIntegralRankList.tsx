@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Carousel } from 'antd';
+import ProTable, { ProColumns } from '@ant-design/pro-table';
 import { IUserTable } from '@/pages/types/user';
-import { STATUS_CODE, UserSexEnum } from "@/pages/constants";
-import { queryUserIntegralRankStatisticsListApi } from "@/services/statistics";
-import ProTable, { ProColumns } from "@ant-design/pro-table";
+import { STATUS_CODE, UserSexEnum } from '@/pages/constants';
+import { queryUserIntegralRankStatisticsListApi } from '@/services/statistics';
+import ViewUser from '@/pages/user/components/Modal/ViewUser';
 import './index.less';
 
 export default () => {
@@ -11,10 +12,21 @@ export default () => {
   const [userRankListKiller, setUserRankListKiller] = useState<IUserTable[]>([]);
   const [userRankListDetective, setUserRankListDetective] = useState<IUserTable[]>([]);
   const [userRankListPeople, setUserRankListPeople] = useState<IUserTable[]>([]);
+  const [viewUserModalVisible, handleViewUserModalVisible] = useState<boolean>(false);
+  const [userData, setUserData] = useState<IUserTable>(Object.create(null));
+
+  const viewUserModalStatusSwitch = (viewUserModalStatus: boolean, rowCurrentData: IUserTable) => {
+    handleViewUserModalVisible(viewUserModalStatus);
+    setUserData(rowCurrentData);
+  };
+
   const baseColumnsList: ProColumns<IUserTable>[] = [
     {
       title: ' 昵称',
       dataIndex: ['userInfo', 'nickname'],
+      render: (value, record: any) => {
+        return <a onClick={() => viewUserModalStatusSwitch(true, record.userInfo)}>{record.userInfo.nickname}</a>;
+      },
     },
     {
       title: '性别',
@@ -24,62 +36,62 @@ export default () => {
     {
       title: ' 手机号',
       dataIndex: ['userInfo', 'phone'],
-    }
+    },
   ];
   const totalColumnsList: ProColumns<IUserTable>[] = [
     {
       title: '排行',
-      dataIndex: ['userInfo','totalRanking'],
+      dataIndex: ['userInfo', 'totalRanking'],
     },
     {
       title: '积分',
-      dataIndex: ['userInfo','totalIntegral'],
+      dataIndex: ['userInfo', 'totalIntegral'],
     },
     {
       title: '称号',
-      dataIndex: ['userInfo','totalTitle'],
+      dataIndex: ['userInfo', 'totalTitle'],
     },
   ];
   const killerColumnsList: ProColumns<IUserTable>[] = [
     {
       title: '排行',
-      dataIndex: ['userInfo','killerRanking'],
+      dataIndex: ['userInfo', 'killerRanking'],
     },
     {
       title: '积分',
-      dataIndex: ['userInfo','killerIntegral'],
+      dataIndex: ['userInfo', 'killerIntegral'],
     },
     {
       title: '称号',
-      dataIndex: ['userInfo','killerTitle'],
+      dataIndex: ['userInfo', 'killerTitle'],
     },
   ];
   const detectiveColumnsList: ProColumns<IUserTable>[] = [
     {
       title: '排行',
-      dataIndex: ['userInfo','detectiveRanking'],
+      dataIndex: ['userInfo', 'detectiveRanking'],
     },
     {
       title: '积分',
-      dataIndex: ['userInfo','detectiveIntegral'],
+      dataIndex: ['userInfo', 'detectiveIntegral'],
     },
     {
       title: '称号',
-      dataIndex: ['userInfo','detectiveTitle'],
+      dataIndex: ['userInfo', 'detectiveTitle'],
     },
   ];
   const peopleColumnsList: ProColumns<IUserTable>[] = [
     {
       title: '排行',
-      dataIndex: ['userInfo','peopleRanking'],
+      dataIndex: ['userInfo', 'peopleRanking'],
     },
     {
       title: '积分',
-      dataIndex: ['userInfo','peopleIntegral'],
+      dataIndex: ['userInfo', 'peopleIntegral'],
     },
     {
       title: '称号',
-      dataIndex: ['userInfo','peopleTitle'],
+      dataIndex: ['userInfo', 'peopleTitle'],
     },
   ];
 
@@ -102,31 +114,31 @@ export default () => {
 
   const totalColumns: ProColumns<IUserTable>[] = [
     ...baseColumnsList,
-    ...totalColumnsList
+    ...totalColumnsList,
   ];
 
   const killerColumns: ProColumns<IUserTable>[] = [
     ...baseColumnsList,
-    ...killerColumnsList
+    ...killerColumnsList,
   ];
 
   const detectiveColumns: ProColumns<IUserTable>[] = [
     ...baseColumnsList,
-    ...detectiveColumnsList
+    ...detectiveColumnsList,
   ];
 
   const peopleColumns: ProColumns<IUserTable>[] = [
     ...baseColumnsList,
-    ...peopleColumnsList
+    ...peopleColumnsList,
   ];
 
   return (
-    <div>
+    <>
       <Carousel>
         <div className='carousel-content'>
           <ProTable<IUserTable>
-            headerTitle="总榜"
-            rowKey="id"
+            headerTitle='总榜'
+            rowKey='id'
             search={false}
             options={false}
             dataSource={userRankListTotal}
@@ -137,8 +149,8 @@ export default () => {
         </div>
         <div className='carousel-content'>
           <ProTable<IUserTable>
-            headerTitle="杀手榜"
-            rowKey="id"
+            headerTitle='杀手榜'
+            rowKey='id'
             search={false}
             options={false}
             dataSource={userRankListKiller}
@@ -149,8 +161,8 @@ export default () => {
         </div>
         <div className='carousel-content'>
           <ProTable<IUserTable>
-            headerTitle="侦探榜"
-            rowKey="id"
+            headerTitle='侦探榜'
+            rowKey='id'
             search={false}
             options={false}
             dataSource={userRankListDetective}
@@ -161,8 +173,8 @@ export default () => {
         </div>
         <div className='carousel-content'>
           <ProTable<IUserTable>
-            headerTitle="路人榜"
-            rowKey="id"
+            headerTitle='路人榜'
+            rowKey='id'
             search={false}
             options={false}
             dataSource={userRankListPeople}
@@ -172,6 +184,11 @@ export default () => {
           />
         </div>
       </Carousel>
-    </div>
+      <ViewUser
+        visible={viewUserModalVisible}
+        onVisibleChange={handleViewUserModalVisible}
+        currentData={userData}
+      />
+    </>
   );
 }
