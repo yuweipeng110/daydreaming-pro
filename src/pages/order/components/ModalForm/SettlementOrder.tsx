@@ -235,9 +235,7 @@ const SettlementOrder: React.FC<TProps> = (props) => {
         />
         <ProFormSelect name="hostId" label="主持人" width="md" options={hostOptions} disabled />
       </ProForm.Group>
-      <ProForm.Group>
-        <ProFormTextArea name="remark" label="备注" width="md" />
-      </ProForm.Group>
+        <ProFormTextArea name="remark" label="备注" width="xl" />
       <ProForm.Item name="detailList" trigger="onValuesChange">
         <EditableProTable<TOrderDetailTable>
           headerTitle="玩家列表"

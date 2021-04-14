@@ -1,10 +1,12 @@
-import { Modal } from 'antd';
+import { Modal, Tabs } from 'antd';
 import type { IOrderTable } from '@/pages/types/order';
 import type { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import ProDescriptions from '@ant-design/pro-descriptions';
 import ProTable, { ProColumns } from '@ant-design/pro-table';
 import { IOrderDetailTable } from '@/pages/types/orderDetail';
 import { OrderStatusEnum, SettlementMethodEnum, UserSexEnum } from '@/pages/constants';
+
+const { TabPane } = Tabs;
 
 export type OrderDetailViewProps = {
   visible: boolean;
@@ -113,15 +115,19 @@ export default (props: OrderDetailViewProps) => {
       footer={false}
     >
       <ProDescriptions column={2} title="订单基本信息" dataSource={currentData} columns={columns} />
-      <ProTable<IOrderDetailTable>
-        headerTitle="订单明细"
-        rowKey="id"
-        search={false}
-        options={false}
-        dataSource={currentData.detailList}
-        pagination={false}
-        columns={orderDetailColumns}
-      />
+      <Tabs defaultActiveKey="1" type="card">
+        <TabPane tab="订单明细" key="1">
+          <ProTable<IOrderDetailTable>
+            headerTitle="订单明细列表"
+            rowKey="id"
+            search={false}
+            options={false}
+            dataSource={currentData.detailList}
+            pagination={false}
+            columns={orderDetailColumns}
+          />
+        </TabPane>
+      </Tabs>
     </Modal>
   );
 };

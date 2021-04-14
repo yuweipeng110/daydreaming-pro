@@ -31,11 +31,6 @@ const PromotionsList: React.FC<TProps> = (props) => {
 
   const columns: ProColumns<IPromotionsTable>[] = [
     {
-      title: 'index',
-      dataIndex: 'index',
-      valueType: 'indexBorder',
-    },
-    {
       title: '活动名称',
       dataIndex: 'title',
       search: false,

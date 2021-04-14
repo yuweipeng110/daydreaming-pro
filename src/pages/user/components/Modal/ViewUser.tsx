@@ -1,7 +1,9 @@
-import { Modal } from 'antd';
+import { Modal, Tabs } from 'antd';
 import ProDescriptions, { ProDescriptionsItemProps } from '@ant-design/pro-descriptions';
 import { IUserTable } from '@/pages/types/user';
 import { UserRoleEnum, UserSexEnum } from '@/pages/constants';
+
+const { TabPane } = Tabs;
 
 export type ViewUserProps = {
   visible: boolean;
@@ -41,6 +43,28 @@ export default (props: ViewUserProps) => {
       dataIndex: 'otime',
       valueType: 'dateTime',
     },
+    {
+      title: '账户余额',
+      dataIndex: 'accountBalance',
+      valueType: 'money',
+    },
+    {
+      title: '代金劵余额',
+      dataIndex: 'voucherBalance',
+      valueType: 'money',
+    },
+    {
+      title: '可用积分',
+      dataIndex: 'activeIntegral',
+    },
+    {
+      title: '备注',
+      dataIndex: 'remark',
+      span: 3,
+    },
+  ];
+
+  const userIntegralColumns: ProDescriptionsItemProps<IUserTable>[] = [
     {
       title: '杀手排行',
       dataIndex: 'killerRanking',
@@ -89,25 +113,6 @@ export default (props: ViewUserProps) => {
       title: '总榜称号',
       dataIndex: 'totalTitle',
     },
-    {
-      title: '账户余额',
-      dataIndex: 'accountBalance',
-      valueType: 'money',
-    },
-    {
-      title: '代金劵余额',
-      dataIndex: 'voucherBalance',
-      valueType: 'money',
-    },
-    {
-      title: '可用积分',
-      dataIndex: 'activeIntegral',
-    },
-    {
-      title: '备注',
-      dataIndex: 'remark',
-      span: 3,
-    },
   ];
 
   return (
@@ -122,6 +127,11 @@ export default (props: ViewUserProps) => {
       footer={false}
     >
       <ProDescriptions column={3} title="用户基本信息" dataSource={currentData} columns={columns} />
+      <Tabs defaultActiveKey="1" type="card">
+        <TabPane tab="用户积分信息" key="1">
+          <ProDescriptions column={3} title="用户积分信息" dataSource={currentData} columns={userIntegralColumns} />
+        </TabPane>
+      </Tabs>
     </Modal>
   );
 };

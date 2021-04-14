@@ -121,6 +121,10 @@ const EditPromotions: React.FC<TProps> = (props) => {
               message: '输入充值金额!',
             },
           ]}
+          fieldProps={{
+            formatter: (value: any) => `￥${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+            parser: (value: any) => value.replace(/￥\s?|(,*)/g, '')
+          }}
         />
         <ProFormDigit
           label="赠送金额(代金劵)"
@@ -132,6 +136,10 @@ const EditPromotions: React.FC<TProps> = (props) => {
               message: '输入赠送金额!',
             },
           ]}
+          fieldProps={{
+            formatter: (value: any) => `￥${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+            parser: (value: any) => value.replace(/￥\s?|(,*)/g, '')
+          }}
         />
       </ProForm.Group>
     </ModalForm>
