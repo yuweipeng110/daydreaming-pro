@@ -100,11 +100,20 @@
   border-radius: 2px;
 }
 
-.CodeMirror { line-height: 1.2; }
-@media screen and (min-width: 1300px) {
-  article { max-width: 1000px; }
-  #nav { border-right: 499px solid transparent; }
+.CodeMirror {
+  line-height: 1.2;
 }
+
+@media screen and (min-width: 1300px) {
+  article {
+    max-width: 1000px;
+  }
+
+  #nav {
+    border-right: 499px solid transparent;
+  }
+}
+
 span.clicky {
   padding: 0 3px;
   color: white;
@@ -116,6 +125,7 @@ span.clicky {
 .div-code-title {
   display: flex;
   justify-content: space-between;
+
   .code-title {
     width: 100%;
     padding: 4px 0 6px 15px;
@@ -125,4 +135,8 @@ span.clicky {
     background: #FAFBFC;
     border: 1px solid #EEEEEE;
   }
+}
+
+.breakpoints {
+  width: .8em;
 }

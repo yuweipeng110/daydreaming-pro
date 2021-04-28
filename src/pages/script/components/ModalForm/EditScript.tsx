@@ -35,13 +35,8 @@ const EditScript: React.FC<TProps> = (props) => {
       scriptId: values.id,
       storeId: loginUserInfo.storeId,
     };
-    let res;
-    if (!currentData) {
-      res = await addScriptApi(params);
-    } else {
-      res = await editScriptApi(params);
-    }
-    if (Number(res.code) !== STATUS_CODE.SUCCESS) {
+    const res = !currentData ? await addScriptApi(params) : await editScriptApi(params);
+    if (res.code !== STATUS_CODE.SUCCESS) {
       message.error({ content: res.msg, key: loadingKey, duration: 2 });
       return false;
     }
@@ -63,7 +58,7 @@ const EditScript: React.FC<TProps> = (props) => {
 
   return (
     <ModalForm
-      title="剧本信息"
+      title='剧本信息'
       visible={visible}
       onVisibleChange={(visibleValue) => {
         form.resetFields();
@@ -73,12 +68,12 @@ const EditScript: React.FC<TProps> = (props) => {
       onFinish={onFinish}
       initialValues={initialValues}
     >
-      <ProFormText name="id" hidden />
+      <ProFormText name='id' hidden />
       <ProForm.Group>
         <ProFormText
-          name="title"
-          label="剧本名称"
-          width="md"
+          name='title'
+          label='剧本名称'
+          width='md'
           rules={[
             {
               required: true,
@@ -87,9 +82,9 @@ const EditScript: React.FC<TProps> = (props) => {
           ]}
         />
         <ProFormText
-          name="type"
-          label="类型"
-          width="md"
+          name='type'
+          label='类型'
+          width='md'
           rules={[
             {
               required: true,
@@ -100,9 +95,9 @@ const EditScript: React.FC<TProps> = (props) => {
       </ProForm.Group>
       <ProForm.Group>
         <ProFormText
-          name="costPrice"
-          label="成本价格"
-          width="md"
+          name='costPrice'
+          label='成本价格'
+          width='md'
           rules={[
             {
               required: true,
@@ -111,9 +106,9 @@ const EditScript: React.FC<TProps> = (props) => {
           ]}
         />
         <ProFormText
-          name="formatPrice"
-          label="开本价格"
-          width="md"
+          name='formatPrice'
+          label='开本价格'
+          width='md'
           rules={[
             {
               required: true,
@@ -123,16 +118,16 @@ const EditScript: React.FC<TProps> = (props) => {
         />
       </ProForm.Group>
       <ProForm.Group>
-        <ProFormText name="applicableNumber" label="适用人数" width="md" />
-        <ProFormDigit name="amount" label="拥有数量" width="md" />
+        <ProFormText name='applicableNumber' label='适用人数' width='md' />
+        <ProFormDigit name='amount' label='拥有数量' width='md' />
       </ProForm.Group>
       <ProForm.Group>
-        <ProFormText name="gameTime" label="游戏时间（小时）" width="md" />
-        <ProFormSwitch name="isAdapt" label="是否改编" />
+        <ProFormText name='gameTime' label='游戏时间（小时）' width='md' />
+        <ProFormSwitch name='isAdapt' label='是否改编' />
       </ProForm.Group>
       <ProForm.Group>
-        <ProFormTextArea name="description" label="描述" width="md" />
-        <ProFormTextArea name="adaptContent" label="改编内容" width="md" />
+        <ProFormTextArea name='description' label='描述' width='md' />
+        <ProFormTextArea name='adaptContent' label='改编内容' width='md' />
       </ProForm.Group>
     </ModalForm>
   );

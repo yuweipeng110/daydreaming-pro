@@ -34,13 +34,8 @@ const EditPromotions: React.FC<TProps> = (props) => {
       promotionsId: values.id,
       storeId: loginUserInfo.storeId,
     };
-    let res: IAddPromotionsResponse;
-    if (!currentData) {
-      res = await addPromotionsApi(params);
-    } else {
-      res = await editPromotionsApi(params);
-    }
-    if (Number(res.code) !== STATUS_CODE.SUCCESS) {
+    const res: IAddPromotionsResponse = !currentData ? await addPromotionsApi(params) : await editPromotionsApi(params);
+    if (res.code !== STATUS_CODE.SUCCESS) {
       message.error({ content: res.msg, key: loadingKey, duration: 2 });
       return false;
     }
@@ -62,7 +57,7 @@ const EditPromotions: React.FC<TProps> = (props) => {
 
   return (
     <ModalForm
-      title="活动信息"
+      title='活动信息'
       visible={visible}
       onVisibleChange={(visibleValue) => {
         form.resetFields();
@@ -72,12 +67,12 @@ const EditPromotions: React.FC<TProps> = (props) => {
       onFinish={onFinish}
       initialValues={initialValues}
     >
-      <ProFormText name="id" hidden />
+      <ProFormText name='id' hidden />
       <ProForm.Group>
         <ProFormText
-          label="活动名称"
-          name="title"
-          width="md"
+          label='活动名称'
+          name='title'
+          width='md'
           rules={[
             {
               required: true,
@@ -88,9 +83,9 @@ const EditPromotions: React.FC<TProps> = (props) => {
       </ProForm.Group>
       <ProForm.Group>
         <ProFormDatePicker
-          label="活动开始时间"
-          name="startTime"
-          width="md"
+          label='活动开始时间'
+          name='startTime'
+          width='md'
           rules={[
             {
               required: true,
@@ -99,9 +94,9 @@ const EditPromotions: React.FC<TProps> = (props) => {
           ]}
         />
         <ProFormDatePicker
-          label="活动结束时间"
-          name="endTime"
-          width="md"
+          label='活动结束时间'
+          name='endTime'
+          width='md'
           rules={[
             {
               required: true,
@@ -112,9 +107,9 @@ const EditPromotions: React.FC<TProps> = (props) => {
       </ProForm.Group>
       <ProForm.Group>
         <ProFormDigit
-          label="充值金额"
-          name="rechargeMoney"
-          width="md"
+          label='充值金额'
+          name='rechargeMoney'
+          width='md'
           rules={[
             {
               required: true,
@@ -123,13 +118,13 @@ const EditPromotions: React.FC<TProps> = (props) => {
           ]}
           fieldProps={{
             formatter: (value: any) => `￥${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-            parser: (value: any) => value.replace(/￥\s?|(,*)/g, '')
+            parser: (value: any) => value.replace(/￥\s?|(,*)/g, ''),
           }}
         />
         <ProFormDigit
-          label="赠送金额(代金劵)"
-          name="voucherMoney"
-          width="md"
+          label='赠送金额(代金劵)'
+          name='voucherMoney'
+          width='md'
           rules={[
             {
               required: true,
@@ -138,7 +133,7 @@ const EditPromotions: React.FC<TProps> = (props) => {
           ]}
           fieldProps={{
             formatter: (value: any) => `￥${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
-            parser: (value: any) => value.replace(/￥\s?|(,*)/g, '')
+            parser: (value: any) => value.replace(/￥\s?|(,*)/g, ''),
           }}
         />
       </ProForm.Group>

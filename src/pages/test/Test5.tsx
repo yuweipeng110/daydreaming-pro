@@ -30,7 +30,7 @@ export default () => {
     const orig1 = '<!doctype html>\n\n' + value.replace(/\.\.\//g, 'codemirror/').replace('Compatible', 'Compatible3');
     const orig2 = value.replace(/\u003cscript/g, '\u003cscript type="text/javascript" ')
       .replace('antd,umi', 'purple;\n      font: comic sans;\n      text-decoration: underline;\n      height: 15em');
-    const mergeDivvView = CodeMirror.MergeView(mergeDiffViewRef.current, {
+    const mergeDivvView  = CodeMirror.MergeView(mergeDiffViewRef.current, {
       // centerValue
       value,
       // leftValue
@@ -45,26 +45,49 @@ export default () => {
       // connect: 'align',
       connect: '',
       collapseIdentical: collapse,
+      gutterClick: () => {
+        console.log('gutterClick.value');
+      },
       // allowEditingOriginals: false, //允许编辑文件
       // theme: 'eclipse',
       // gutters: ['CodeMirror-lint-markers'],
       // lint: true,
+    });
+
+    mergeDivvView.leftOriginal().on('gutterClick', (instance, line, gutter,clickEvent) => {
+      // console.log('leftOriginal.gutterClick',instance,line,gutter);
+      const newValue = `${instance.lineInfo(line).text}\n`;
+      mergeDivvView.editor().replaceRange(newValue, { line, ch: 0 }, { line, ch: 0 });
+      // 光标所在地插入字符
+      // mergeDivvView.editor().replaceSelection('tttt');
+      instance.setGutterMarker(line, "breakpoints", instance.lineInfo(line).gutterMarkers ? null : makeMarker());
+    });
+    mergeDivvView.rightOriginal().on('gutterClick', (instance, line, gutter) => {
+      const newValue = `${instance.lineInfo(line).text}\n`;
+      mergeDivvView.editor().replaceRange(newValue, { line, ch: 0 }, { line, ch: 0 });
     });
     mergeDivvView.setShowDifferences(true);
     // dv.current?.editor().getValue()
     dv.current = mergeDivvView;
   };
 
+  const makeMarker = () => {
+    const marker = document.createElement('div');
+    marker.style.color = '#822';
+    marker.innerHTML = '●';
+    return marker;
+  }
+
   useEffect(() => {
     initCodeMirrorMergeView();
-    const d = document.createElement("div");
-    d.style.cssText = "width: 50px; margin: 7px; height: 14px";
+    const d = document.createElement('div');
+    d.style.cssText = 'width: 50px; margin: 7px; height: 14px';
     dv.current?.editor().addLineWidget(57, d);
   }, []);
 
   const handleGetMergeValue = () => {
-    console.log('mergeValue',dv.current?.editor().getValue());
-  }
+    console.log('mergeValue', dv.current?.editor().getValue());
+  };
 
   return (
     <>

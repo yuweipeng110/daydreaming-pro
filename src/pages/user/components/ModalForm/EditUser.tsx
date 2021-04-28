@@ -1,4 +1,4 @@
-import React  from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { ConnectProps, ConnectState } from '@/models/connect';
 import { Form, message } from 'antd';
@@ -35,19 +35,14 @@ const EditUser: React.FC<TProps> = (props) => {
       userId: values.id,
       storeId: loginUserInfo.storeId,
     };
-    let res: IAddUserResponse;
-    if (!currentData) {
-      res = await addUserApi(params);
-    } else {
-      res = await editUserApi(params);
-    }
+    const res: IAddUserResponse = !currentData && await addUserApi(params) || await editUserApi(params);
     if (Number(res.code) === STATUS_CODE.CHECK_ERROR) {
       const phoneError = res.data.phoneExists
         ? {}
         : {
-            name: 'phone',
-            errors: ['手机号码已存在'],
-          };
+          name: 'phone',
+          errors: ['手机号码已存在'],
+        };
       const errorList = [phoneError];
       hide();
       // @ts-ignore
@@ -72,7 +67,7 @@ const EditUser: React.FC<TProps> = (props) => {
 
   return (
     <ModalForm
-      title="修改用户信息"
+      title='修改用户信息'
       visible={visible}
       onVisibleChange={(visibleValue) => {
         form.resetFields();
@@ -82,12 +77,12 @@ const EditUser: React.FC<TProps> = (props) => {
       onFinish={onFinish}
       initialValues={initialValues}
     >
-      <ProFormText name="id" hidden />
+      <ProFormText name='id' hidden />
       <ProForm.Group>
         <ProFormText
-          name="nickname"
-          label="昵称"
-          width="md"
+          name='nickname'
+          label='昵称'
+          width='md'
           rules={[
             {
               required: true,
@@ -96,9 +91,9 @@ const EditUser: React.FC<TProps> = (props) => {
           ]}
         />
         <ProFormRadio.Group
-          name="sex"
-          label="性别"
-          width="md"
+          name='sex'
+          label='性别'
+          width='md'
           options={[
             {
               value: '0',
@@ -119,9 +114,9 @@ const EditUser: React.FC<TProps> = (props) => {
       </ProForm.Group>
       <ProForm.Group>
         <ProFormText
-          name="phone"
-          label="手机号"
-          width="md"
+          name='phone'
+          label='手机号'
+          width='md'
           rules={[
             {
               required: true,
@@ -129,10 +124,10 @@ const EditUser: React.FC<TProps> = (props) => {
             },
           ]}
         />
-        <ProFormDatePicker name="birthday" label="生日" width="md" />
+        <ProFormDatePicker name='birthday' label='生日' width='md' />
       </ProForm.Group>
       <ProForm.Group>
-        <ProFormTextArea name="remark" label="备注" width="md" />
+        <ProFormTextArea name='remark' label='备注' width='md' />
       </ProForm.Group>
     </ModalForm>
   );

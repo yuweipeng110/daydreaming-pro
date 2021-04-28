@@ -8,6 +8,7 @@ import { IStoreTable } from '@/pages/types/store';
 import EditStore from '@/pages/store/components/ModalForm/EditStore';
 import { queryStoreListApi } from '@/services/store';
 import { StoreStatusEnum } from '@/pages/constants';
+import Authorized from '@/components/Authorized/Authorized';
 
 const StoreList: React.FC = () => {
   const actionRef = useRef<ActionType>();
@@ -35,7 +36,7 @@ const StoreList: React.FC = () => {
     },
     {
       title: '管理员 (密码)',
-      dataIndex: ['bossInfo', 'passWord'],
+      dataIndex: ['bossInfo', 'password'],
       search: false,
     },
     {
@@ -62,39 +63,41 @@ const StoreList: React.FC = () => {
   ];
 
   return (
-    <PageContainer>
-      <ProTable<IStoreTable>
-        headerTitle="门店管理"
-        actionRef={actionRef}
-        rowKey="id"
-        search={{
-          labelWidth: 'auto',
-        }}
-        toolBarRender={() => [
-          <Button
-            type="primary"
-            key="primary"
-            onClick={() => {
-              editStoreModalStatusSwitch(true);
-            }}
-          >
-            <PlusOutlined /> 新建门店
-          </Button>,
-        ]}
-        options={false}
-        request={(params) => queryStoreListApi({ ...params })}
-        pagination={{
-          pageSize: 10,
-        }}
-        columns={columns}
-      />
-      <EditStore
-        actionRef={actionRef}
-        visible={editStoreModalVisible}
-        onVisibleChange={handleEditStoreModalVisible}
-        currentData={currentData}
-      />
-    </PageContainer>
+    <Authorized authority={['admin']}>
+      <PageContainer>
+        <ProTable<IStoreTable>
+          headerTitle='门店管理'
+          actionRef={actionRef}
+          rowKey='id'
+          search={{
+            labelWidth: 'auto',
+          }}
+          toolBarRender={() => [
+            <Button
+              type='primary'
+              key='primary'
+              onClick={() => {
+                editStoreModalStatusSwitch(true);
+              }}
+            >
+              <PlusOutlined /> 新建门店
+            </Button>,
+          ]}
+          options={false}
+          request={(params) => queryStoreListApi({ ...params })}
+          pagination={{
+            pageSize: 10,
+          }}
+          columns={columns}
+        />
+        <EditStore
+          actionRef={actionRef}
+          visible={editStoreModalVisible}
+          onVisibleChange={handleEditStoreModalVisible}
+          currentData={currentData}
+        />
+      </PageContainer>
+    </Authorized>
   );
 };
 

@@ -89,6 +89,7 @@
                 name: '门店管理',
                 icon: 'dashboard',
                 component: './store',
+                authority: ['admin'],
               },
               {
                 path: '/user',
@@ -143,6 +144,7 @@
                 name: '营收记录',
                 icon: 'RedEnvelopeOutlined',
                 component: './account/RevenueList',
+                authority: ['admin'],
               },
               {
                 component: './404',

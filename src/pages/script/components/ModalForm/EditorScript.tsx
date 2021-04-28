@@ -8,6 +8,7 @@ import { editScriptApi } from '@/services/script';
 import { IUserTable } from '@/pages/types/user';
 import { STATUS_CODE } from '@/pages/constants';
 import BraftEditor, { EditorState } from 'braft-editor';
+// @ts-ignore
 import Table from 'braft-extensions/dist/table';
 import 'braft-editor/dist/index.css';
 import 'braft-extensions/dist/table.css';

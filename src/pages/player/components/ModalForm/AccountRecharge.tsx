@@ -92,7 +92,7 @@ const AccountRecharge: React.FC<TProps> = (props) => {
 
   return (
     <ModalForm
-      title="账户充值"
+      title='账户充值'
       visible={visible}
       onVisibleChange={(visibleValue) => {
         form.resetFields();
@@ -102,13 +102,13 @@ const AccountRecharge: React.FC<TProps> = (props) => {
       onFinish={onFinish}
       initialValues={initialValues}
     >
-      <ProFormText name="id" hidden />
+      <ProFormText name='id' hidden />
       <ProForm.Group>
-        <ProFormText name="nickname" label="昵称" width="md" disabled />
+        <ProFormText name='nickname' label='昵称' width='md' disabled />
         <ProFormRadio.Group
-          name="sex"
-          label="性别"
-          width="md"
+          name='sex'
+          label='性别'
+          width='md'
           options={[
             {
               value: 0,
@@ -123,17 +123,17 @@ const AccountRecharge: React.FC<TProps> = (props) => {
         />
       </ProForm.Group>
       <ProForm.Group>
-        <ProFormText name="phone" label="手机号" width="md" disabled />
-        <ProFormDatePicker name="birthday" label="生日" width="md" disabled />
+        <ProFormText name='phone' label='手机号' width='md' disabled />
+        <ProFormDatePicker name='birthday' label='生日' width='md' disabled />
       </ProForm.Group>
       <ProForm.Group>
-        <ProFormTextArea name="remark" label="备注" width="md" disabled />
+        <ProFormTextArea name='remark' label='备注' width='md' disabled />
       </ProForm.Group>
       <ProForm.Group>
         <ProFormDigit
-          name="accountBalance"
-          label="账户余额"
-          width="md"
+          name='accountBalance'
+          label='账户余额'
+          width='md'
           fieldProps={{
             formatter: (value: number) => `￥${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
             parser: (value: string) => value.replace(/￥\s?|(,*)/g, ''),
@@ -141,9 +141,9 @@ const AccountRecharge: React.FC<TProps> = (props) => {
           disabled
         />
         <ProFormDigit
-          name="voucherBalance"
-          label="代金卷余额"
-          width="md"
+          name='voucherBalance'
+          label='代金卷余额'
+          width='md'
           fieldProps={{
             formatter: (value: number) => `￥${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
             parser: (value: string) => value.replace(/￥\s?|(,*)/g, ''),
@@ -153,9 +153,9 @@ const AccountRecharge: React.FC<TProps> = (props) => {
       </ProForm.Group>
       <ProForm.Group>
         <ProFormDigit
-          name="rechargeAmount"
-          label="充值金额"
-          width="md"
+          name='rechargeAmount'
+          label='充值金额'
+          width='md'
           rules={[
             {
               required: true,
@@ -169,9 +169,9 @@ const AccountRecharge: React.FC<TProps> = (props) => {
           }}
         />
         <ProFormRadio.Group
-          name="paymentMethodId"
-          label="充值方式"
-          width="md"
+          name='paymentMethodId'
+          label='充值方式'
+          width='md'
           options={[
             {
               value: 1,
@@ -195,7 +195,7 @@ const AccountRecharge: React.FC<TProps> = (props) => {
         />
       </ProForm.Group>
       <ProForm.Group>
-        <Statistic title="赠送金额" prefix={'￥'} value={voucherMoney} precision={2} />
+        <Statistic title='赠送金额' prefix={'￥'} value={voucherMoney} precision={2} />
       </ProForm.Group>
     </ModalForm>
   );

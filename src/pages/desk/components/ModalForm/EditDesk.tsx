@@ -29,13 +29,8 @@ const EditDesk: React.FC<TProps> = (props) => {
       deskId: values.id,
       storeId: loginUserInfo.storeId,
     };
-    let res: IAddDeskResponse;
-    if (!currentData) {
-      res = await addDeskApi(params);
-    } else {
-      res = await editDeskApi(params);
-    }
-    if (Number(res.code) !== STATUS_CODE.SUCCESS) {
+    const res: IAddDeskResponse = !currentData ? await addDeskApi(params) : editDeskApi(params);
+    if (res.code !== STATUS_CODE.SUCCESS) {
       message.error({ content: res.msg, key: loadingKey, duration: 2 });
       return false;
     }

@@ -99,10 +99,12 @@ import storage from '@/utils/storage';
 import { getPageQuery } from '@/utils/utils';
 import { stringify } from 'querystring';
 import _ from 'lodash';
+import { setAuthority } from '@/utils/authority';
 
 export interface IUser {
   [key: string]: any;
 }
+
 // export type StateType = {
 //   status?: 'ok' | 'error';
 //   type?: string;
@@ -139,6 +141,11 @@ const partnerModel: ILoginModeType = {
       // Login successfully
       if (Number(res.code) === STATUS_CODE.SUCCESS) {
         storage.saveUserToken(res.data.userToken);
+        if (res.data.storeId === 1 && res.data.role === 1) {
+          setAuthority('admin');
+        } else {
+          setAuthority('guest');
+        }
         yield put({
           type: 'setLoginUserReducer',
           loginUserInfo: res.data,

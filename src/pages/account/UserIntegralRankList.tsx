@@ -6,7 +6,6 @@ import { IUserTable } from '@/pages/types/user';
 import { queryUserIntegralRankListApi } from '@/services/account';
 import { StoreRoleEnum, UserSexEnum } from '@/pages/constants';
 import { PageContainer } from '@ant-design/pro-layout';
-import { Carousel } from 'antd';
 import ViewUser from '@/pages/user/components/Modal/ViewUser';
 
 export type TProps = {

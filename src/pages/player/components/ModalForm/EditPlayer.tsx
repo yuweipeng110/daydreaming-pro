@@ -54,18 +54,13 @@ const EditPlayer: React.FC<TProps> = (props) => {
       playerId: values.id,
       storeId: loginUserInfo.storeId,
     };
-    let submitRes: IAddUserExists;
-    if (!currentData) {
-      submitRes = await dispatch({
-        type: 'player/addPlayerEffect',
-        params,
-      });
-    } else {
-      submitRes = await dispatch({
-        type: 'player/editPlayerEffect',
-        params,
-      });
-    }
+    const submitRes: IAddUserExists = !currentData ? await dispatch({
+      type: 'player/addPlayerEffect',
+      params,
+    }) : await dispatch({
+      type: 'player/editPlayerEffect',
+      params,
+    });
     if (!submitRes.phoneExists) {
       const phoneError = submitRes.phoneExists
         ? {}
