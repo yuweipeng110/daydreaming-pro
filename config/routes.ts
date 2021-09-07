@@ -45,6 +45,16 @@
         component: './test/test5',
       },
       {
+        path: '/test6',
+        name: 'test6',
+        component: './test/test6',
+      },
+      {
+        path: '/test7',
+        name: 'test7',
+        component: './test/test7',
+      },
+      {
         path: '/rankList',
         name: 'userIntegralRankList',
         component: './statistics/userIntegralRankList',
@@ -60,7 +70,7 @@
             routes: [
               {
                 path: '/',
-                redirect: '/welcome',
+                redirect: '/test',
               },
               {
                 path: '/welcome',

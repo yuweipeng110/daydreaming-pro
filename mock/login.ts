@@ -6,9 +6,10 @@ export default {
     data: {
       userToken: '1234567890',
       id: 1,
-      role: 2,
-      nickname: '小于',
+      role: 1,
+      nickname: '隋总',
       storeId: 1,
+      avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
     },
   },
   'POST /app/signin/login-token-check': {
@@ -17,9 +18,10 @@ export default {
     time: '2020-01-01 00:00:00',
     data: {
       id: 1,
-      role: 2,
-      nickname: '小于',
+      role: 1,
+      nickname: '隋总',
       storeId: 1,
+      avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
     },
   },
 };

@@ -6,6 +6,18 @@ export const getBase64 = (img: any, callback: any) => {
   reader.readAsDataURL(img);
 }
 
+export const getImgBase64 = async (file: any) => {
+  let imgBase64 = file.url;
+  if (!file.src) {
+    imgBase64 = await new Promise(resolve => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file.originFileObj);
+      reader.onload = () => resolve(reader.result);
+    });
+  }
+  return imgBase64;
+}
+
 export const beforeUpload = (file: any) => {
   const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
   if (!isJpgOrPng) {
@@ -17,3 +29,18 @@ export const beforeUpload = (file: any) => {
   }
   return isJpgOrPng && isLt2M;
 }
+
+export const onPreview = async (file: any) => {
+  let src = file.url;
+  if (!src) {
+    src = await new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file.originFileObj);
+      reader.onload = () => resolve(reader.result);
+    });
+  }
+  const image = new Image();
+  image.src = src;
+  const imgWindow = window.open(src);
+  imgWindow?.document.write(image.outerHTML);
+};

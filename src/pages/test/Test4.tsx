@@ -22,6 +22,14 @@ export default () => {
   BraftEditor.use(Table(options));
 
   useEffect(() => {
+    // get-promotions-list params isActive
+    // get-user-list params isHost
+    // get-revenue-list statistics total
+    // undone
+    // ping++ 聚合支付 ？order or recharge diff undone
+    // week undone
+    // editor no copy undone
+
     // oncontextmenu='return false'    禁止右键
     // ondragstart='return false'    禁止拖动
     // onselectstart ='return false'    禁止选中

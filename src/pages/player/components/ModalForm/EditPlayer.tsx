@@ -12,6 +12,7 @@ import ProForm, {
 import { IAddUserExists } from '@/pages/types/user';
 import { IUserTable } from '@/pages/types/user';
 import { UploadFile } from 'antd/lib/upload/interface';
+import { getImgBase64, beforeUpload, onPreview } from '@/utils/upload';
 
 export type TProps = {
   actionRef: any;
@@ -28,32 +29,55 @@ const EditPlayer: React.FC<TProps> = (props) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const onChange = ({ fileList: newFileList }: { fileList: UploadFile[] }) => {
+    console.log('fileList', newFileList);
     setFileList(newFileList);
   };
 
-  const onPreview = async (file: any) => {
-    let src = file.url;
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj);
-        reader.onload = () => resolve(reader.result);
-      });
-    }
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow?.document.write(image.outerHTML);
-  };
-
   const onSubmit = async (values: any) => {
+    let avatarObj = Object.create(null);
+    if (fileList.length > 0) {
+      const imgBase64 = await getImgBase64(fileList[0]);
+      avatarObj = {
+        avatar: imgBase64,
+        avatarThumbUrl: fileList[0].thumbUrl,
+      };
+    }
     const loadingKey = 'loadingKey';
     const hide = message.loading({ content: '正在保存...', key: loadingKey, duration: 0 });
     const params = {
       ...values,
       playerId: values.id,
       storeId: loginUserInfo.storeId,
+      ...avatarObj,
     };
+    // 1 = 1
+    // 1 > 1 2 3 4
+    // 33
+    // ===========
+    // 1 1
+    // 2 1
+    // 3 1
+    // 4 1
+    // ===========
+    // 33 1
+    // 33 2
+    // 33 3
+    // 33 4
+    // add =============
+    // TABLE DE ADD FILED OS_ID
+    // ADD TABLE RELATION ADD ID,ST_ID,DE_ID
+    // sql =============
+    // SELECT ID FROM DE
+    // WHERE OS_ID = 1
+    // OR ID IN ( SELECT DE_ID FROM RELATION WHERE ST_ID = 33 )
+
+    // price
+    // 6 20 WEEK RANGE IS_ENABLE
+    // 0 20 WEEK RANGE IS_ENABLE
+    // datetime >= 00:00 CONTRAST
+    // ADD SELECT * FROM A_101 WHERE F1_A101 = 'JOIN'
+    console.log('params', params);
+    return false;
     const submitRes: IAddUserExists = !currentData ? await dispatch({
       type: 'player/addPlayerEffect',
       params,
@@ -103,17 +127,18 @@ const EditPlayer: React.FC<TProps> = (props) => {
       initialValues={initialValues}
     >
       <ProFormText name='id' hidden />
-      {/*<ProForm.Group>*/}
-      {/*  <Upload*/}
-      {/*    // action='https://www.mocky.io/v2/5cc8019d300000980a055e76'*/}
-      {/*    listType="picture-card"*/}
-      {/*    fileList={fileList}*/}
-      {/*    onChange={onChange}*/}
-      {/*    onPreview={onPreview}*/}
-      {/*  >*/}
-      {/*    {fileList.length < 1 && '+ Upload'}*/}
-      {/*  </Upload>*/}
-      {/*</ProForm.Group>*/}
+      <ProForm.Group>
+        <Upload
+          // action='https://www.mocky.io/v2/5cc8019d300000980a055e76'
+          listType='picture-card'
+          fileList={fileList}
+          beforeUpload={beforeUpload}
+          onChange={onChange}
+          onPreview={onPreview}
+        >
+          {fileList.length < 1 && '+ Upload'}
+        </Upload>
+      </ProForm.Group>
       <ProForm.Group>
         <ProFormText
           name='nickname'

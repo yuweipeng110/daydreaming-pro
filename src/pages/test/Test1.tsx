@@ -1,34 +1,35 @@
-import React from 'react';
-import { Collapse } from 'antd';
-import './index.less';
-
-const { Panel } = Collapse;
+import LazyLoad from 'react-lazyload';
+import { useEffect, useState } from 'react';
+import Test6 from '@/pages/test/Test6';
+import Placeholder from './compoents/Placeholder';
 
 export default () => {
-
-  const callback = (key: any) => {
-    console.log(key);
-
-
+  const uniqueId = () => {
+    return (Math.random().toString(36) + '00000000000000000').slice(2, 10);
   };
+  const [arr, setArr] = useState([]);
 
-  const text = `
-  A dog is a type of domesticated animal.
-  Known for its loyalty and faithfulness,
-  it can be found as a welcome guest in many households across the world.
-`;
+  useEffect(() => {
+    setArr(Array.apply(null, Array(30)).map((a, index) => {
+      return {
+        uniqueId: uniqueId(),
+        // once: [6, 7].indexOf(index) > -1,
+        once: false,
+      };
+    }));
+  },[])
 
   return (
-    <Collapse defaultActiveKey={['1']} onChange={callback}>
-      <Panel header='This is panel header 1' key='1'>
-        <p>{text}</p>
-      </Panel>
-      <Panel header='This is panel header 2' key='2'>
-        <p>{text}</p>
-      </Panel>
-      <Panel header='This is panel header 3' key='3'>
-        <p>{text}</p>
-      </Panel>
-    </Collapse>
+    <>
+      {
+        arr.map((item,index) => {
+          return (
+            <LazyLoad once={false} key={index} placeholder={<Placeholder />} debounce={50}>
+              <Test6 index={index} />
+            </LazyLoad>
+          )
+        })
+      }
+    </>
   );
 };
