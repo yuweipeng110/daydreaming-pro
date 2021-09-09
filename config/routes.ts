@@ -45,11 +45,6 @@
         component: './test/test5',
       },
       {
-        path: '/test6',
-        name: 'test6',
-        component: './test/test6',
-      },
-      {
         path: '/test7',
         name: 'test7',
         component: './test/test7',

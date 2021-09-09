@@ -1,6 +1,5 @@
 import LazyLoad from 'react-lazyload';
 import { useEffect, useState } from 'react';
-import Test6 from '@/pages/test/Test6';
 import Placeholder from './compoents/Placeholder';
 
 export default () => {
@@ -25,7 +24,6 @@ export default () => {
         arr.map((item,index) => {
           return (
             <LazyLoad once={false} key={index} placeholder={<Placeholder />} debounce={50}>
-              <Test6 index={index} />
             </LazyLoad>
           )
         })

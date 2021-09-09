@@ -1,15 +1,16 @@
+import { useEffect } from 'react';
 import './index.less';
-import { createFromIconfontCN } from '@ant-design/icons';
 
-const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_2795224_xwzbo4ety.js',
-});
 export default () => {
+  useEffect(() => {
+    const a = null;
+    if (a === -1) {
+      console.log('xxxx');
+    }
+  }, []);
+
   return (
     <>
-      <div>
-        <IconFont type="icon-grid" style={{fontSize: 25}} />
-      </div>
       <div className="spinner">
         <div className="rect1"></div>
         <div className="rect2"></div>
