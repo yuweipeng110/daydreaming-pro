@@ -141,7 +141,6 @@
 //   width: .8em;
 // }
 
-
 // .placeholder {
 //   background: #f8f8f8;
 //   height: 200px;
@@ -201,23 +200,22 @@
 //      }
 // }
 
-
 .spinner {
-  margin: 100px auto;
   width: 60px;
   height: 60px;
-  text-align: center;
+  margin: 100px auto;
   font-size: 10px;
+  text-align: center;
 }
- 
+
 .spinner > div {
-  background-color: #37A963;
-  height: 100%;
-  width: 6px;
   display: inline-block;
+  width: 6px;
+  height: 100%;
   margin: 0 3px;
+  background-color: #37a963;
   border-radius: 4px;
-   
+
   -webkit-animation: stretchdelay 1s infinite ease-in-out;
   animation: stretchdelay 1s infinite ease-in-out;
 }
@@ -226,45 +224,57 @@
   -webkit-animation-delay: 0.2s;
   animation-delay: 0.2s;
 }
- 
+
 .spinner .rect3 {
   -webkit-animation-delay: 0.4s;
   animation-delay: 0.4s;
 }
- 
+
 .spinner .rect4 {
   -webkit-animation-delay: 0.6s;
   animation-delay: 0.6s;
 }
- 
+
 .spinner .rect5 {
   -webkit-animation-delay: 0.8s;
   animation-delay: 0.8s;
 }
- 
+
 @-webkit-keyframes stretchdelay {
-  // 0%, 40%, 100% { -webkit-transform: scaleY(0.4) } 
+  // 0%, 40%, 100% { -webkit-transform: scaleY(0.4) }
   // 20% { -webkit-transform: scaleY(1.0) }
-  0%,100%{
+  0%,
+  100% {
     height: 60px;
-    background: #37A963;
-}
-50%{
+    background: #37a963;
+  }
+  50% {
     height: 80px;
     margin: -15px 0;
     background: lightblue;
+  }
 }
-}
- 
+
 @keyframes stretchdelay {
-  0%, 100% {
-    transform: scaleY(0.4);
+  0%,
+  100% {
+    background: #37a963;
     -webkit-transform: scaleY(0.4);
-    background: #37A963;
+    transform: scaleY(0.4);
   }
   50% {
-    transform: scaleY(1.0);
-    -webkit-transform: scaleY(1.0);
     background: lightblue;
+    -webkit-transform: scaleY(1);
+    transform: scaleY(1);
+  }
+}
+
+.display-none {
+  display: none;
+}
+
+.my-approve-flow{
+  .ant-steps-item-content{
+    width: 180px !important;
   }
 }

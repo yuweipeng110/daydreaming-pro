@@ -45,9 +45,34 @@
         component: './test/test5',
       },
       {
+        path: '/test6',
+        name: 'test6',
+        component: './test/test6',
+      },
+      {
         path: '/test7',
         name: 'test7',
         component: './test/test7',
+      },
+      {
+        path: '/test8',
+        name: 'test8',
+        component: './test/test8',
+      },
+      {
+        path: '/test9',
+        name: 'test9',
+        component: './test/test9',
+      },
+      {
+        path: '/test10',
+        name: 'test10',
+        component: './test/test10',
+      },
+      {
+        path: '/test11',
+        name: 'test11',
+        component: './test/test11',
       },
       {
         path: '/rankList',
